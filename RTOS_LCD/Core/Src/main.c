@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "string.h"
+#include "cmsis_os.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -28,7 +29,11 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
+typedef enum{
+	LCD_STATE_INIT = 0,
+	LCD_STATE_FILL,
+	LCD_STATE_DRAW_TEXT
+}LcdState_t;
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -55,8 +60,20 @@ UART_HandleTypeDef huart3;
 
 PCD_HandleTypeDef hpcd_USB_OTG_FS;
 
+/* Definitions for LCDTask */
+osThreadId_t LCDTaskHandle;
+const osThreadAttr_t LCDTask_attributes = {
+  .name = "LCDTask",
+  .stack_size = 256 * 4,
+  .priority = (osPriority_t) osPriorityNormal,
+};
+/* Definitions for lcdQueue */
+osMessageQueueId_t lcdQueueHandle;
+const osMessageQueueAttr_t lcdQueue_attributes = {
+  .name = "lcdQueue"
+};
 /* USER CODE BEGIN PV */
-
+LcdState_t currentLcdState = LCD_STATE_INIT;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -66,6 +83,8 @@ static void MX_ETH_Init(void);
 static void MX_USART3_UART_Init(void);
 static void MX_USB_OTG_FS_PCD_Init(void);
 static void MX_SPI5_Init(void);
+void LCD_Task(void *argument);
+
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -110,20 +129,56 @@ int main(void)
   MX_SPI5_Init();
   /* USER CODE BEGIN 2 */
 
-//  HAL_GPIO_WritePin(GPIOD, RESET_Pin, GPIO_PIN_RESET);
-//  HAL_Delay(100);
-//  HAL_GPIO_WritePin(GPIOD, RESET_Pin, GPIO_PIN_SET);
-//  HAL_Delay(100);
+  HAL_GPIO_WritePin(GPIOD, RESET_Pin, GPIO_PIN_RESET);
+  HAL_Delay(100);
+  HAL_GPIO_WritePin(GPIOD, RESET_Pin, GPIO_PIN_SET);
+  HAL_Delay(100);
 
   // 2. 라이브러리 초기화
   ILI9341_Init();
 
   // 3. 테스트 화면 출력
-  ILI9341_Fill_Screen(GREEN);
-  HAL_Delay(500);
-
-  ILI9341_Draw_Text("Hello World", 50, 100, WHITE, 2, BLACK);
   /* USER CODE END 2 */
+
+  /* Init scheduler */
+  osKernelInitialize();
+
+  /* USER CODE BEGIN RTOS_MUTEX */
+  /* add mutexes, ... */
+  /* USER CODE END RTOS_MUTEX */
+
+  /* USER CODE BEGIN RTOS_SEMAPHORES */
+  /* add semaphores, ... */
+  /* USER CODE END RTOS_SEMAPHORES */
+
+  /* USER CODE BEGIN RTOS_TIMERS */
+  /* start timers, add new ones, ... */
+  /* USER CODE END RTOS_TIMERS */
+
+  /* Create the queue(s) */
+  /* creation of lcdQueue */
+  lcdQueueHandle = osMessageQueueNew (5, sizeof(uint32_t), &lcdQueue_attributes);
+
+  /* USER CODE BEGIN RTOS_QUEUES */
+  /* add queues, ... */
+  /* USER CODE END RTOS_QUEUES */
+
+  /* Create the thread(s) */
+  /* creation of LCDTask */
+  LCDTaskHandle = osThreadNew(LCD_Task, NULL, &LCDTask_attributes);
+
+  /* USER CODE BEGIN RTOS_THREADS */
+  /* add threads, ... */
+  /* USER CODE END RTOS_THREADS */
+
+  /* USER CODE BEGIN RTOS_EVENTS */
+  /* add events, ... */
+  /* USER CODE END RTOS_EVENTS */
+
+  /* Start scheduler */
+  osKernelStart();
+
+  /* We should never get here as control is now taken by the scheduler */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -399,6 +454,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+
   /* USER CODE BEGIN MX_GPIO_Init_2 */
 
   /* USER CODE END MX_GPIO_Init_2 */
@@ -407,6 +466,59 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 
 /* USER CODE END 4 */
+
+/* USER CODE BEGIN Header_LCD_Task */
+/**
+  * @brief  Function implementing the defaultTask thread.
+  * @param  argument: Not used
+  * @retval None
+  */
+/* USER CODE END Header_LCD_Task */
+void LCD_Task(void *argument)
+{
+  /* USER CODE BEGIN 5 */
+	LcdState_t receivedState;
+
+	ILI9341_Fill_Screen(WHITE);
+  /* Infinite loop */
+	for(;;)
+	{
+		if(osMessageQueueGet(lcdQueueHandle, &receivedState, NULL, osWaitForever) == osOK)
+		{
+			HAL_GPIO_TogglePin(GPIOB, LD1_Pin);
+			switch(receivedState)
+			{
+			case LCD_STATE_FILL:
+				ILI9341_Fill_Screen(BLACK);
+				break;
+
+			case LCD_STATE_DRAW_TEXT:
+				ILI9341_Draw_Text("Hello World", 50, 100, BLACK, 2, GREEN);
+				break;
+
+			default:
+				break;
+			}
+		}
+	}
+}
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_PIN)
+{
+	if(GPIO_PIN == USER_Btn_Pin)
+	{
+		if(currentLcdState == LCD_STATE_FILL)
+		{
+			currentLcdState = LCD_STATE_DRAW_TEXT;
+		}
+		else
+		{
+			currentLcdState = LCD_STATE_FILL;
+		}
+		osMessageQueuePut(lcdQueueHandle, &currentLcdState, 0, 0);
+	}
+}
+  /* USER CODE END 5 */
 
 /**
   * @brief  This function is executed in case of error occurrence.
