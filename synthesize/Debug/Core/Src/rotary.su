@@ -1,0 +1,6 @@
+../Core/Src/rotary.c:38:23:read_ab	32	static
+../Core/Src/rotary.c:50:23:read_btn	24	static
+../Core/Src/rotary.c:58:23:btn_pressed_level	16	static
+../Core/Src/rotary.c:63:6:handle_enc_ab	24	static
+../Core/Src/rotary.c:84:6:handle_btn_edge	24	static
+../Core/Src/rotary.c:100:6:InputTask	40	static

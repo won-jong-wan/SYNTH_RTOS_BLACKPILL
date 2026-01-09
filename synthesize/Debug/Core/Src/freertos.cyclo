@@ -21,3 +21,4 @@
 ../Core/Src/freertos.c:209:13:print_event	3
 ../Core/Src/freertos.c:217:13:KeyScanTask	3
 ../Core/Src/freertos.c:257:6:KeypadTasks_Init	6
+../Core/Src/freertos.c:284:6:RotaryTasks_Init	2

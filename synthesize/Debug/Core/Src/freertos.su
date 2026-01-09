@@ -21,3 +21,4 @@
 ../Core/Src/freertos.c:209:13:print_event	24	static
 ../Core/Src/freertos.c:217:13:KeyScanTask	48	static
 ../Core/Src/freertos.c:257:6:KeypadTasks_Init	48	static,ignoring_inline_asm
+../Core/Src/freertos.c:284:6:RotaryTasks_Init	24	static,ignoring_inline_asm

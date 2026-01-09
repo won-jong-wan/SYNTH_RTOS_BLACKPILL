@@ -1,0 +1,6 @@
+../Core/Src/rotary.c:38:23:read_ab	4
+../Core/Src/rotary.c:50:23:read_btn	2
+../Core/Src/rotary.c:58:23:btn_pressed_level	1
+../Core/Src/rotary.c:63:6:handle_enc_ab	4
+../Core/Src/rotary.c:84:6:handle_btn_edge	4
+../Core/Src/rotary.c:100:6:InputTask	7

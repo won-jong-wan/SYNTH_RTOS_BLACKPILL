@@ -21,12 +21,12 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "main.h"
-
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "semphr.h"
 #include <stdint.h>
 #include <stdio.h>
+#include "rotary.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -63,8 +63,26 @@ static GPIO_TypeDef* const ROW_PORT[4] = { R1_GPIO_Port, R2_GPIO_Port, R3_GPIO_P
 static const uint16_t      ROW_PIN [4] = { R1_Pin,       R2_Pin,       R3_Pin,       R4_Pin       };
 
 /* ====== RTOS handles ====== */
+static TaskHandle_t keyTaskHandle[16] = {0};
 static SemaphoreHandle_t printfMutex = NULL;
 
+/* ====== optional: 버튼별 액션 함수(예시) ====== */
+static void Action_Btn1(void)  { printf("BTN1\r\n"); }
+static void Action_Btn2(void)  { printf("BTN2\r\n"); }
+static void Action_Btn3(void)  { printf("BTN3\r\n"); }
+static void Action_Btn4(void)  { printf("BTN4\r\n"); }
+static void Action_Btn5(void)  { printf("BTN5\r\n"); }
+static void Action_Btn6(void)  { printf("BTN6\r\n"); }
+static void Action_Btn7(void)  { printf("BTN7\r\n"); }
+static void Action_Btn8(void)  { printf("BTN8\r\n"); }
+static void Action_Btn9(void)  { printf("BTN9\r\n"); }
+static void Action_Btn10(void) { printf("BTN10\r\n"); }
+static void Action_Btn11(void) { printf("BTN11\r\n"); }
+static void Action_Btn12(void) { printf("BTN12\r\n"); }
+static void Action_Btn13(void) { printf("BTN13\r\n"); }
+static void Action_Btn14(void) { printf("BTN14\r\n"); }
+static void Action_Btn15(void) { printf("BTN15\r\n"); }
+static void Action_Btn16(void) { printf("BTN16\r\n"); }
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -74,6 +92,13 @@ static SemaphoreHandle_t printfMutex = NULL;
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
+typedef void (*KeyActionFn)(void);
+static KeyActionFn g_actions[16] = {
+    Action_Btn1, Action_Btn2, Action_Btn3, Action_Btn4,
+    Action_Btn5, Action_Btn6, Action_Btn7, Action_Btn8,
+    Action_Btn9, Action_Btn10, Action_Btn11, Action_Btn12,
+    Action_Btn13, Action_Btn14, Action_Btn15, Action_Btn16
+};
 
 typedef enum {
     EV_KEY_DOWN = 0,
@@ -166,6 +191,20 @@ static uint16_t debounce_update(uint16_t raw, uint16_t *down_edges, uint16_t *up
 }
 
 /* ====== tasks ====== */
+static void KeyWorkerTask(void *arg)
+{
+    int idx = (int)(uintptr_t)arg;
+
+    for (;;) {
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+
+        if ((unsigned)idx < 16 && g_actions[idx]) {
+            if (printfMutex) xSemaphoreTake(printfMutex, portMAX_DELAY);
+            g_actions[idx]();
+            if (printfMutex) xSemaphoreGive(printfMutex);
+        }
+    }
+}
 
 static void print_event(const InputEvent *e)
 {
@@ -193,6 +232,11 @@ static void KeyScanTask(void *arg)
 
             InputEvent e = { .type = EV_KEY_DOWN, .key = (uint8_t)idx };
             print_event(&e);
+
+            // (원하면) 기존 WorkerTask도 같이 깨울 수 있음
+//            if (keyTaskHandle[idx]) {
+//                xTaskNotifyGive(keyTaskHandle[idx]);
+//            }
         }
 
         // UP 이벤트들 출력
@@ -215,12 +259,20 @@ void KeypadTasks_Init(void)
     if (printfMutex == NULL) {
         printfMutex = xSemaphoreCreateMutex();
     }
-    static uint8_t started = 0;
-    if (started) return;
-    started = 1;
 
-    stable_mask = 0;
-    for (int i = 0; i < 16; i++) integ[i] = 0;
+    if (keyTaskHandle[0] != NULL) return; // 중복 방지
+
+    for (int i = 0; i < 16; i++) {
+        char name[8];
+        snprintf(name, sizeof(name), "K%02d", i);
+
+        BaseType_t ok = xTaskCreate(KeyWorkerTask, name,
+                                   128, // 워커는 가볍게
+                                   (void*)(uintptr_t)i,
+                                   tskIDLE_PRIORITY + 1,
+                                   &keyTaskHandle[i]);
+        configASSERT(ok == pdPASS);
+    }
 
     BaseType_t ok = xTaskCreate(KeyScanTask, "KeyScan",
                                256,
@@ -228,6 +280,14 @@ void KeypadTasks_Init(void)
                                tskIDLE_PRIORITY + 2,
                                NULL);
     configASSERT(ok == pdPASS);
+}
+void RotaryTasks_Init(void)
+{
+
+    g_inputQ = xQueueCreate(32, sizeof(input_evt_t)); // 버퍼는 넉넉히
+    configASSERT(g_inputQ);
+
+    xTaskCreate(InputTask, "InputTask", 512, NULL, tskIDLE_PRIORITY+2, NULL);
 }
 /* USER CODE END Application */
 

@@ -51,6 +51,53 @@
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+#include "FreeRTOS.h"
+#include "task.h"
+#include "queue.h"
+#include "rotary.h"
+/* 큐 핸들 전역은 freertos.c에서 만들고 extern으로 가져와야 함 */
+
+static inline void push_evt_from_isr(uint8_t id, evt_type_t type, uint8_t v)
+{
+    BaseType_t hpw = pdFALSE;
+
+    input_evt_t e = {
+        .id = id,
+        .type = type,
+        .v = v,
+        .tick = xTaskGetTickCountFromISR()
+    };
+
+    xQueueSendFromISR(g_inputQ, &e, &hpw);
+    portYIELD_FROM_ISR(hpw);
+}
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+    if (g_inputQ == NULL) return;
+
+    // ENC1 A/B
+    if (GPIO_Pin == ENC1_S1_PIN || GPIO_Pin == ENC1_S2_PIN) {
+        push_evt_from_isr(0, EVT_ENC_AB, 0);
+        return;
+    }
+
+    // ENC2 A/B
+    if (GPIO_Pin == ENC2_S1_PIN || GPIO_Pin == ENC2_S2_PIN) {
+        push_evt_from_isr(1, EVT_ENC_AB, 0);
+        return;
+    }
+
+    // KEY
+    if (GPIO_Pin == ENC1_KEY_PIN) {
+        push_evt_from_isr(0, EVT_BTN_EDGE, 0);
+        return;
+    }
+    if (GPIO_Pin == ENC2_KEY_PIN) {
+        push_evt_from_isr(1, EVT_BTN_EDGE, 0);
+        return;
+    }
+}
 
 /* USER CODE END 0 */
 
@@ -158,6 +205,51 @@ void DebugMon_Handler(void)
 /* For the available peripheral interrupt handler names,                      */
 /* please refer to the startup file (startup_stm32f4xx.s).                    */
 /******************************************************************************/
+
+/**
+  * @brief This function handles EXTI line3 interrupt.
+  */
+void EXTI3_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI3_IRQn 0 */
+
+  /* USER CODE END EXTI3_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(Rotary1_KEY_Pin);
+  /* USER CODE BEGIN EXTI3_IRQn 1 */
+
+  /* USER CODE END EXTI3_IRQn 1 */
+}
+
+/**
+  * @brief This function handles EXTI line4 interrupt.
+  */
+void EXTI4_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI4_IRQn 0 */
+
+  /* USER CODE END EXTI4_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(Rotary1_S2_Pin);
+  /* USER CODE BEGIN EXTI4_IRQn 1 */
+
+  /* USER CODE END EXTI4_IRQn 1 */
+}
+
+/**
+  * @brief This function handles EXTI line[9:5] interrupts.
+  */
+void EXTI9_5_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI9_5_IRQn 0 */
+
+  /* USER CODE END EXTI9_5_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(Rotary1_S1_Pin);
+  HAL_GPIO_EXTI_IRQHandler(Rotary2_KEY_Pin);
+  HAL_GPIO_EXTI_IRQHandler(Rotary2_S2_Pin);
+  HAL_GPIO_EXTI_IRQHandler(Rotary2_S1_Pin);
+  /* USER CODE BEGIN EXTI9_5_IRQn 1 */
+
+  /* USER CODE END EXTI9_5_IRQn 1 */
+}
 
 /**
   * @brief This function handles TIM6 global interrupt, DAC1 and DAC2 underrun error interrupts.

@@ -3,6 +3,6 @@
 ../Core/Src/main.c:206:13:MX_USART3_UART_Init	2
 ../Core/Src/main.c:239:13:MX_USB_OTG_FS_PCD_Init	2
 ../Core/Src/main.c:274:13:MX_GPIO_Init	1
-../Core/Src/main.c:400:6:StartDefaultTask	1
-../Core/Src/main.c:421:6:HAL_TIM_PeriodElapsedCallback	2
-../Core/Src/main.c:439:6:Error_Handler	1
+../Core/Src/main.c:428:6:StartDefaultTask	1
+../Core/Src/main.c:450:6:HAL_TIM_PeriodElapsedCallback	2
+../Core/Src/main.c:468:6:Error_Handler	1

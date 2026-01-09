@@ -64,8 +64,8 @@ all: main-build
 main-build: synthesize.elf secondary-outputs
 
 # Tool invocations
-synthesize.elf synthesize.map: $(OBJS) $(USER_OBJS) C:\Users\A\Documents\embeded\synthesize\STM32F429ZITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "synthesize.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\A\Documents\embeded\synthesize\STM32F429ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="synthesize.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+synthesize.elf synthesize.map: $(OBJS) $(USER_OBJS) C:\Users\KCCISTC\Desktop\work\intel8\STM32F411RE\synthesize\STM32F429ZITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "synthesize.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\KCCISTC\Desktop\work\intel8\STM32F411RE\synthesize\STM32F429ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="synthesize.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
