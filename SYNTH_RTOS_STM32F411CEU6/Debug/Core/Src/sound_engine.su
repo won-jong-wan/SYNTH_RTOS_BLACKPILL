@@ -1,0 +1,9 @@
+../Core/Src/sound_engine.c:60:6:NoteOn	4	static
+../Core/Src/sound_engine.c:67:6:NoteOff	4	static
+../Core/Src/sound_engine.c:73:6:HAL_I2S_TxHalfCpltCallback	32	static,ignoring_inline_asm
+../Core/Src/sound_engine.c:83:6:HAL_I2S_TxCpltCallback	32	static,ignoring_inline_asm
+../Core/Src/sound_engine.c:93:6:Init_All_LUTs	32	static
+../Core/Src/sound_engine.c:115:6:Calc_Wave_LUT	32	static
+../Core/Src/sound_engine.c:183:6:StartAudioTask	24	static
+../Core/Src/sound_engine.c:207:6:InitTasks	16	static
+../Core/Src/sound_engine.c:211:6:Test	8	static
