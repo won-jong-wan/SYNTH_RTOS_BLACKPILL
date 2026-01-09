@@ -64,8 +64,8 @@ all: main-build
 main-build: RTOS_LCD.elf secondary-outputs
 
 # Tool invocations
-RTOS_LCD.elf RTOS_LCD.map: $(OBJS) $(USER_OBJS) C:\Users\User\Desktop\RTOS\RTOS_LCD\STM32F429ZITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "RTOS_LCD.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\User\Desktop\RTOS\RTOS_LCD\STM32F429ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="RTOS_LCD.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+RTOS_LCD.elf RTOS_LCD.map: $(OBJS) $(USER_OBJS) C:\Users\lhj57\Desktop\SYNTH_RTOS_BLACKPILL-ui-dev\RTOS_LCD\STM32F429ZITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "RTOS_LCD.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\lhj57\Desktop\SYNTH_RTOS_BLACKPILL-ui-dev\RTOS_LCD\STM32F429ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="RTOS_LCD.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

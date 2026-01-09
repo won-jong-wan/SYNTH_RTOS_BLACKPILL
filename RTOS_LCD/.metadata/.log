@@ -1,0 +1,95 @@
+!SESSION 2026-01-09 11:24:36.334 -----------------------------------------------
+eclipse.buildId=Version 1.19.0
+java.version=21.0.3
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=ko_KR
+Framework arguments:  C:\Users\lhj57\Desktop\SYNTH_RTOS_BLACKPILL-ui-dev\RTOS_LCD\.project
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 C:\Users\lhj57\Desktop\SYNTH_RTOS_BLACKPILL-ui-dev\RTOS_LCD\.project
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2026-01-09 11:24:57.935
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2026-01-09 11:24:57.937
+!MESSAGE Log4j2 initialized with config file C:\Users\lhj57\Desktop\SYNTH_RTOS_BLACKPILL-ui-dev\RTOS_LCD\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2026-01-09 11:25:03.812
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.core.jobs 2 2 2026-01-09 11:26:02.798
+!MESSAGE Job found still running after platform shutdown.  Jobs should be canceled by the plugin that scheduled them during shutdown: org.eclipse.ui.internal.Workbench$39 RUNNING
+	 at java.desktop/sun.awt.windows.WWindowPeer._setResizable(Native Method)
+	 at java.desktop/sun.awt.windows.WWindowPeer.setResizable(WWindowPeer.java:192)
+	 at java.desktop/sun.awt.windows.WDialogPeer.initialize(WDialogPeer.java:83)
+	 at java.desktop/sun.awt.windows.WComponentPeer.<init>(WComponentPeer.java:808)
+	 at java.desktop/sun.awt.windows.WCanvasPeer.<init>(WCanvasPeer.java:45)
+	 at java.desktop/sun.awt.windows.WPanelPeer.<init>(WPanelPeer.java:80)
+	 at java.desktop/sun.awt.windows.WWindowPeer.<init>(WWindowPeer.java:200)
+	 at java.desktop/sun.awt.windows.WDialogPeer.<init>(WDialogPeer.java:49)
+	 at java.desktop/sun.awt.windows.WToolkit.createDialog(WToolkit.java:506)
+	 at java.desktop/java.awt.Dialog.addNotify(Dialog.java:767)
+	 at java.desktop/java.awt.Window.pack(Window.java:829)
+	 at com.st.microxplorer.plugins.userauth.UserAuth.activatePlugin(UserAuth.java:199)
+	 at com.st.stm32cube.common.mx.userauth.UserAuthAdapter.<init>(UserAuthAdapter.java:29)
+	 at com.st.stm32cube.common.mx.userauth.UserAuthProvider.getUserAuthAdapter(UserAuthProvider.java:16)
+	 at com.st.stm32cube.common.ecosystemintegration.ui.core.MCUEcoSystemIntegrationUiHelper.getUserAuth(MCUEcoSystemIntegrationUiHelper.java:100)
+	 at com.st.stm32cube.ide.mcu.userauth.UserAuthStartup.earlyStartup(UserAuthStartup.java:32)
+	 at org.eclipse.ui.internal.EarlyStartupRunnable.runEarlyStartup(EarlyStartupRunnable.java:79)
+	 at org.eclipse.ui.internal.EarlyStartupRunnable.run(EarlyStartupRunnable.java:55)
+	 at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:47)
+	 at org.eclipse.ui.internal.Workbench$39.run(Workbench.java:2733)
+	 at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SESSION 2026-01-09 11:26:04.765 -----------------------------------------------
+eclipse.buildId=Version 1.19.0
+java.version=21.0.3
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=ko_KR
+Framework arguments:  C:\Users\lhj57\Desktop\SYNTH_RTOS_BLACKPILL-ui-dev\RTOS_LCD\.project
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 C:\Users\lhj57\Desktop\SYNTH_RTOS_BLACKPILL-ui-dev\RTOS_LCD\.project
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2026-01-09 11:26:10.814
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2026-01-09 11:26:10.815
+!MESSAGE Log4j2 initialized with config file C:\Users\lhj57\Desktop\SYNTH_RTOS_BLACKPILL-ui-dev\RTOS_LCD\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2026-01-09 11:26:13.764
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.core.jobs 2 2 2026-01-09 11:26:30.496
+!MESSAGE Job found still running after platform shutdown.  Jobs should be canceled by the plugin that scheduled them during shutdown: org.eclipse.ui.internal.Workbench$39 RUNNING
+	 at java.base/sun.nio.ch.Net.poll(Native Method)
+	 at java.base/sun.nio.ch.NioSocketImpl.park(NioSocketImpl.java:191)
+	 at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:548)
+	 at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:592)
+	 at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327)
+	 at java.base/java.net.Socket.connect(Socket.java:751)
+	 at org.apache.http.conn.ssl.SSLConnectionSocketFactory.connectSocket(SSLConnectionSocketFactory.java:339)
+	 at org.apache.http.impl.conn.DefaultHttpClientConnectionOperator.connect(DefaultHttpClientConnectionOperator.java:142)
+	 at org.apache.http.impl.conn.PoolingHttpClientConnectionManager.connect(PoolingHttpClientConnectionManager.java:373)
+	 at org.apache.http.impl.execchain.MainClientExec.establishRoute(MainClientExec.java:381)
+	 at org.apache.http.impl.execchain.MainClientExec.execute(MainClientExec.java:237)
+	 at org.apache.http.impl.execchain.ProtocolExec.execute(ProtocolExec.java:185)
+	 at org.apache.http.impl.execchain.RetryExec.execute(RetryExec.java:89)
+	 at org.apache.http.impl.execchain.RedirectExec.execute(RedirectExec.java:111)
+	 at org.apache.http.impl.client.InternalHttpClient.doExecute(InternalHttpClient.java:185)
+	 at org.apache.http.impl.client.CloseableHttpClient.execute(CloseableHttpClient.java:83)
+	 at org.apache.http.impl.client.CloseableHttpClient.execute(CloseableHttpClient.java:108)
+	 at com.st.microxplorer.plugins.updater.engine.CheckConnectionManager.openHttpConnexion(CheckConnectionManager.java:195)
+	 at com.st.microxplorer.plugins.updater.engine.CheckConnectionManager.getHttpFileSize(CheckConnectionManager.java:118)
+	 at com.st.microxplorer.plugins.updater.engine.LoadServerUpdatesThread.performUpdaterHttpAccessCheck(LoadServerUpdatesThread.java:592)
+	 at com.st.microxplorer.plugins.updater.engine.LoadServerUpdatesThread.performConnectionCheckNoThread(LoadServerUpdatesThread.java:263)
+	 at com.st.microxplorer.plugins.updater.engine.MainUpdater.performConnectionCheck(MainUpdater.java:2853)
+	 at com.st.microxplorer.plugins.updater.engine.MainUpdater.<init>(MainUpdater.java:285)
+	 at com.st.microxplorer.plugins.updater.Updater.initPhase2(Updater.java:1162)
+	 at com.st.microxplorer.plugins.updater.Updater.setUserPreferencesHandler(Updater.java:1216)
+	 at com.st.stm32cube.common.mx.core.CubeMxInstance.<init>(CubeMxInstance.java:141)
+	 at com.st.stm32cube.common.mx.core.CubeMxInstance.getInstance(CubeMxInstance.java:91)
+	 at com.st.stm32cube.common.mx.userauth.UserAuthAdapter.<init>(UserAuthAdapter.java:25)
+	 at com.st.stm32cube.common.mx.userauth.UserAuthProvider.getUserAuthAdapter(UserAuthProvider.java:16)
+	 at com.st.stm32cube.common.ecosystemintegration.ui.core.MCUEcoSystemIntegrationUiHelper.getUserAuth(MCUEcoSystemIntegrationUiHelper.java:100)
+	 at com.st.stm32cube.ide.mcu.userauth.UserAuthStartup.earlyStartup(UserAuthStartup.java:32)
+	 at org.eclipse.ui.internal.EarlyStartupRunnable.runEarlyStartup(EarlyStartupRunnable.java:79)
+	 at org.eclipse.ui.internal.EarlyStartupRunnable.run(EarlyStartupRunnable.java:55)
+	 at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:47)
+	 at org.eclipse.ui.internal.Workbench$39.run(Workbench.java:2733)
+	 at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)

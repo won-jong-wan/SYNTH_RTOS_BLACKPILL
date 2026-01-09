@@ -31,8 +31,9 @@
 /* USER CODE BEGIN PTD */
 typedef enum{
 	LCD_STATE_INIT = 0,
-	LCD_STATE_FILL,
-	LCD_STATE_DRAW_TEXT
+	LCD_STATE_MAIN_DASH,   // 기존 텍스트 화면
+	LCD_STATE_SUB_INFO,    // 새로운 정보 화면
+	LCD_STATE_GRAPH_VIEW   // (선택) 그래프 화면
 }LcdState_t;
 /* USER CODE END PTD */
 
@@ -64,7 +65,7 @@ PCD_HandleTypeDef hpcd_USB_OTG_FS;
 osThreadId_t LCDTaskHandle;
 const osThreadAttr_t LCDTask_attributes = {
   .name = "LCDTask",
-  .stack_size = 256 * 4,
+  .stack_size = 1024 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
 /* Definitions for lcdQueue */
@@ -86,7 +87,9 @@ static void MX_SPI5_Init(void);
 void LCD_Task(void *argument);
 
 /* USER CODE BEGIN PFP */
-
+void draw_main_dashboard(void);
+void draw_system_info(void);
+void draw_graph_view(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -464,7 +467,42 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void draw_main_dashboard(void) {
+    // 1. 그라데이션 대신 단색으로 먼저 테스트 (가장 안전)
+    ILI9341_Fill_Screen(BLACK);
+    osDelay(10);
 
+    // 2. 상단바 (Y: 0 ~ 30)
+    ILI9341_Draw_Filled_Rectangle_Coord(0, 0, 240, 30, GREEN);
+    ILI9341_Draw_Text("SYSTEM READY", 55, 10, BLACK, 2, GREEN);
+
+    // 3. 메인 텍스트 위치 대폭 수정 (Y좌표 200 아래로 고정)
+    // Size 4는 가로폭(CHAR_WIDTH * 4)이 커서 X좌표 오버플로우 위험이 있으니
+    // X좌표도 작게 시작하세요.
+    ILI9341_Draw_Text("Welcome to", 30, 60, WHITE, 2, BLACK);
+    ILI9341_Draw_Text("SYNTH_RTOS", 20, 90, YELLOW, 3, BLACK);
+
+    // BLACKPILL은 Size 3으로 낮춰서 테스트 (가로폭 오버플로우 방지)
+    ILI9341_Draw_Text("BLACKPILL", 10, 130, CYAN, 3, BLACK);
+
+    // 4. 하단 안내 (안전한 Y좌표 180)
+    ILI9341_Draw_Horizontal_Line(20, 180, 200, WHITE);
+    ILI9341_Draw_Text("Press Button", 60, 195, LIGHTGREY, 1, BLACK);
+}
+
+void draw_system_info(void) {
+    ILI9341_Draw_Filled_Rectangle_Coord(0, 0, 240, 35, 0x001F); // BLUE
+    ILI9341_Draw_Text("SYSTEM INFO", 65, 10, WHITE, 2, 0x001F);
+    ILI9341_Draw_Text("- CPU: STM32F429", 20, 60, WHITE, 1, BLACK);
+    ILI9341_Draw_Text("- OS: FreeRTOS V2", 20, 85, WHITE, 1, BLACK);
+}
+
+void draw_graph_view(void) {
+    ILI9341_Draw_Text("SENSOR DATA", 50, 20, YELLOW, 2, BLACK);
+    ILI9341_Draw_Filled_Rectangle_Coord(40, 150, 70, 200, RED);
+    ILI9341_Draw_Filled_Rectangle_Coord(90, 80, 120, 200, GREEN);
+    ILI9341_Draw_Horizontal_Line(20, 200, 200, WHITE);
+}
 /* USER CODE END 4 */
 
 /* USER CODE BEGIN Header_LCD_Task */
@@ -476,49 +514,53 @@ static void MX_GPIO_Init(void)
 /* USER CODE END Header_LCD_Task */
 void LCD_Task(void *argument)
 {
-  /* USER CODE BEGIN 5 */
-	LcdState_t receivedState;
+    LcdState_t receivedState;
+    ILI9341_Fill_Screen(BLACK);
 
-	ILI9341_Fill_Screen(WHITE);
-  /* Infinite loop */
-	for(;;)
-	{
-		if(osMessageQueueGet(lcdQueueHandle, &receivedState, NULL, osWaitForever) == osOK)
-		{
-			HAL_GPIO_TogglePin(GPIOB, LD1_Pin);
-			switch(receivedState)
-			{
-			case LCD_STATE_FILL:
-				ILI9341_Fill_Screen(BLACK);
-				break;
+    for(;;)
+    {
+        if(osMessageQueueGet(lcdQueueHandle, &receivedState, NULL, osWaitForever) == osOK)
+        {
+            // 화면을 전환할 때마다 일단 깨끗이 지웁니다.
+            ILI9341_Fill_Screen(BLACK);
 
-			case LCD_STATE_DRAW_TEXT:
-				ILI9341_Draw_Text("Hello World", 50, 100, BLACK, 2, GREEN);
-				break;
+            switch(receivedState)
+            {
+            case LCD_STATE_INIT:
+            	// 아무것도 안 하거나 초기화 화면 호출
+            	break;
 
-			default:
-				break;
-			}
-		}
-	}
+            case LCD_STATE_MAIN_DASH:
+            	draw_main_dashboard();
+                break;
+
+            case LCD_STATE_GRAPH_VIEW:
+                // 3번 화면: 도형을 이용한 간단한 그래프 화면
+                draw_graph_view();
+                break;
+            }
+        }
+    }
 }
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_PIN)
 {
-	if(GPIO_PIN == USER_Btn_Pin)
-	{
-		if(currentLcdState == LCD_STATE_FILL)
-		{
-			currentLcdState = LCD_STATE_DRAW_TEXT;
-		}
-		else
-		{
-			currentLcdState = LCD_STATE_FILL;
-		}
-		osMessageQueuePut(lcdQueueHandle, &currentLcdState, 0, 0);
-	}
-}
+    static uint32_t last_tick = 0;
+    if(GPIO_PIN == USER_Btn_Pin)
+    {
+        // 디바운싱: 250ms 이내 연타 무시
+        if(HAL_GetTick() - last_tick < 250) return;
+        last_tick = HAL_GetTick();
+
+        // 상태 순환 로직
+        if(currentLcdState == LCD_STATE_MAIN_DASH) currentLcdState = LCD_STATE_SUB_INFO;
+        else if(currentLcdState == LCD_STATE_SUB_INFO) currentLcdState = LCD_STATE_GRAPH_VIEW;
+        else currentLcdState = LCD_STATE_MAIN_DASH;
+
+        osMessageQueuePut(lcdQueueHandle, &currentLcdState, 0, 0);
+    }
   /* USER CODE END 5 */
+}
 
 /**
   * @brief  This function is executed in case of error occurrence.

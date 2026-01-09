@@ -291,7 +291,7 @@ void ILI9341_Draw_Image(const char* Image_Array, uint8_t Orientation)
 				HAL_SPI_Transmit(&hspi5, (unsigned char*)Temp_small_buffer, BURST_MAX_SIZE, 10);	
 				counter += BURST_MAX_SIZE;			
 		}
-		HAL_GPIO_WritePin(GPIOC, LCD_CS_PIN, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOG, LCD_CS_PIN, GPIO_PIN_SET);
 	}
 	else if(Orientation == SCREEN_HORIZONTAL_2)
 	{
@@ -333,7 +333,7 @@ void ILI9341_Draw_Image(const char* Image_Array, uint8_t Orientation)
 				HAL_SPI_Transmit(&hspi5, (unsigned char*)Temp_small_buffer, BURST_MAX_SIZE, 10);	
 				counter += BURST_MAX_SIZE;			
 		}
-		HAL_GPIO_WritePin(GPIOC, LCD_CS_PIN, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOG, LCD_CS_PIN, GPIO_PIN_SET);
 	}
 	else if(Orientation == SCREEN_VERTICAL_1)
 	{
