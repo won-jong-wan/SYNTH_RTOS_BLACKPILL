@@ -11,7 +11,7 @@
 
 // --- 설정 ---
 #define SAMPLE_RATE   44100
-#define BUFFER_SIZE   4096
+#define BUFFER_SIZE   4096 // 사실 상 2048
 #define LUT_SIZE      1024
 #define LUT_SHIFT     (32 - 10)
 
@@ -24,9 +24,19 @@
 #define FREQ_A4       440.00f
 #define FREQ_B4       493.88f
 
+extern double freq_list[];
+
 extern volatile float target_freq;
+
+extern int16_t *current_lut;
+extern int16_t sine_lut[LUT_SIZE];
+extern int16_t saw_lut[LUT_SIZE];
+extern int16_t square_lut[LUT_SIZE];
 
 extern void InitTasks(void);
 extern void Test(void);
+extern void KeypadTasks_Init(void);
+extern void NoteOn(void);
+extern void NoteOff(void);
 
 #endif /* INC_USER_RTOS_H_ */

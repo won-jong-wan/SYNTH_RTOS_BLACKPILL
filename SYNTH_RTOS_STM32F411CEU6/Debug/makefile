@@ -64,8 +64,8 @@ all: main-build
 main-build: SYNTH_RTOS_STM32F411CEU6.elf secondary-outputs
 
 # Tool invocations
-SYNTH_RTOS_STM32F411CEU6.elf SYNTH_RTOS_STM32F411CEU6.map: $(OBJS) $(USER_OBJS) C:\Users\kccistc\Desktop\SYNTH\SYNTH_RTOS_STM32F411CEU6\STM32F411CEUX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "SYNTH_RTOS_STM32F411CEU6.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\kccistc\Desktop\SYNTH\SYNTH_RTOS_STM32F411CEU6\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="SYNTH_RTOS_STM32F411CEU6.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+SYNTH_RTOS_STM32F411CEU6.elf SYNTH_RTOS_STM32F411CEU6.map: $(OBJS) $(USER_OBJS) C:\Users\kccistc\Desktop\SYNTH_RTOS_BLACKPILL\SYNTH_RTOS_STM32F411CEU6\STM32F411CEUX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "SYNTH_RTOS_STM32F411CEU6.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\kccistc\Desktop\SYNTH_RTOS_BLACKPILL\SYNTH_RTOS_STM32F411CEU6\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="SYNTH_RTOS_STM32F411CEU6.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

@@ -13,6 +13,8 @@
 
 extern I2S_HandleTypeDef hi2s1;
 
+double freq_list[] = {FREQ_C4, FREQ_D4, FREQ_E4, FREQ_F4, FREQ_G4, FREQ_A4, FREQ_B4};
+
 // --- 변수 ---
 typedef enum {
 	ADSR_IDLE, ADSR_ATTACK, ADSR_DECAY, ADSR_SUSTAIN, ADSR_RELEASE
@@ -51,17 +53,24 @@ uint32_t tuning_word = 0;
 volatile float target_freq = 440.0f;
 TaskHandle_t audioTaskHandle = NULL;
 
-ADSR_Control_t adsr = { .attack_steps = 4410,    // 0.1s
+ADSR_Control_t adsr = { .attack_steps = 4410,    // 0.1s // 현재 전송 속도 44.1KHz
 		.decay_steps = 4410,     // 0.1s
 		.sustain_level = 0.5f,   // 50% volume
 		.release_steps = 13230,  // 0.3s
 		.state = ADSR_IDLE, .current_level = 0.0f, .step_val = 0.0f };
+
+//ADSR_Control_t adsr = { .attack_steps = 0,    // 0.1s // 현재 전송 속도 44.1KHz
+//		.decay_steps = 2205,     // 0.1s
+//		.sustain_level = 0,   // 50% volume
+//		.release_steps = 2205,  // 0.3s
+//		.state = ADSR_IDLE, .current_level = 0.0f, .step_val = 0.0f };
 
 void NoteOn(void) {
 	adsr.state = ADSR_ATTACK;
 	// 0.0에서 1.0까지 가는데 필요한 스텝 계산
 	// 이미 소리가 나고 있는 중일 수도 있으므로 (1.0 - 현재) / steps
 	adsr.step_val = (1.0f - adsr.current_level) / (float) adsr.attack_steps;
+	// 차이를 앞으로 갈 스탭 수로 나눔 = 한 스탭 당 바뀌어야하는 값
 }
 
 void NoteOff(void) {
@@ -70,28 +79,8 @@ void NoteOff(void) {
 	adsr.step_val = adsr.current_level / (float) adsr.release_steps;
 }
 
-void HAL_I2S_TxHalfCpltCallback(I2S_HandleTypeDef *hi2s) {
-	BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-	if (audioTaskHandle != NULL) {
-		// 태스크에 알림 전송 (Bit 0 설정)
-		xTaskNotifyFromISR(audioTaskHandle, 0x01, eSetBits,
-				&xHigherPriorityTaskWoken);
-		portYIELD_FROM_ISR(xHigherPriorityTaskWoken); // 필요시 즉시 문맥 전환
-	}
-}
-
-void HAL_I2S_TxCpltCallback(I2S_HandleTypeDef *hi2s) {
-	BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-	if (audioTaskHandle != NULL) {
-		// 태스크에 알림 전송 (Bit 1 설정)
-		xTaskNotifyFromISR(audioTaskHandle, 0x02, eSetBits,
-				&xHigherPriorityTaskWoken);
-		portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-	}
-}
-
 void Init_All_LUTs(void) {
-	int16_t amplitude = 10000;
+	int16_t amplitude = 10000; // 이게 최고 볼륭, 이론 상 최고 볼륨은 32,767
 
 	for (int i = 0; i < LUT_SIZE; i++) {
 		// 1. Sine Wave (기존과 동일)
@@ -167,14 +156,14 @@ void Calc_Wave_LUT(int16_t *buffer, int length) {
 			continue;
 		}
 
-		uint32_t index = phase_accumulator >> LUT_SHIFT;
-		int16_t raw_val = current_lut[index];
+		uint32_t index = phase_accumulator >> LUT_SHIFT; // tuning_word 수식에 맞추다 보니 상위 10비트만 사용
+		int16_t raw_val = current_lut[index];            // 10비트 즉 2^10 = 1024로 LUT 크기와 같음
 
 		// [핵심] 원본 파형 * ADSR 볼륨
 		int16_t final_val = (int16_t) ((float) raw_val * adsr.current_level);
 
-		buffer[i] = final_val;
-		buffer[i + 1] = final_val;
+		buffer[i] = final_val; // 왼쪽
+		buffer[i + 1] = final_val; // 오른쪽
 
 		phase_accumulator += tuning_word;
 	}
@@ -191,6 +180,8 @@ void StartAudioTask(void *argument) {
 
 	uint32_t ulNotificationValue;
 
+	// 초기화 완료
+
 	for (;;) {
 		xTaskNotifyWait(0, 0xFFFFFFFF, &ulNotificationValue, portMAX_DELAY);
 
@@ -204,6 +195,27 @@ void StartAudioTask(void *argument) {
 	}
 }
 
+void HAL_I2S_TxHalfCpltCallback(I2S_HandleTypeDef *hi2s) {
+	BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+	if (audioTaskHandle != NULL) {
+		// 태스크에 알림 전송 (Bit 0 설정)
+		xTaskNotifyFromISR(audioTaskHandle, 0x01, eSetBits,
+				&xHigherPriorityTaskWoken);
+		portYIELD_FROM_ISR(xHigherPriorityTaskWoken); // 필요시 즉시 문맥 전환
+	}
+}
+
+void HAL_I2S_TxCpltCallback(I2S_HandleTypeDef *hi2s) {
+	BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+	if (audioTaskHandle != NULL) {
+		// 태스크에 알림 전송 (Bit 1 설정)
+		xTaskNotifyFromISR(audioTaskHandle, 0x02, eSetBits,
+				&xHigherPriorityTaskWoken);
+		portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+	}
+}
+
+
 void InitTasks(void) {
 	xTaskCreate(StartAudioTask, "AudioTask", 256, NULL, 52, &audioTaskHandle);
 }
@@ -211,29 +223,29 @@ void InitTasks(void) {
 void Test(void) {
 //	current_lut = sine_lut;
 //	current_lut = saw_lut;
-	current_lut = square_lut;
-	// 1. 도(C4) 누르기
-	target_freq = FREQ_C4;
-	NoteOn();
-	vTaskDelay(pdMS_TO_TICKS(1000));
-
-	// 2. 떼기
-	NoteOff();
-	vTaskDelay(pdMS_TO_TICKS(1000));
-
-	// 3. 미(E4) 누르기
-	target_freq = FREQ_E4;
-	NoteOn();
-	vTaskDelay(pdMS_TO_TICKS(2000));
-
-	// 4. 떼기
-	NoteOff();
-	vTaskDelay(pdMS_TO_TICKS(1000));
-
-	// 5. 솔(G4)
-	target_freq = FREQ_G4;
-	NoteOn();
-	vTaskDelay(pdMS_TO_TICKS(3000));
-	NoteOff();
+//	current_lut = square_lut;
+//	// 1. 도(C4) 누르기
+//	target_freq = FREQ_C4;
+//	NoteOn();
+//	vTaskDelay(pdMS_TO_TICKS(1000));
+//
+//	// 2. 떼기
+//	NoteOff();
+//	vTaskDelay(pdMS_TO_TICKS(1000));
+//
+//	// 3. 미(E4) 누르기
+//	target_freq = FREQ_E4;
+//	NoteOn();
+//	vTaskDelay(pdMS_TO_TICKS(1000));
+//
+//	// 4. 떼기
+//	NoteOff();
+//	vTaskDelay(pdMS_TO_TICKS(1000));
+//
+//	// 5. 솔(G4)
+//	target_freq = FREQ_G4;
+//	NoteOn();
+//	vTaskDelay(pdMS_TO_TICKS(1000));
+//	NoteOff();
 	vTaskDelay(pdMS_TO_TICKS(1000));
 }
