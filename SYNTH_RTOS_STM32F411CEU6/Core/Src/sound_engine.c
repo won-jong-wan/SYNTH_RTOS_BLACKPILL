@@ -101,74 +101,87 @@ void Init_All_LUTs(void) {
 	}
 }
 
-void Calc_Wave_LUT(int16_t *buffer, int length) {
-	tuning_word = (uint32_t) ((double) target_freq * 4294967296.0
-			/ (double) SAMPLE_RATE);
 
-	for (int i = 0; i < length; i += 2) {
-		// --- [1] ADSR 상태 머신 처리 ---
-		switch (adsr.state) {
-		case ADSR_IDLE:
-			adsr.current_level = 0.0f;
-			break;
+void Calc_Wave_LUT(int16_t *buffer, int length)
+{
+    tuning_word = (uint32_t)((double)target_freq * 4294967296.0 / (double)SAMPLE_RATE);
 
-		case ADSR_ATTACK:
-			adsr.current_level += adsr.step_val;
-			if (adsr.current_level >= 1.0f) {
-				adsr.current_level = 1.0f;
-				adsr.state = ADSR_DECAY;
-				// Decay 스텝 계산: (1.0 - Sustain) / DecayTime
-				adsr.step_val = (1.0f - adsr.sustain_level)
-						/ (float) adsr.decay_steps;
-			}
-			break;
+    // ✅ 필터는 “한 번만” 초기화 (상태 유지)
+    static Biquad lpf;
+    static int inited = 0;
+    if (!inited) {
+        biquad_reset(&lpf);
+        biquad_set_lpf(&lpf, (float)SAMPLE_RATE, 1500.0f, 3.707f); // ✅ Fs는 SAMPLE_RATE로
+        inited = 1;
+    }
 
-		case ADSR_DECAY:
-			adsr.current_level -= adsr.step_val;
-			if (adsr.current_level <= adsr.sustain_level) {
-				adsr.current_level = adsr.sustain_level;
-				adsr.state = ADSR_SUSTAIN;
-				adsr.step_val = 0.0f;
-			}
-			break;
+    for (int i = 0; i < length; i += 2) {
 
-		case ADSR_SUSTAIN:
-			// 레벨 유지 (변화 없음)
-			break;
+        // --- [1] ADSR 상태 머신 처리 ---
+        switch (adsr.state) {
+        case ADSR_IDLE:
+            adsr.current_level = 0.0f;
+            break;
 
-		case ADSR_RELEASE:
-			adsr.current_level -= adsr.step_val;
-			if (adsr.current_level <= 0.0f) {
-				adsr.current_level = 0.0f;
-				adsr.state = ADSR_IDLE;
-			}
-			break;
-		}
+        case ADSR_ATTACK:
+            adsr.current_level += adsr.step_val;
+            if (adsr.current_level >= 1.0f) {
+                adsr.current_level = 1.0f;
+                adsr.state = ADSR_DECAY;
+                adsr.step_val = (1.0f - adsr.sustain_level) / (float)adsr.decay_steps;
+            }
+            break;
 
-		// --- [2] 파형 생성 및 볼륨 적용 ---
+        case ADSR_DECAY:
+            adsr.current_level -= adsr.step_val;
+            if (adsr.current_level <= adsr.sustain_level) {
+                adsr.current_level = adsr.sustain_level;
+                adsr.state = ADSR_SUSTAIN;
+                adsr.step_val = 0.0f;
+            }
+            break;
 
-		// 아무 소리도 안 나면 연산 건너뛰기 (최적화)
-		if (adsr.current_level <= 0.0001f) {
-			buffer[i] = 0;
-			buffer[i + 1] = 0;
-			// 소리는 안 나지만 위상은 계속 흘러가야 다음에 눌렀을 때 자연스러움
-			phase_accumulator += tuning_word;
-			continue;
-		}
+        case ADSR_SUSTAIN:
+            break;
 
-		uint32_t index = phase_accumulator >> LUT_SHIFT; // tuning_word 수식에 맞추다 보니 상위 10비트만 사용
-		int16_t raw_val = current_lut[index];            // 10비트 즉 2^10 = 1024로 LUT 크기와 같음
+        case ADSR_RELEASE:
+            adsr.current_level -= adsr.step_val;
+            if (adsr.current_level <= 0.0f) {
+                adsr.current_level = 0.0f;
+                adsr.state = ADSR_IDLE;
+            }
+            break;
+        }
 
-		// [핵심] 원본 파형 * ADSR 볼륨
-		int16_t final_val = (int16_t) ((float) raw_val * adsr.current_level);
+        // --- [2] 무음이면 출력 0 ---
+        if (adsr.current_level <= 0.0001f) {
+            buffer[i] = 0;
+            buffer[i + 1] = 0;
+            phase_accumulator += tuning_word;
+            continue;
+        }
 
-		buffer[i] = final_val; // 왼쪽
-		buffer[i + 1] = final_val; // 오른쪽
+        // --- [3] 파형 생성 + ADSR ---
+        uint32_t index = phase_accumulator >> LUT_SHIFT;
+        int16_t raw_val = current_lut[index];
+        float s = (float)raw_val * adsr.current_level; // float로 유지
 
-		phase_accumulator += tuning_word;
-	}
+        // --- [4] ✅ IIR 필터 적용 ---
+        float x = s / 32768.0f;
+        float y = biquad_process(&lpf, x);
+
+        float out_f = y * 32767.0f;
+        if (out_f >  32767.0f) out_f =  32767.0f;
+        if (out_f < -32768.0f) out_f = -32768.0f;
+
+        int16_t out = (int16_t)out_f;
+
+        buffer[i]     = out;
+        buffer[i + 1] = out;
+
+        phase_accumulator += tuning_word;
+    }
 }
-
 void StartAudioTask(void *argument) {
 	audioTaskHandle = xTaskGetCurrentTaskHandle();
 

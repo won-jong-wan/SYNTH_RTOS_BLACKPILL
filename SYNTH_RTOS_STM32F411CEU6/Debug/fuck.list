@@ -1,5 +1,5 @@
 
-SYNTH_RTOS_STM32F411CEU6.elf:     file format elf32-littlearm
+fuck.elf:     file format elf32-littlearm
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
@@ -2948,7 +2948,7 @@ void Calc_Wave_LUT(int16_t *buffer, int length)
         biquad_reset(&lpf);
  8001a62:	4899      	ldr	r0, [pc, #612]	@ (8001cc8 <Calc_Wave_LUT+0x2b0>)
  8001a64:	f7ff f9e0 	bl	8000e28 <biquad_reset>
-        biquad_set_lpf(&lpf, (float)SAMPLE_RATE, 1500.0f, 3.707f); // ✅ Fs는 SAMPLE_RATE로
+        biquad_set_lpf(&lpf, (float)SAMPLE_RATE, 2000.0f, 0.707f); // ✅ Fs는 SAMPLE_RATE로
  8001a68:	ed9f 1a98 	vldr	s2, [pc, #608]	@ 8001ccc <Calc_Wave_LUT+0x2b4>
  8001a6c:	eddf 0a98 	vldr	s1, [pc, #608]	@ 8001cd0 <Calc_Wave_LUT+0x2b8>
  8001a70:	ed9f 0a98 	vldr	s0, [pc, #608]	@ 8001cd4 <Calc_Wave_LUT+0x2bc>
@@ -3251,8 +3251,8 @@ void Calc_Wave_LUT(int16_t *buffer, int length)
  8001cc0:	200039ac 	.word	0x200039ac
  8001cc4:	200039b4 	.word	0x200039b4
  8001cc8:	200039b8 	.word	0x200039b8
- 8001ccc:	406d3f7d 	.word	0x406d3f7d
- 8001cd0:	44bb8000 	.word	0x44bb8000
+ 8001ccc:	3f34fdf4 	.word	0x3f34fdf4
+ 8001cd0:	44fa0000 	.word	0x44fa0000
  8001cd4:	472c4400 	.word	0x472c4400
  8001cd8:	20000040 	.word	0x20000040
  8001cdc:	38d1b717 	.word	0x38d1b717

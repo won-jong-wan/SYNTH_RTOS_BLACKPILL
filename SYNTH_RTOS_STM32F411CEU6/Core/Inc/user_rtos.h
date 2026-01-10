@@ -7,7 +7,7 @@
 
 #ifndef INC_USER_RTOS_H_
 #define INC_USER_RTOS_H_
-
+#include "main.h"
 
 // --- 설정 ---
 #define SAMPLE_RATE   44100
@@ -32,6 +32,26 @@ extern int16_t *current_lut;
 extern int16_t sine_lut[LUT_SIZE];
 extern int16_t saw_lut[LUT_SIZE];
 extern int16_t square_lut[LUT_SIZE];
+
+
+
+typedef struct {
+    // normalized coefficients (a0 == 1)
+    float b0, b1, b2;
+    float a1, a2;
+
+    // state (Direct Form I)
+    float x1, x2;
+    float y1, y2;
+} Biquad;
+
+void  biquad_reset(Biquad *q);
+void  biquad_set_lpf(Biquad *q, float Fs, float Fc, float Q);
+float biquad_process(Biquad *q, float x);
+
+
+
+
 
 extern void InitTasks(void);
 extern void Test(void);

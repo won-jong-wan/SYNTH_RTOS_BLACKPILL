@@ -1,3 +1,4 @@
+"./Core/Inc/biquad.o"
 "./Core/Src/btn.o"
 "./Core/Src/freertos.o"
 "./Core/Src/main.o"
