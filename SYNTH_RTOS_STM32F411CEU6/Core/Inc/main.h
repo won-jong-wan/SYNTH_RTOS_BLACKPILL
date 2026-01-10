@@ -57,6 +57,24 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define Rotary2_S1_Pin GPIO_PIN_13
+#define Rotary2_S1_GPIO_Port GPIOB
+#define Rotary2_S1_EXTI_IRQn EXTI15_10_IRQn
+#define Rotary2_S2_Pin GPIO_PIN_14
+#define Rotary2_S2_GPIO_Port GPIOB
+#define Rotary2_S2_EXTI_IRQn EXTI15_10_IRQn
+#define Rotary2_KEY_Pin GPIO_PIN_15
+#define Rotary2_KEY_GPIO_Port GPIOB
+#define Rotary2_KEY_EXTI_IRQn EXTI15_10_IRQn
+#define Rotary1_S1_Pin GPIO_PIN_6
+#define Rotary1_S1_GPIO_Port GPIOB
+#define Rotary1_S1_EXTI_IRQn EXTI9_5_IRQn
+#define Rotary1_S2_Pin GPIO_PIN_7
+#define Rotary1_S2_GPIO_Port GPIOB
+#define Rotary1_S2_EXTI_IRQn EXTI9_5_IRQn
+#define Rotary1_KEY_Pin GPIO_PIN_8
+#define Rotary1_KEY_GPIO_Port GPIOB
+#define Rotary1_KEY_EXTI_IRQn EXTI9_5_IRQn
 
 /* USER CODE BEGIN Private defines */
 /* USER CODE END Private defines */

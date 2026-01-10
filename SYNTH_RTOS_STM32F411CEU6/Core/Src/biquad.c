@@ -48,6 +48,8 @@ void biquad_set_lpf(Biquad *q, float Fs, float Fc, float Q)
 float biquad_process(Biquad *q, float x)
 {
     // Direct Form I
+	// y = b0*x + b1*x1 + b2*x2 - a1*y1 - a2*y2;
+
     float y = q->b0 * x
             + q->b1 * q->x1
             + q->b2 * q->x2

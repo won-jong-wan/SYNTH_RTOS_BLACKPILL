@@ -35,6 +35,9 @@ extern int16_t square_lut[LUT_SIZE];
 
 
 
+//iir
+#define Q_MIN  0.50f
+#define Q_MAX  8.00f
 typedef struct {
     // normalized coefficients (a0 == 1)
     float b0, b1, b2;
@@ -48,7 +51,24 @@ typedef struct {
 void  biquad_reset(Biquad *q);
 void  biquad_set_lpf(Biquad *q, float Fs, float Fc, float Q);
 float biquad_process(Biquad *q, float x);
+extern volatile uint8_t g_lpf_dirty;   // 파라미터 바뀜 플래그
+extern volatile float g_lpf_Q;
+extern volatile float g_lpf_FC;
 
+typedef enum {
+    EVT_ENC_AB = 0,
+    EVT_BTN_EDGE = 1,
+} evt_type_t;
+
+typedef struct {
+    uint8_t    id;     // 0: enc1, 1: enc2
+    evt_type_t type;
+    uint8_t    v;      // AB(2bit) or BTN(0/1)
+    uint32_t   tick;   // xTaskGetTickCountFromISR()
+} input_evt_t;
+
+
+extern void RotaryTasks_Init(void);
 
 
 

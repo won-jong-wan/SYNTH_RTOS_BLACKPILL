@@ -4,12 +4,17 @@
  *  Created on: Jan 9, 2026
  *      Author: kccistc
  */
+
+
+
 #include "FreeRTOS.h"
 #include "task.h"
 #include "main.h"
 
 #include <math.h>
 #include "user_rtos.h"
+
+#define OCTAVE_SHIFT  1
 
 extern I2S_HandleTypeDef hi2s1;
 
@@ -53,6 +58,13 @@ uint32_t tuning_word = 0;
 volatile float target_freq = 440.0f;
 TaskHandle_t audioTaskHandle = NULL;
 
+
+volatile float g_lpf_Q = 0.707f;
+volatile float g_lpf_FC = 1500.f;
+volatile uint8_t g_lpf_dirty = 1;
+
+
+
 ADSR_Control_t adsr = { .attack_steps = 4410,    // 0.1s // 현재 전송 속도 44.1KHz
 		.decay_steps = 4410,     // 0.1s
 		.sustain_level = 0.5f,   // 50% volume
@@ -80,7 +92,7 @@ void NoteOff(void) {
 }
 
 void Init_All_LUTs(void) {
-	int16_t amplitude = 10000; // 이게 최고 볼륭, 이론 상 최고 볼륨은 32,767
+	int16_t amplitude = 7000; // 이게 최고 볼륭, 이론 상 최고 볼륨은 32,767
 
 	for (int i = 0; i < LUT_SIZE; i++) {
 		// 1. Sine Wave (기존과 동일)
@@ -109,12 +121,18 @@ void Calc_Wave_LUT(int16_t *buffer, int length)
     // ✅ 필터는 “한 번만” 초기화 (상태 유지)
     static Biquad lpf;
     static int inited = 0;
+
+
     if (!inited) {
         biquad_reset(&lpf);
-        biquad_set_lpf(&lpf, (float)SAMPLE_RATE, 1500.0f, 3.707f); // ✅ Fs는 SAMPLE_RATE로
+        biquad_set_lpf(&lpf, (float)SAMPLE_RATE, g_lpf_FC, g_lpf_Q); // ✅ Fs는 SAMPLE_RATE로
         inited = 1;
     }
 
+    if (g_lpf_dirty) {
+        g_lpf_dirty = 0;
+        biquad_set_lpf(&lpf, (float)SAMPLE_RATE, g_lpf_FC, g_lpf_Q);
+    }
     for (int i = 0; i < length; i += 2) {
 
         // --- [1] ADSR 상태 머신 처리 ---
