@@ -44,6 +44,8 @@ static const uint16_t ROW_PIN[4] = { R1_Pin, R2_Pin, R3_Pin, R4_Pin };
 /* ====== RTOS handles ====== */
 static SemaphoreHandle_t printfMutex = NULL;
 
+volatile uint8_t KEY;
+
 typedef enum {
 	EV_KEY_DOWN = 0, EV_KEY_UP = 1,
 } InputEventType;
@@ -59,6 +61,7 @@ static const char* ev_name(InputEventType t) {
 
 static uint16_t matrix_scan_raw(void) {
 	uint16_t mask = 0;
+
 
 	/* 모든 컬럼 HIGH */
 	for (int c = 0; c < 4; c++) {
@@ -130,9 +133,13 @@ static void debounce_update(uint16_t raw, uint16_t *down_edges,
 
 static void print_event(const InputEvent *e) {
 	// 사람이 보기 좋게 1~16로 표시하려면 key+1
+
+	//static uint8_t count_arr[7];
+
 	if (printfMutex)
 		xSemaphoreTake(printfMutex, portMAX_DELAY);
 
+	KEY = e->key;
 	if (e->key == 7) {
 		current_lut = saw_lut;
 	} else if (e->key == 8) {
@@ -201,7 +208,7 @@ void KeypadTasks_Init(void) {
 
 	BaseType_t ok = xTaskCreate(KeyScanTask, "KeyScan", 256,
 	NULL,
-	tskIDLE_PRIORITY + 2,
+	tskIDLE_PRIORITY + 53,
 	NULL);
 	configASSERT(ok == pdPASS);
 }

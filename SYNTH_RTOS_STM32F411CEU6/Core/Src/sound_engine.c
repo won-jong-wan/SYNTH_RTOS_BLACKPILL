@@ -13,12 +13,14 @@
 
 #include <math.h>
 #include "user_rtos.h"
-
+#include <stdio.h>
 #define OCTAVE_SHIFT  1
 
 extern I2S_HandleTypeDef hi2s1;
 
 double freq_list[] = {FREQ_C4, FREQ_D4, FREQ_E4, FREQ_F4, FREQ_G4, FREQ_A4, FREQ_B4};
+
+uint8_t count_arr[7] = {0};
 
 // --- 변수 ---
 typedef enum {
@@ -26,6 +28,10 @@ typedef enum {
 } ADSR_State_t;
 
 typedef struct {
+	float  freq;
+	uint8_t count;
+	uint32_t phase_accumulator;
+	uint32_t tuning_word;
 	// 설정값 (Time은 샘플 개수 단위, Level은 0.0~1.0)
 	uint32_t attack_steps;   // Attack에 걸리는 시간 (샘플 수)
 	uint32_t decay_steps;    // Decay에 걸리는 시간 (샘플 수)
@@ -65,11 +71,19 @@ volatile uint8_t g_lpf_dirty = 1;
 
 
 
-ADSR_Control_t adsr = { .attack_steps = 4410,    // 0.1s // 현재 전송 속도 44.1KHz
-		.decay_steps = 4410,     // 0.1s
-		.sustain_level = 0.5f,   // 50% volume
-		.release_steps = 13230,  // 0.3s
-		.state = ADSR_IDLE, .current_level = 0.0f, .step_val = 0.0f };
+ADSR_Control_t basic_adsr = {
+		.freq 				= FREQ_C4,
+		.tuning_word		= 0.f,
+		.count				= 0,
+		.phase_accumulator 	= 0,
+		.attack_steps 		= 4410,    // 0.1s // 현재 전송 속도 44.1KHz
+		.decay_steps 		= 4410,     // 0.1s
+		.sustain_level 		= 0.5f,   // 50% volume
+		.release_steps 		= 13230,  // 0.3s
+		.state = ADSR_IDLE,
+		.current_level = 0.0f,
+		.step_val = 0.0f
+};
 
 //ADSR_Control_t adsr = { .attack_steps = 0,    // 0.1s // 현재 전송 속도 44.1KHz
 //		.decay_steps = 2205,     // 0.1s
@@ -77,18 +91,96 @@ ADSR_Control_t adsr = { .attack_steps = 4410,    // 0.1s // 현재 전송 속도
 //		.release_steps = 2205,  // 0.3s
 //		.state = ADSR_IDLE, .current_level = 0.0f, .step_val = 0.0f };
 
+ADSR_Control_t adsrs[MAX_VOICES];
+
+
+
+
 void NoteOn(void) {
-	adsr.state = ADSR_ATTACK;
+	//adsr.state = ADSR_ATTACK;
 	// 0.0에서 1.0까지 가는데 필요한 스텝 계산
 	// 이미 소리가 나고 있는 중일 수도 있으므로 (1.0 - 현재) / steps
-	adsr.step_val = (1.0f - adsr.current_level) / (float) adsr.attack_steps;
+
+	//adsr.step_val = (1.0f - adsr.current_level) / (float) adsr.attack_steps;
 	// 차이를 앞으로 갈 스탭 수로 나눔 = 한 스탭 당 바뀌어야하는 값
+
+	int8_t new_voice_idx = 0;
+	int8_t min_count = 127;
+
+
+	static int8_t count = 0;
+
+
+
+    for (int i = 0; i < MAX_VOICES; i++){
+    	if (adsrs[i].state == ADSR_IDLE) {
+    		new_voice_idx = i;
+    		break;
+    	}
+        if (adsrs[i].count < min_count) {
+            min_count = adsrs[i].count;
+            new_voice_idx = i;
+        }
+
+    }
+    printf("New voice idx %d\n", new_voice_idx);
+
+    adsrs[new_voice_idx] 		= basic_adsr;
+    adsrs[new_voice_idx].freq 	= target_freq;
+    adsrs[new_voice_idx].count 	= ++count;
+    adsrs[new_voice_idx].state 	= ADSR_ATTACK;
+    adsrs[new_voice_idx].step_val = 0.1f;
+    adsrs[new_voice_idx].tuning_word = (uint32_t)((double)target_freq * 4294967296.0 / (double)SAMPLE_RATE);
+    printf("idle to attack\n");
+
+
+	if (count >= 127){
+		int8_t min = 127;
+
+		    // 1) 활성 voice의 최소 count 찾기
+		    for (int i = 0; i < MAX_VOICES; i++) {
+		        if (adsrs[i].state != ADSR_IDLE && adsrs[i].count < min) {
+		            min = adsrs[i].count;
+		        }
+		    }
+		    // 활성 voice가 하나도 없으면 그냥 초기화
+		    if (min == 127) {
+		        count = 0;
+		    }
+		    else {
+		        int8_t offset = (int8_t)(min - 1);
+
+		        // 2) 모든 voice count를 동일 오프셋만큼 당김 (상대관계 유지)
+		        for (int i = 0; i < MAX_VOICES; i++) {
+		            if (adsrs[i].state != ADSR_IDLE) {
+		                adsrs[i].count -= offset;
+		            }
+		            else {
+		                adsrs[i].count = 0;
+		            }
+		        }
+		        // 3) 전역 count도 같은 기준으로 보정
+		        count -= offset;
+
+		    }
+	}
+	count_arr[KEY] = count;
 }
 
 void NoteOff(void) {
-	adsr.state = ADSR_RELEASE;
-	// 현재 레벨에서 0.0까지 가는데 필요한 스텝
-	adsr.step_val = adsr.current_level / (float) adsr.release_steps;
+
+	for (int i = 0; i < MAX_VOICES; i++){
+		if (adsrs[i].count == count_arr[KEY]){
+			adsrs[i].state = ADSR_RELEASE;
+			adsrs[i].step_val = adsrs[i].current_level / (float) adsrs[i].release_steps;
+			break;
+		}
+	}
+
+
+
+
+
 }
 
 void Init_All_LUTs(void) {
@@ -116,7 +208,7 @@ void Init_All_LUTs(void) {
 
 void Calc_Wave_LUT(int16_t *buffer, int length)
 {
-    tuning_word = (uint32_t)((double)target_freq * 4294967296.0 / (double)SAMPLE_RATE);
+    //tuning_word = (uint32_t)((double)target_freq * 4294967296.0 / (double)SAMPLE_RATE);
 
     // ✅ 필터는 “한 번만” 초기화 (상태 유지)
     static Biquad lpf;
@@ -133,79 +225,97 @@ void Calc_Wave_LUT(int16_t *buffer, int length)
         g_lpf_dirty = 0;
         biquad_set_lpf(&lpf, (float)SAMPLE_RATE, g_lpf_FC, g_lpf_Q);
     }
+
+
     for (int i = 0; i < length; i += 2) {
+		buffer[i]     = 0;
+		buffer[i + 1] = 0;
+        for (int voice_idx = 0; voice_idx < MAX_VOICES; voice_idx++) {
+        	target_freq = adsrs[voice_idx].freq;
+        	tuning_word = adsrs[voice_idx].tuning_word; //(uint32_t)((double)target_freq * 4294967296.0 / (double)SAMPLE_RATE);
 
-        // --- [1] ADSR 상태 머신 처리 ---
-        switch (adsr.state) {
-        case ADSR_IDLE:
-            adsr.current_level = 0.0f;
-            break;
+			// --- [1] ADSR 상태 머신 처리 ---
+			switch (adsrs[voice_idx].state) {
+			case ADSR_IDLE:
+				adsrs[voice_idx].current_level = 0.0f;
+				break;
 
-        case ADSR_ATTACK:
-            adsr.current_level += adsr.step_val;
-            if (adsr.current_level >= 1.0f) {
-                adsr.current_level = 1.0f;
-                adsr.state = ADSR_DECAY;
-                adsr.step_val = (1.0f - adsr.sustain_level) / (float)adsr.decay_steps;
-            }
-            break;
+			case ADSR_ATTACK:
+				adsrs[voice_idx].current_level += adsrs[voice_idx].step_val;
 
-        case ADSR_DECAY:
-            adsr.current_level -= adsr.step_val;
-            if (adsr.current_level <= adsr.sustain_level) {
-                adsr.current_level = adsr.sustain_level;
-                adsr.state = ADSR_SUSTAIN;
-                adsr.step_val = 0.0f;
-            }
-            break;
+				if (adsrs[voice_idx].current_level >= 1.0f) {
+					adsrs[voice_idx].current_level = 1.0f;
+					adsrs[voice_idx].state = ADSR_DECAY;
+					adsrs[voice_idx].step_val = (1.0f - adsrs[voice_idx].sustain_level) / (float)adsrs[voice_idx].decay_steps;
+					printf("attack to decay\n");
+				}
+				break;
 
-        case ADSR_SUSTAIN:
-            break;
+			case ADSR_DECAY:
+				adsrs[voice_idx].current_level -= adsrs[voice_idx].step_val;
+				if (adsrs[voice_idx].current_level <= adsrs[voice_idx].sustain_level) {
+					adsrs[voice_idx].current_level = adsrs[voice_idx].sustain_level;
+					adsrs[voice_idx].state = ADSR_SUSTAIN;
+					adsrs[voice_idx].step_val = 0.0f;
+				    printf("ADSR_DECAY to ADSR_SUSTAIN\n");
+				}
+				break;
 
-        case ADSR_RELEASE:
-            adsr.current_level -= adsr.step_val;
-            if (adsr.current_level <= 0.0f) {
-                adsr.current_level = 0.0f;
-                adsr.state = ADSR_IDLE;
-            }
-            break;
-        }
+			case ADSR_SUSTAIN:
+				break;
 
-        // --- [2] 무음이면 출력 0 ---
-        if (adsr.current_level <= 0.0001f) {
-            buffer[i] = 0;
-            buffer[i + 1] = 0;
-            phase_accumulator += tuning_word;
-            continue;
-        }
+			case ADSR_RELEASE:
+				adsrs[voice_idx].current_level -= adsrs[voice_idx].step_val;
+				if (adsrs[voice_idx].current_level <= 0.0f) {
+					adsrs[voice_idx].current_level = 0.0f;
+					adsrs[voice_idx].state = ADSR_IDLE;
+					printf("ADSR_RELEASE to idle\n");
+				}
+				break;
+			}
 
-        // --- [3] 파형 생성 + ADSR ---
-        uint32_t index = phase_accumulator >> LUT_SHIFT;
-        int16_t raw_val = current_lut[index];
-        float s = (float)raw_val * adsr.current_level; // float로 유지
+			// --- [2] 무음이면 출력 0 ---
+			if (adsrs[voice_idx].current_level <= 0.0001f) {
 
-        // --- [4] ✅ IIR 필터 적용 ---
-        float x = s / 32768.0f;
-        float y = biquad_process(&lpf, x);
+				adsrs[voice_idx].phase_accumulator += tuning_word;
+				continue;
+			}
 
-        float out_f = y * 32767.0f;
-        if (out_f >  32767.0f) out_f =  32767.0f;
-        if (out_f < -32768.0f) out_f = -32768.0f;
+			// --- [3] 파형 생성 + ADSR ---
+			uint32_t index = adsrs[voice_idx].phase_accumulator >> LUT_SHIFT;
+			int16_t raw_val = current_lut[index];
+			float s = (float)raw_val * adsrs[voice_idx].current_level; // float로 유지
 
-        int16_t out = (int16_t)out_f;
 
-        buffer[i]     = out;
-        buffer[i + 1] = out;
+			// --- [4] ✅ IIR 필터 적용 ---
+			float x = s / 32768.0f;
+			float y = biquad_process(&lpf, x);
 
-        phase_accumulator += tuning_word;
+			float out_f = y * 32767.0f;
+			if (out_f >  32767.0f) out_f =  32767.0f;
+			if (out_f < -32768.0f) out_f = -32768.0f;
+
+			int16_t out = (int16_t)out_f;
+
+			buffer[i]     += out;
+			buffer[i + 1] += out;
+
+			adsrs[voice_idx].phase_accumulator += tuning_word;
+		}
+
     }
 }
 void StartAudioTask(void *argument) {
+
 	audioTaskHandle = xTaskGetCurrentTaskHandle();
 
-	Init_All_LUTs(); // 이름 변경됨
+    for (int i = 0; i < MAX_VOICES; i++) {
+        adsrs[i] = basic_adsr;
+    }
 
-	Calc_Wave_LUT(&i2s_buffer[0], BUFFER_SIZE); // 이름 변경됨
+	Init_All_LUTs();
+
+	Calc_Wave_LUT(&i2s_buffer[0], BUFFER_SIZE);
 
 	HAL_I2S_Transmit_DMA(&hi2s1, (uint16_t*) i2s_buffer, BUFFER_SIZE);
 

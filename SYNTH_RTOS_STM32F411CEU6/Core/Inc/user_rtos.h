@@ -15,6 +15,9 @@
 #define LUT_SIZE      1024
 #define LUT_SHIFT     (32 - 10)
 
+#define MAX_VOICES    5
+
+
 // 주파수 설정
 #define FREQ_C4       261.63f
 #define FREQ_D4       293.66f
@@ -52,6 +55,8 @@ void  biquad_reset(Biquad *q);
 void  biquad_set_lpf(Biquad *q, float Fs, float Fc, float Q);
 float biquad_process(Biquad *q, float x);
 extern volatile uint8_t g_lpf_dirty;   // 파라미터 바뀜 플래그
+extern volatile uint8_t KEY;
+
 extern volatile float g_lpf_Q;
 extern volatile float g_lpf_FC;
 
