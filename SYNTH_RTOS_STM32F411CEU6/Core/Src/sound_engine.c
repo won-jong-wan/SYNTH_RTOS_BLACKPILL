@@ -230,6 +230,7 @@ void Calc_Wave_LUT(int16_t *buffer, int length)
     for (int i = 0; i < length; i += 2) {
 		buffer[i]     = 0;
 		buffer[i + 1] = 0;
+		float s = 0;
         for (int voice_idx = 0; voice_idx < MAX_VOICES; voice_idx++) {
         	target_freq = adsrs[voice_idx].freq;
         	tuning_word = adsrs[voice_idx].tuning_word; //(uint32_t)((double)target_freq * 4294967296.0 / (double)SAMPLE_RATE);
@@ -283,25 +284,29 @@ void Calc_Wave_LUT(int16_t *buffer, int length)
 
 			// --- [3] 파형 생성 + ADSR ---
 			uint32_t index = adsrs[voice_idx].phase_accumulator >> LUT_SHIFT;
-			int16_t raw_val = current_lut[index];
-			float s = (float)raw_val * adsrs[voice_idx].current_level; // float로 유지
-
-
-			// --- [4] ✅ IIR 필터 적용 ---
-			float x = s / 32768.0f;
-			float y = biquad_process(&lpf, x);
-
-			float out_f = y * 32767.0f;
-			if (out_f >  32767.0f) out_f =  32767.0f;
-			if (out_f < -32768.0f) out_f = -32768.0f;
-
-			int16_t out = (int16_t)out_f;
-
-			buffer[i]     += out;
-			buffer[i + 1] += out;
-
 			adsrs[voice_idx].phase_accumulator += tuning_word;
+
+			int16_t raw_val = current_lut[index];
+			s += (float)raw_val * adsrs[voice_idx].current_level; // float로 유지
+
+
+
+
+
 		}
+        // --- [4] ✅ IIR 필터 적용 ---
+		float x = s / 32768.0f;
+		float y = biquad_process(&lpf, x);
+
+		float out_f = y * 32767.0f;
+		if (out_f >  32767.0f) out_f =  32767.0f;
+		if (out_f < -32768.0f) out_f = -32768.0f;
+
+		int16_t out = (int16_t)out_f;
+
+		buffer[i]     += out;
+		buffer[i + 1] += out;
+
 
     }
 }

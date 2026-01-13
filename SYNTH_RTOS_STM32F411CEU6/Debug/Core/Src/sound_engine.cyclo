@@ -2,8 +2,8 @@
 ../Core/Src/sound_engine.c:170:6:NoteOff	3
 ../Core/Src/sound_engine.c:186:6:Init_All_LUTs	3
 ../Core/Src/sound_engine.c:209:6:Calc_Wave_LUT	15
-../Core/Src/sound_engine.c:307:6:StartAudioTask	4
-../Core/Src/sound_engine.c:338:6:HAL_I2S_TxHalfCpltCallback	3
-../Core/Src/sound_engine.c:348:6:HAL_I2S_TxCpltCallback	3
-../Core/Src/sound_engine.c:359:6:InitTasks	1
-../Core/Src/sound_engine.c:363:6:Test	1
+../Core/Src/sound_engine.c:313:6:StartAudioTask	4
+../Core/Src/sound_engine.c:344:6:HAL_I2S_TxHalfCpltCallback	3
+../Core/Src/sound_engine.c:354:6:HAL_I2S_TxCpltCallback	3
+../Core/Src/sound_engine.c:365:6:InitTasks	1
+../Core/Src/sound_engine.c:369:6:Test	1
