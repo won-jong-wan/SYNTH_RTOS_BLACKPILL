@@ -147,8 +147,10 @@ static void print_event(const InputEvent *e) {
 	} else if (e->type == EV_KEY_UP && e->key < 7) {
 		NoteOff();
 	}
+#ifdef BTN_DEBUG
 	printf("[EV] key=%u type=%s\r\n", (unsigned) (e->key + 1),
 			ev_name(e->type));
+#endif
 	if (printfMutex)
 		xSemaphoreGive(printfMutex);
 }
