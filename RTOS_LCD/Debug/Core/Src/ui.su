@@ -1,0 +1,7 @@
+../Core/Src/ui.c:28:6:UI_Init	24	static
+../Core/Src/ui.c:57:13:Generate_Sine_Samples	16	static
+../Core/Src/ui.c:63:13:draw_main_dashboard	16	static
+../Core/Src/ui.c:78:13:draw_system_info	16	static
+../Core/Src/ui.c:90:13:draw_moving_sine	32	static
+../Core/Src/ui.c:112:13:LCD_Task	32	static
+../Core/Src/ui.c:148:6:HAL_GPIO_EXTI_Callback	32	static,ignoring_inline_asm

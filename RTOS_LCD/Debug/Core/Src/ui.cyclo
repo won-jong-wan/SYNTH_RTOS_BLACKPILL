@@ -1,0 +1,7 @@
+../Core/Src/ui.c:28:6:UI_Init	3
+../Core/Src/ui.c:57:13:Generate_Sine_Samples	2
+../Core/Src/ui.c:63:13:draw_main_dashboard	1
+../Core/Src/ui.c:78:13:draw_system_info	1
+../Core/Src/ui.c:90:13:draw_moving_sine	6
+../Core/Src/ui.c:112:13:LCD_Task	8
+../Core/Src/ui.c:148:6:HAL_GPIO_EXTI_Callback	7
