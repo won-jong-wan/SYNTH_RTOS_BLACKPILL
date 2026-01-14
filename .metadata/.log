@@ -96,3 +96,41 @@ java.lang.NullPointerException: Cannot invoke "org.eclipse.swt.widgets.Shell.set
 	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:668)
 	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:605)
 	at org.eclipse.equinox.launcher.Main.run(Main.java:1481)
+!SESSION 2026-01-14 11:25:13.117 -----------------------------------------------
+eclipse.buildId=Version 1.19.0
+java.version=21.0.3
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=ko_KR
+Framework arguments:  C:\Users\User\Desktop\SYNTH_RTOS_BLACKPILL\RTOS_LCD\.project
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 C:\Users\User\Desktop\SYNTH_RTOS_BLACKPILL\RTOS_LCD\.project
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2026-01-14 11:25:18.711
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2026-01-14 11:25:18.712
+!MESSAGE Log4j2 initialized with config file C:\Users\User\Desktop\SYNTH_RTOS_BLACKPILL\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2026-01-14 11:25:21.709
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.cdt.core 1 0 2026-01-14 11:25:24.481
+!MESSAGE Indexed 'RTOS_LCD' (39 sources, 156 headers) in 2.54 sec: 17,724 declarations; 76,779 references; 1 unresolved inclusions; 202 syntax errors; 241 unresolved names (0.25%)
+!SESSION 2026-01-14 17:52:49.276 -----------------------------------------------
+eclipse.buildId=Version 1.19.0
+java.version=21.0.3
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=ko_KR
+Framework arguments:  C:\Users\User\Desktop\SYNTH_RTOS_BLACKPILL\RTOS_LCD\.project
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 C:\Users\User\Desktop\SYNTH_RTOS_BLACKPILL\RTOS_LCD\.project
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2026-01-14 17:52:53.066
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2026-01-14 17:52:53.068
+!MESSAGE Log4j2 initialized with config file C:\Users\User\Desktop\SYNTH_RTOS_BLACKPILL\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2026-01-14 17:52:56.088
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.cdt.core 1 0 2026-01-14 17:52:58.880
+!MESSAGE Indexed 'RTOS_LCD' (39 sources, 156 headers) in 2.56 sec: 17,756 declarations; 76,922 references; 1 unresolved inclusions; 202 syntax errors; 241 unresolved names (0.25%)

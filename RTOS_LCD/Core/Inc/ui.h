@@ -16,16 +16,20 @@
 /* ===== 화면 상태 정의 ===== */
 typedef enum {
     LCD_STATE_INIT = 0,
-    LCD_STATE_MAIN_DASH,
-    LCD_STATE_SUB_INFO,
-    LCD_STATE_GRAPH_VIEW
+	LCD_STATE_MAIN_DASH,
+	LCD_STATE_ADSR_VIEW
 } LcdState_t;
 
 /* ===== 전역 변수 (외부 접근용) ===== */
 extern TaskHandle_t lcdTaskHandle;
 extern QueueHandle_t lcdQueueHandle;
 extern LcdState_t currentLcdState;
-extern uint8_t sin_samples[1024];
+
+extern uint8_t adsr_samples[1024];
+extern uint8_t filtered_samples[1024];
+
+extern LcdState_t currentLcdState;
+extern uint8_t selected_adsr_idx;
 
 /* ===== 초기화 함수 ===== */
 void UI_Init(void);

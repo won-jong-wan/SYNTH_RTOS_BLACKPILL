@@ -3,6 +3,9 @@
 	<item key="hasShownOverlayPopupBefore" value="true"/>
 	<item key="replaceBarOpen" value="false"/>
 	<list key="searchhistory">
+		<item value="50"/>
+		<item value="ILI9341_Draw_Colour_Burst"/>
+		<item value="ILI9341_Draw_Pixel"/>
 		<item value="LCDTaskHandle "/>
 		<item value="i2s"/>
 	</list>
