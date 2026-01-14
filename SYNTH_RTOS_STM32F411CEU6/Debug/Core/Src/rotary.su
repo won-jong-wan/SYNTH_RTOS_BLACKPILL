@@ -1,10 +1,5 @@
-../Core/Src/rotary.c:22:20:push_evt_from_isr	32	static,ignoring_inline_asm
-../Core/Src/rotary.c:34:21:clampf	24	static
-../Core/Src/rotary.c:72:23:read_ab	24	static
-../Core/Src/rotary.c:91:23:read_btn	16	static
-../Core/Src/rotary.c:103:23:btn_pressed_level	16	static
-../Core/Src/rotary.c:109:6:handle_enc_ab	24	static
-../Core/Src/rotary.c:130:6:handle_btn_edge	24	static
-../Core/Src/rotary.c:151:6:InputTask	64	static
-../Core/Src/rotary.c:200:6:RotaryTasks_Init	32	static,ignoring_inline_asm
-../Core/Src/rotary.c:213:6:HAL_GPIO_EXTI_Callback	16	static
+../Core/Src/rotary.c:33:21:clampf	24	static
+../Core/Src/rotary.c:41:13:Apply_Rotary1_Change	32	static
+../Core/Src/rotary.c:54:13:Apply_Rotary2_Change	32	static
+../Core/Src/rotary.c:67:6:InputTask	48	static
+../Core/Src/rotary.c:125:6:RotaryTasks_Init	24	static,ignoring_inline_asm

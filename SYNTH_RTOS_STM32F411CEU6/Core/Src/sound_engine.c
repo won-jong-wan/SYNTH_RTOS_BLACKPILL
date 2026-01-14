@@ -123,7 +123,7 @@ void NoteOn(void) {
         }
 
     }
-    printf("New voice idx %d\n", new_voice_idx);
+//    printf("New voice idx %d\n", new_voice_idx);
 
     adsrs[new_voice_idx] 		= basic_adsr;
     adsrs[new_voice_idx].freq 	= target_freq;
@@ -131,7 +131,7 @@ void NoteOn(void) {
     adsrs[new_voice_idx].state 	= ADSR_ATTACK;
     adsrs[new_voice_idx].step_val = 0.1f;
     adsrs[new_voice_idx].tuning_word = (uint32_t)((double)target_freq * 4294967296.0 / (double)SAMPLE_RATE);
-    printf("idle to attack\n");
+//    printf("idle to attack\n");
 
 
 	if (count >= 127){
@@ -248,7 +248,7 @@ void Calc_Wave_LUT(int16_t *buffer, int length)
 					adsrs[voice_idx].current_level = 1.0f;
 					adsrs[voice_idx].state = ADSR_DECAY;
 					adsrs[voice_idx].step_val = (1.0f - adsrs[voice_idx].sustain_level) / (float)adsrs[voice_idx].decay_steps;
-					printf("attack to decay\n");
+//					printf("attack to decay\n");
 				}
 				break;
 
@@ -258,7 +258,7 @@ void Calc_Wave_LUT(int16_t *buffer, int length)
 					adsrs[voice_idx].current_level = adsrs[voice_idx].sustain_level;
 					adsrs[voice_idx].state = ADSR_SUSTAIN;
 					adsrs[voice_idx].step_val = 0.0f;
-				    printf("ADSR_DECAY to ADSR_SUSTAIN\n");
+//				    printf("ADSR_DECAY to ADSR_SUSTAIN\n");
 				}
 				break;
 
@@ -270,7 +270,7 @@ void Calc_Wave_LUT(int16_t *buffer, int length)
 				if (adsrs[voice_idx].current_level <= 0.0f) {
 					adsrs[voice_idx].current_level = 0.0f;
 					adsrs[voice_idx].state = ADSR_IDLE;
-					printf("ADSR_RELEASE to idle\n");
+//					printf("ADSR_RELEASE to idle\n");
 				}
 				break;
 			}

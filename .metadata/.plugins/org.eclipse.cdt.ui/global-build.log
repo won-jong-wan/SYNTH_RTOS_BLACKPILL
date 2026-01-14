@@ -1,36 +1,90 @@
-15:25:48 **** Incremental Build of configuration Debug for project SYNTH_RTOS_STM32F411CEU6 ****
+15:43:14 **** Incremental Build of configuration Debug for project SYNTH_RTOS_STM32F411CEU6 ****
 make -j24 all 
-arm-none-eabi-gcc "../Core/Src/btn.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/btn.d" -MT"Core/Src/btn.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/btn.o"
-arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
-arm-none-eabi-gcc "../Core/Src/sound_engine.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/sound_engine.d" -MT"Core/Src/sound_engine.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/sound_engine.o"
-arm-none-eabi-gcc -o "SYNTH_RTOS_STM32F411CEU6.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kccistc\Desktop\SYNTH_RTOS_BLACKPILL\SYNTH_RTOS_STM32F411CEU6\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="SYNTH_RTOS_STM32F411CEU6.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+arm-none-eabi-gcc "../Core/Src/ILI9341_STM32_Driver.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/ILI9341_STM32_Driver.d" -MT"Core/Src/ILI9341_STM32_Driver.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/ILI9341_STM32_Driver.o"
+arm-none-eabi-gcc -o "SYNTH_RTOS_STM32F411CEU6.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kccistc\Desktop\SYNTH_RTOS_BLACKPILL\SYNTH_RTOS_STM32F411CEU6\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="SYNTH_RTOS_STM32F411CEU6.map" -Wl,--gc-sections -static -u _printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 Finished building target: SYNTH_RTOS_STM32F411CEU6.elf
  
 arm-none-eabi-size  SYNTH_RTOS_STM32F411CEU6.elf 
 arm-none-eabi-objdump -h -S SYNTH_RTOS_STM32F411CEU6.elf  > "SYNTH_RTOS_STM32F411CEU6.list"
    text	   data	    bss	    dec	    hex	filename
-  39360	    200	  35440	  75000	  124f8	SYNTH_RTOS_STM32F411CEU6.elf
+  64648	    600	  37424	 102672	  19110	SYNTH_RTOS_STM32F411CEU6.elf
 Finished building: default.size.stdout
  
 Finished building: SYNTH_RTOS_STM32F411CEU6.list
  
-15:25:50 **** Incremental Build of configuration Debug for project SYNTH_RTOS_STM32F411CEU6 ****
+15:43:19 **** Incremental Build of configuration Debug for project SYNTH_RTOS_STM32F411CEU6 ****
 make -j24 all 
 arm-none-eabi-size  SYNTH_RTOS_STM32F411CEU6.elf 
    text	   data	    bss	    dec	    hex	filename
-  39360	    200	  35440	  75000	  124f8	SYNTH_RTOS_STM32F411CEU6.elf
+  64648	    600	  37424	 102672	  19110	SYNTH_RTOS_STM32F411CEU6.elf
 Finished building: default.size.stdout
  
-15:26:53 **** Incremental Build of configuration Debug for project SYNTH_RTOS_STM32F411CEU6 ****
+15:44:11 **** Incremental Build of configuration Debug for project SYNTH_RTOS_STM32F411CEU6 ****
 make -j24 all 
-arm-none-eabi-gcc "../Core/Src/btn.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/btn.d" -MT"Core/Src/btn.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/btn.o"
-arm-none-eabi-gcc -o "SYNTH_RTOS_STM32F411CEU6.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kccistc\Desktop\SYNTH_RTOS_BLACKPILL\SYNTH_RTOS_STM32F411CEU6\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="SYNTH_RTOS_STM32F411CEU6.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "SYNTH_RTOS_STM32F411CEU6.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kccistc\Desktop\SYNTH_RTOS_BLACKPILL\SYNTH_RTOS_STM32F411CEU6\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="SYNTH_RTOS_STM32F411CEU6.map" -Wl,--gc-sections -static -u _printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 Finished building target: SYNTH_RTOS_STM32F411CEU6.elf
  
 arm-none-eabi-size  SYNTH_RTOS_STM32F411CEU6.elf 
 arm-none-eabi-objdump -h -S SYNTH_RTOS_STM32F411CEU6.elf  > "SYNTH_RTOS_STM32F411CEU6.list"
    text	   data	    bss	    dec	    hex	filename
-  39360	    200	  35440	  75000	  124f8	SYNTH_RTOS_STM32F411CEU6.elf
+  64648	    600	  37424	 102672	  19110	SYNTH_RTOS_STM32F411CEU6.elf
+Finished building: default.size.stdout
+ 
+Finished building: SYNTH_RTOS_STM32F411CEU6.list
+ 
+15:45:07 **** Incremental Build of configuration Debug for project SYNTH_RTOS_STM32F411CEU6 ****
+make -j24 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "SYNTH_RTOS_STM32F411CEU6.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kccistc\Desktop\SYNTH_RTOS_BLACKPILL\SYNTH_RTOS_STM32F411CEU6\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="SYNTH_RTOS_STM32F411CEU6.map" -Wl,--gc-sections -static -u _printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: SYNTH_RTOS_STM32F411CEU6.elf
+ 
+arm-none-eabi-size  SYNTH_RTOS_STM32F411CEU6.elf 
+arm-none-eabi-objdump -h -S SYNTH_RTOS_STM32F411CEU6.elf  > "SYNTH_RTOS_STM32F411CEU6.list"
+   text	   data	    bss	    dec	    hex	filename
+  64648	    600	  37424	 102672	  19110	SYNTH_RTOS_STM32F411CEU6.elf
+Finished building: default.size.stdout
+ 
+Finished building: SYNTH_RTOS_STM32F411CEU6.list
+ 
+15:45:53 **** Incremental Build of configuration Debug for project SYNTH_RTOS_STM32F411CEU6 ****
+make -j24 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "SYNTH_RTOS_STM32F411CEU6.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kccistc\Desktop\SYNTH_RTOS_BLACKPILL\SYNTH_RTOS_STM32F411CEU6\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="SYNTH_RTOS_STM32F411CEU6.map" -Wl,--gc-sections -static -u _printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: SYNTH_RTOS_STM32F411CEU6.elf
+ 
+arm-none-eabi-size  SYNTH_RTOS_STM32F411CEU6.elf 
+arm-none-eabi-objdump -h -S SYNTH_RTOS_STM32F411CEU6.elf  > "SYNTH_RTOS_STM32F411CEU6.list"
+   text	   data	    bss	    dec	    hex	filename
+  64648	    600	  37424	 102672	  19110	SYNTH_RTOS_STM32F411CEU6.elf
+Finished building: default.size.stdout
+ 
+Finished building: SYNTH_RTOS_STM32F411CEU6.list
+ 
+15:51:21 **** Incremental Build of configuration Debug for project SYNTH_RTOS_STM32F411CEU6 ****
+make -j24 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "SYNTH_RTOS_STM32F411CEU6.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kccistc\Desktop\SYNTH_RTOS_BLACKPILL\SYNTH_RTOS_STM32F411CEU6\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="SYNTH_RTOS_STM32F411CEU6.map" -Wl,--gc-sections -static -u _printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: SYNTH_RTOS_STM32F411CEU6.elf
+ 
+arm-none-eabi-size  SYNTH_RTOS_STM32F411CEU6.elf 
+arm-none-eabi-objdump -h -S SYNTH_RTOS_STM32F411CEU6.elf  > "SYNTH_RTOS_STM32F411CEU6.list"
+   text	   data	    bss	    dec	    hex	filename
+  64648	    600	  37424	 102672	  19110	SYNTH_RTOS_STM32F411CEU6.elf
+Finished building: default.size.stdout
+ 
+Finished building: SYNTH_RTOS_STM32F411CEU6.list
+ 
+16:04:12 **** Incremental Build of configuration Debug for project SYNTH_RTOS_STM32F411CEU6 ****
+make -j24 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "SYNTH_RTOS_STM32F411CEU6.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kccistc\Desktop\SYNTH_RTOS_BLACKPILL\SYNTH_RTOS_STM32F411CEU6\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="SYNTH_RTOS_STM32F411CEU6.map" -Wl,--gc-sections -static -u _printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: SYNTH_RTOS_STM32F411CEU6.elf
+ 
+arm-none-eabi-size  SYNTH_RTOS_STM32F411CEU6.elf 
+arm-none-eabi-objdump -h -S SYNTH_RTOS_STM32F411CEU6.elf  > "SYNTH_RTOS_STM32F411CEU6.list"
+   text	   data	    bss	    dec	    hex	filename
+  64648	    600	  37424	 102672	  19110	SYNTH_RTOS_STM32F411CEU6.elf
 Finished building: default.size.stdout
  
 Finished building: SYNTH_RTOS_STM32F411CEU6.list

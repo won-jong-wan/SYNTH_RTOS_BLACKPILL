@@ -8,230 +8,137 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "main.h"
-#include "semphr.h"
-#include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "user_rtos.h"
 
-QueueHandle_t g_inputQ = NULL;
-volatile int32_t g_enc_pos[2] = {0, 0};
+// --- 설정값 정의 ---
+// Rotary 1 (Q Factor)
+#define Q_MIN 0.50f
+#define Q_MAX 8.00f
+#define Q_STEP 0.10f
 
-#define STEPS_PER_DETENT 4
-#define BTN_DEBOUNCE_MS  30
+// Rotary 2 (Cutoff Frequency)
+#define FC_MIN   50.0f
+#define FC_MAX   8000.0f
+#define FC_STEP  50.0f
 
-static inline void push_evt_from_isr(uint8_t id, uint8_t type, uint32_t data)
-{
-    BaseType_t hpw = pdFALSE;
-    input_evt_t e;
-    e.id   = id;
-    e.type = type;
-    e.tick = xTaskGetTickCountFromISR();
+// 엔코더 감도 설정 (2: 민감함, 4: 둔감함/안정적)
+#define ENC_STEPS_PER_NOTCH 2
 
-    xQueueSendFromISR(g_inputQ, &e, &hpw);
-    portYIELD_FROM_ISR(hpw);
-}
+// 전역 변수 (외부에서 참조한다고 가정)
+volatile int32_t g_enc_pos[2] = { 0, 0 };
 
-static inline float clampf(float x, float lo, float hi)
-{
+// --- Helper Functions ---
+static inline float clampf(float x, float lo, float hi) {
     if (x < lo) return lo;
     if (x > hi) return hi;
     return x;
 }
 
-// Rotary 1 (Q Factor) 설정
-#define Q_MIN 0.50f
-#define Q_MAX 8.00f
-#define Q_STEP 0.10f
+// --- [Logic Layer] 비즈니스 로직 분리 ---
+// 로터리 1이 움직였을 때 호출됨
+static void Apply_Rotary1_Change(int8_t dir) {
+    // 1. 위치값 단순 기록 (디버깅용)
+    g_enc_pos[0] += dir;
 
+    // 2. 실제 기능 (Q Factor 조절)
+    float q = g_lpf_Q + (float)dir * Q_STEP;
+    g_lpf_Q = clampf(q, Q_MIN, Q_MAX);
+    g_lpf_dirty = 1; // 오디오 태스크에 변경 알림
 
-// Fc (Cutoff Frequency, Hz)
-#define FC_MIN   50.0f     // 너무 낮으면 DC/웅웅거림
-#define FC_MAX   8000.0f   // SAMPLE_RATE=44.1k 기준 안전 상한
-#define FC_STEP  50.0f     // 로터리 한 칸당 50Hz
-
-// Rotary 2 설정 (예시: Gain이나 Freq 등) - 일단 로그 확인용
-// #define VAR2_MIN ...
-
-typedef struct {
-    uint8_t  prev_ab;
-    int8_t   step_acc;
-    uint8_t  btn_last;
-    uint32_t btn_last_tick;
-} enc_state_t;
-
-static enc_state_t s_enc[2];
-
-// 4상 전이 테이블
-static const int8_t s_qdec[16] = {
-    0, +1, -1,  0,
-   -1,  0,  0, +1,
-   +1,  0,  0, -1,
-    0, -1, +1,  0
-};
-
-static inline uint8_t read_ab(uint8_t id)
-{
-    uint8_t A = 0;
-    uint8_t B = 0;
-
-    if (id == 0) {
-        // Rotary 1
-        A = (HAL_GPIO_ReadPin(Rotary1_S1_GPIO_Port, Rotary1_S1_Pin) == GPIO_PIN_SET);
-        B = (HAL_GPIO_ReadPin(Rotary1_S2_GPIO_Port, Rotary1_S2_Pin) == GPIO_PIN_SET);
-    }
-    else if (id == 1) {
-        // [추가됨] Rotary 2
-        A = (HAL_GPIO_ReadPin(Rotary2_S1_GPIO_Port, Rotary2_S1_Pin) == GPIO_PIN_SET);
-        B = (HAL_GPIO_ReadPin(Rotary2_S2_GPIO_Port, Rotary2_S2_Pin) == GPIO_PIN_SET);
-    }
-
-    return (A << 1) | B;
+    printf("[R1] Q-Factor: %.2f (Pos: %ld)\r\n", g_lpf_Q, g_enc_pos[0]);
 }
 
-static inline uint8_t read_btn(uint8_t id)
-{
-    if (id == 0) {
-        return (HAL_GPIO_ReadPin(Rotary1_KEY_GPIO_Port, Rotary1_KEY_Pin) == GPIO_PIN_SET);
-    }
-    else if (id == 1) {
-        // [추가됨] Rotary 2 Key
-        return (HAL_GPIO_ReadPin(Rotary2_KEY_GPIO_Port, Rotary2_KEY_Pin) == GPIO_PIN_SET);
-    }
-    return 0;
+// 로터리 2가 움직였을 때 호출됨
+static void Apply_Rotary2_Change(int8_t dir) {
+    // 1. 위치값 단순 기록
+    g_enc_pos[1] += dir;
+
+    // 2. 실제 기능 (Cutoff Frequency 조절)
+    float fc = g_lpf_FC + (float)dir * FC_STEP;
+    g_lpf_FC = clampf(fc, FC_MIN, FC_MAX);
+    g_lpf_dirty = 1;
+
+    printf("[R2] Freq: %.0f Hz (Pos: %ld)\r\n", g_lpf_FC, g_enc_pos[1]);
 }
 
-static inline uint8_t btn_pressed_level(uint8_t raw)
-{
-    // Low Active 가정 (눌림=0 -> 1로 변환)
-    return (raw == 0) ? 1 : 0;
-}
+// --- [Driver Layer] 하드웨어 폴링 태스크 ---
+void InputTask(void *arg) {
+    // [초기화] 현재 타이머 값 읽기
+    // TIM4는 16비트, TIM5는 32비트지만 uint32_t로 통일해서 받아도 됨
+    uint32_t last_cnt1 = __HAL_TIM_GET_COUNTER(&htim4);
+    uint32_t last_cnt2 = __HAL_TIM_GET_COUNTER(&htim5);
 
-void handle_enc_ab(const input_evt_t *e)
-{
-    uint8_t id = e->id;
-    uint8_t ab = read_ab(id);
-
-    uint8_t prev = s_enc[id].prev_ab;
-    s_enc[id].prev_ab = ab;
-
-    int8_t d = s_qdec[(prev << 2) | ab];
-    if (d == 0) return;
-
-    s_enc[id].step_acc += d;
-    if (s_enc[id].step_acc >= STEPS_PER_DETENT) {
-        s_enc[id].step_acc = 0;
-        g_enc_pos[id] += 1;
-    } else if (s_enc[id].step_acc <= -STEPS_PER_DETENT) {
-        s_enc[id].step_acc = 0;
-        g_enc_pos[id] -= 1;
-    }
-}
-
-void handle_btn_edge(const input_evt_t *e)
-{
-    uint8_t id = e->id;
-    uint8_t raw = read_btn(id);
-    uint8_t pressed = btn_pressed_level(raw);
-    uint32_t now = e->tick;
-
-    // 디바운스 타임 체크
-    if ((now - s_enc[id].btn_last_tick) < BTN_DEBOUNCE_MS) return;
-
-    // 상태 변화가 있을 때만 처리
-    if (pressed != s_enc[id].btn_last) {
-        s_enc[id].btn_last_tick = now;
-        s_enc[id].btn_last = pressed;
-
-        if (pressed) {
-            printf("ENC%u BTN DOWN\r\n", (unsigned)id + 1); // 1-based index로 출력
-        }
-    }
-}
-
-void InputTask(void *arg)
-{
-    // 초기화
-    for (int i=0; i<2; i++) {
-        s_enc[i].prev_ab = read_ab(i);
-        s_enc[i].step_acc = 0;
-        s_enc[i].btn_last = btn_pressed_level(read_btn(i));
-        s_enc[i].btn_last_tick = 0;
-    }
-
-    int32_t last0 = g_enc_pos[0];
-    int32_t last1 = g_enc_pos[1];
-    input_evt_t e;
+    // 스텝 누적 변수 (나머지 처리용)
+    int16_t acc1 = 0;
+    int16_t acc2 = 0;
 
     for (;;) {
-        if (xQueueReceive(g_inputQ, &e, portMAX_DELAY) == pdTRUE) {
-            if (e.type == EVT_ENC_AB)        handle_enc_ab(&e);
-            else if (e.type == EVT_BTN_EDGE) handle_btn_edge(&e);
+        // 1. 현재 카운터 값 읽기
+        uint32_t curr_cnt1 = __HAL_TIM_GET_COUNTER(&htim4);
+        uint32_t curr_cnt2 = __HAL_TIM_GET_COUNTER(&htim5);
 
-            int32_t cur0 = g_enc_pos[0];
-            int32_t cur1 = g_enc_pos[1];
+        // 2. 변화량 계산 (핵심: int16_t 캐스팅으로 오버플로우 자동 해결)
+        // TIM4(16bit)가 0 -> 65535가 되어도 int16_t로 변환하면 -1이 됨
+        int16_t diff1 = (int16_t)(curr_cnt1 - last_cnt1);
+        int16_t diff2 = (int16_t)(curr_cnt2 - last_cnt2);
 
-            // 값이 바뀌었는지 체크
-            if (cur0 != last0 || cur1 != last1) {
+        // 3. 기준점 업데이트 (무조건 수행해야 함)
+        last_cnt1 = curr_cnt1;
+        last_cnt2 = curr_cnt2;
 
-                // --- Rotary 1 Logic (Q Factor) ---
-                int32_t delta0 = cur0 - last0;
-                if (delta0 != 0) {
-                    float q = g_lpf_Q + (float)delta0 * Q_STEP;
-                    g_lpf_Q = clampf(q, Q_MIN, Q_MAX);
-                    g_lpf_dirty = 1;
+        // --- Rotary 1 처리 ---
+        if (diff1 != 0) {
+            acc1 -= diff1;
+            // 설정된 스텝(예: 2칸) 이상 쌓이면 1칸 이동으로 간주
+            if (abs(acc1) >= ENC_STEPS_PER_NOTCH) {
+                int8_t dir = (acc1 > 0) ? 1 : -1;
 
-                }
+                // [Logic 호출] 여기서 비즈니스 로직 함수만 딱 부름
+                Apply_Rotary1_Change(dir);
 
-                // --- Rotary 2 Logic (Placeholder) ---
-                int32_t delta1 = cur1 - last1;
-                if (delta1 != 0) {
-                    float fc = g_lpf_FC + (float)delta1 * FC_STEP;
-                    g_lpf_FC = clampf(fc, FC_MIN, FC_MAX);
-                    g_lpf_dirty = 1;
-                }
-
-                last0 = cur0;
-                last1 = cur1;
+                // 처리 후 누적값에서 해당 스텝만큼 뺌 (나머지는 유지하여 부드럽게)
+                acc1 -= (dir * ENC_STEPS_PER_NOTCH);
+                // 혹은 acc1 = 0; 으로 하면 딱딱 끊어지는 느낌
             }
         }
+
+        // --- Rotary 2 처리 ---
+        if (diff2 != 0) {
+            acc2 -= diff2;
+            if (abs(acc2) >= ENC_STEPS_PER_NOTCH) {
+                int8_t dir = (acc2 > 0) ? 1 : -1;
+
+                // [Logic 호출]
+                Apply_Rotary2_Change(dir);
+
+                acc2 -= (dir * ENC_STEPS_PER_NOTCH);
+            }
+        }
+
+        // 10ms 대기 (너무 빠르면 CPU 낭비, 너무 느리면 반응성 저하)
+        vTaskDelay(pdMS_TO_TICKS(10));
     }
 }
 
-void RotaryTasks_Init(void)
-{
-    static uint8_t started = 0;
-    if (started) return;
-    started = 1;
-
-    g_inputQ = xQueueCreate(32, sizeof(input_evt_t));
-    configASSERT(g_inputQ);
-
-    BaseType_t ok = xTaskCreate(InputTask, "InputTask", 512, NULL, tskIDLE_PRIORITY + 2, NULL);
-    configASSERT(ok == pdPASS);
+void RotaryTasks_Init(void) {
+	BaseType_t ok = xTaskCreate(InputTask, "InputTask", 512, NULL,
+			tskIDLE_PRIORITY + 2, NULL);
+	configASSERT(ok == pdPASS);
 }
 
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-    if (g_inputQ == NULL) return;
-
-    // --- Rotary 1 (ENC1) ---
-    if (GPIO_Pin == Rotary1_S1_Pin || GPIO_Pin == Rotary1_S2_Pin) {
-        push_evt_from_isr(0, EVT_ENC_AB, 0);
-        return;
-    }
-    if (GPIO_Pin == Rotary1_KEY_Pin) {
-        push_evt_from_isr(0, EVT_BTN_EDGE, 0);
-        return;
-    }
-
-    // --- Rotary 2 (ENC2) ---
-    // [수정됨] Rotary2 관련 핀 정의 매칭
-    if (GPIO_Pin == Rotary2_S1_Pin || GPIO_Pin == Rotary2_S2_Pin) {
-        push_evt_from_isr(1, EVT_ENC_AB, 0);
-        return;
-    }
-    if (GPIO_Pin == Rotary2_KEY_Pin) {
-        push_evt_from_isr(1, EVT_BTN_EDGE, 0);
-        return;
-    }
-}
+//// --- [수정됨] ISR: 핀 상태를 즉시 읽어 전달 ---
+//void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
+//	// --- Rotary 1 (ENC1) ---
+//	if (GPIO_Pin == Rotary1_KEY_Pin) {
+//		printf("ro1_key\n");
+//		return;
+//	}
+//
+//	// --- Rotary 2 (ENC2) ---
+//	if (GPIO_Pin == Rotary2_KEY_Pin) {
+//		printf("ro2_key\n");
+//		return;
+//	}
+//}

@@ -1,10 +1,5 @@
-../Core/Src/rotary.c:22:20:push_evt_from_isr	2
-../Core/Src/rotary.c:34:21:clampf	3
-../Core/Src/rotary.c:72:23:read_ab	3
-../Core/Src/rotary.c:91:23:read_btn	3
-../Core/Src/rotary.c:103:23:btn_pressed_level	1
-../Core/Src/rotary.c:109:6:handle_enc_ab	4
-../Core/Src/rotary.c:130:6:handle_btn_edge	4
-../Core/Src/rotary.c:151:6:InputTask	9
-../Core/Src/rotary.c:200:6:RotaryTasks_Init	4
-../Core/Src/rotary.c:213:6:HAL_GPIO_EXTI_Callback	8
+../Core/Src/rotary.c:33:21:clampf	3
+../Core/Src/rotary.c:41:13:Apply_Rotary1_Change	1
+../Core/Src/rotary.c:54:13:Apply_Rotary2_Change	1
+../Core/Src/rotary.c:67:6:InputTask	7
+../Core/Src/rotary.c:125:6:RotaryTasks_Init	2

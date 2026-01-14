@@ -65,18 +65,10 @@ typedef enum {
     EVT_BTN_EDGE = 1,
 } evt_type_t;
 
-typedef struct {
-    uint8_t    id;     // 0: enc1, 1: enc2
-    evt_type_t type;
-    uint8_t    v;      // AB(2bit) or BTN(0/1)
-    uint32_t   tick;   // xTaskGetTickCountFromISR()
-} input_evt_t;
-
+extern TIM_HandleTypeDef htim4;
+extern TIM_HandleTypeDef htim5;
 
 extern void RotaryTasks_Init(void);
-
-
-
 
 extern void InitTasks(void);
 extern void Test(void);

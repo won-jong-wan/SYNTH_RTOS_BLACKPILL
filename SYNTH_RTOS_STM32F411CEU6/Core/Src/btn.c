@@ -15,8 +15,8 @@
 
 #include "user_rtos.h"
 
-#define C1_GPIO_Port  GPIOA
-#define C1_Pin        GPIO_PIN_11
+#define C1_GPIO_Port  GPIOB
+#define C1_Pin        GPIO_PIN_13
 #define C2_GPIO_Port  GPIOA
 #define C2_Pin        GPIO_PIN_10
 #define C3_GPIO_Port  GPIOA
@@ -208,7 +208,7 @@ void KeypadTasks_Init(void) {
 
 	BaseType_t ok = xTaskCreate(KeyScanTask, "KeyScan", 256,
 	NULL,
-	tskIDLE_PRIORITY + 53,
+	tskIDLE_PRIORITY + 2,
 	NULL);
 	configASSERT(ok == pdPASS);
 }
