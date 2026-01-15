@@ -65,7 +65,6 @@ extern TIM_HandleTypeDef htim4;
 extern TIM_HandleTypeDef htim5;
 
 extern void RotaryTasks_Init(void);
-
 extern void InitTasks(void);
 extern void Test(void);
 extern void KeypadTasks_Init(void);

@@ -1,28 +1,17 @@
-12:08:08 **** Incremental Build of configuration Debug for project SYNTH_RTOS_STM32F411CEU6 ****
+14:19:33 **** Incremental Build of configuration Debug for project SYNTH_RTOS_STM32F411CEU6 ****
 make -j24 all 
-arm-none-eabi-gcc "../Core/Src/ui.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -D__FPU_PRESENT=1 -DSTM32F411xE -DARM_MATH_CM4 -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -I../Middlewares/ST/ARM/DSP/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/ui.d" -MT"Core/Src/ui.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/ui.o"
-In file included from ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h:154,
-                 from ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h:29,
-                 from ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h:27,
-                 from ../Core/Inc/stm32f4xx_hal_conf.h:275,
-                 from ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:29,
-                 from ../Core/Inc/main.h:30,
-                 from ../Core/Src/ui.c:9:
-../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f411xe.h:51: warning: "__FPU_PRESENT" redefined
-   51 | #define __FPU_PRESENT             1U       /*!< FPU present                                   */
-      | 
-<command-line>: note: this is the location of the previous definition
+arm-none-eabi-gcc "../Core/Src/sound_engine.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -DARM_MATH_CM4 -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -I../Middlewares/ST/ARM/DSP/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/sound_engine.d" -MT"Core/Src/sound_engine.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/sound_engine.o"
 arm-none-eabi-gcc -o "SYNTH_RTOS_STM32F411CEU6.elf" @"objects.list"  -l:libarm_cortexM4lf_math.a -mcpu=cortex-m4 -T"C:\Users\kccistc\Desktop\SYNTH_RTOS_BLACKPILL\SYNTH_RTOS_STM32F411CEU6\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="SYNTH_RTOS_STM32F411CEU6.map" -Wl,--gc-sections -static -L../Middlewares/ST/ARM/DSP/Lib -u _printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 Finished building target: SYNTH_RTOS_STM32F411CEU6.elf
  
 arm-none-eabi-size  SYNTH_RTOS_STM32F411CEU6.elf 
 arm-none-eabi-objdump -h -S SYNTH_RTOS_STM32F411CEU6.elf  > "SYNTH_RTOS_STM32F411CEU6.list"
    text	   data	    bss	    dec	    hex	filename
-  66136	    620	  38132	 104888	  199b8	SYNTH_RTOS_STM32F411CEU6.elf
+  68536	    676	  37116	 106328	  19f58	SYNTH_RTOS_STM32F411CEU6.elf
 Finished building: default.size.stdout
  
 Finished building: SYNTH_RTOS_STM32F411CEU6.list
  
 
-12:08:09 Build Finished. 0 errors, 1 warnings. (took 531ms)
+14:19:34 Build Finished. 0 errors, 0 warnings. (took 546ms)
 

@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "user_rtos.h"
+#include "ui.h"
 
 // --- 설정값 정의 ---
 // Rotary 1 (Q Factor)
@@ -42,6 +43,8 @@ static inline int volfilter(int pos){
 	}else if(pos < 0){
 		return 0;
 	}
+
+	return pos;
 }
 
 // --- [Logic Layer] 비즈니스 로직 분리 ---
@@ -49,6 +52,8 @@ static inline int volfilter(int pos){
 static void Apply_Rotary1_Change(int8_t dir) {
     // 1. 위치값 단순 기록 (디버깅용)
     g_enc_pos[0] += dir;
+
+    UI_OnEncoderDelta((int)dir);
 
     // 2. 실제 기능 (Q Factor 조절)
 //    float q = g_lpf_Q + (float)dir * Q_STEP;

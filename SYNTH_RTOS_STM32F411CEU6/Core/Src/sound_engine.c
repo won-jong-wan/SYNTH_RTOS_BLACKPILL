@@ -12,13 +12,16 @@
 #include <math.h>
 #include "user_rtos.h"
 #include <stdio.h>
+#include "ui.h"
+
 #define OCTAVE_SHIFT  1
 #define SOUND_MAX 32767.0f
+#define SAMPLES_PER_MS  44  // 44.1kHz 기준 약 1ms
 
 extern I2S_HandleTypeDef hi2s1;
 
 double freq_list[] = { FREQ_C4, FREQ_D4, FREQ_E4, FREQ_F4, FREQ_G4, FREQ_A4,
-		FREQ_B4 };
+FREQ_B4 };
 
 uint8_t count_arr[7] = { 0 };
 
@@ -111,13 +114,38 @@ void NoteOn(void) {
 	}
 //    printf("New voice idx %d\n", new_voice_idx);
 
-	adsrs[new_voice_idx] = basic_adsr;
+	// 1. Attack (UI값 1당 약 5ms 정도로 가정)
+	adsrs[new_voice_idx].attack_steps = g_ui_adsr.attack_steps
+			* (5 * SAMPLES_PER_MS);
+
+	// 2. Decay
+	adsrs[new_voice_idx].decay_steps = g_ui_adsr.decay_steps
+			* (5 * SAMPLES_PER_MS);
+
+	// 3. Sustain (UI 0~100 -> 0.0 ~ 1.0 실수로 변환)
+	adsrs[new_voice_idx].sustain_level = (float) g_ui_adsr.sustain_level
+			/ 100.0f;
+
+	// 4. Release
+	adsrs[new_voice_idx].release_steps = g_ui_adsr.release_steps
+			* (5 * SAMPLES_PER_MS);
+
 	adsrs[new_voice_idx].freq = target_freq;
 	adsrs[new_voice_idx].count = ++count;
 	adsrs[new_voice_idx].state = ADSR_ATTACK;
-	adsrs[new_voice_idx].step_val = 0.1f;
+	// [중요] Step Value 재계산 (Attack 시간에 맞춰서)
+	if (adsrs[new_voice_idx].attack_steps > 0) {
+		adsrs[new_voice_idx].step_val = 1.0f
+				/ (float) adsrs[new_voice_idx].attack_steps;
+	} else {
+		adsrs[new_voice_idx].step_val = 1.0f; // 즉시 최대 볼륨
+	}
+
 	adsrs[new_voice_idx].tuning_word = (uint32_t) ((double) target_freq
 			* 4294967296.0 / (double) SAMPLE_RATE);
+
+	// 어택 시작은 0부터
+	adsrs[new_voice_idx].current_level = 0.0f;
 //    printf("idle to attack\n");
 
 	if (count >= 127) {
