@@ -1,0 +1,2 @@
+../Core/Src/hal_freertos_tick.c:13:10:HAL_GetTick	8	static
+../Core/Src/hal_freertos_tick.c:24:6:HAL_Delay	24	static

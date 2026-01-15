@@ -1,0 +1,200 @@
+/*
+ * ui.c
+ *
+ *  Created on: Jan 14, 2026
+ *      Author: 환중
+ */
+
+#include "ui.h"
+#include "main.h"
+#include "ILI9341_STM32_Driver.h"
+#include "ILI9341_GFX.h"
+#include <string.h>
+#include <math.h>
+
+TaskHandle_t lcdTaskHandle = NULL;
+QueueHandle_t lcdQueueHandle = NULL;
+LcdState_t currentLcdState = LCD_STATE_INIT;
+
+uint8_t sin_samples[1024];
+static uint8_t prev_y[240] = {0};
+
+static void LCD_Task(void *argument);
+static void Generate_Sine_Samples(void);
+void draw_main_dashboard(void);	 // 메인 대시보드 화면 그리기
+void draw_system_info(void); // 시스템 정보 화면 그리기
+void draw_moving_sine(uint8_t *data, uint32_t offset); // 사인파 애니메이션 그리기
+
+void UI_Init(void) {
+    Generate_Sine_Samples();
+
+    HAL_GPIO_WritePin(GPIOD, RESET_Pin, GPIO_PIN_RESET);
+    HAL_Delay(100);
+    HAL_GPIO_WritePin(GPIOD, RESET_Pin, GPIO_PIN_SET);
+    HAL_Delay(100);
+
+    ILI9341_Init();
+
+    lcdQueueHandle = xQueueCreate(5, sizeof(uint32_t));
+    if(lcdQueueHandle == NULL) {
+        Error_Handler();
+    }
+
+    BaseType_t result = xTaskCreate(
+        LCD_Task,
+        "LCDTask",
+        2048,
+        NULL,
+        tskIDLE_PRIORITY + 1,
+        &lcdTaskHandle
+    );
+
+    if(result != pdPASS) {
+        Error_Handler();
+    }
+}
+
+static void Generate_Sine_Samples(void) {
+	  // 사인파 샘플링 (1024개 생성)
+	  // Y = 120 + 50 * sin(x)
+	  // 중심: 120 (화면 중앙)
+	  // 진폭: 50 (위아래로 50픽셀)
+	  // 주기: 1024개 샘플 안에 5개의 사인파
+    for (int i = 0; i < 1024; i++) {
+        sin_samples[i] = (uint8_t)(120 + 50 * sin(5.0 * 2 * M_PI * i / 1024.0));
+    }
+}
+
+void draw_main_dashboard(void) {
+    // 1. 그라데이션 대신 단색으로 먼저 테스트 (가장 안전)
+    ILI9341_Fill_Screen(BLACK);
+    osDelay(10);
+
+    // 2. 상단바 (Y: 0 ~ 30)
+    // ILI9341_Draw_Filled_Rectangle_Coord : 지정된 좌표로 채워진 사각형을 그리는 함수
+    ILI9341_Draw_Filled_Rectangle_Coord(0, 0, 240, 30, GREEN);
+    ILI9341_Draw_Text("SYSTEM READY", 55, 10, BLACK, 2, GREEN);
+
+    // 3. 메인 텍스트 위치 대폭 수정 (Y좌표 200 아래로 고정)
+    // Size 4는 가로폭(CHAR_WIDTH * 4)이 커서 X좌표 오버플로우 위험이 있으니
+    // X좌표도 작게 시작하세요.
+    ILI9341_Draw_Text("Welcome to", 30, 60, WHITE, 2, BLACK);
+    ILI9341_Draw_Text("SYNTH RTOS", 20, 90, YELLOW, 3, BLACK);
+
+    // BLACKPILL은 Size 3으로 낮춰서 테스트 (가로폭 오버플로우 방지)
+    ILI9341_Draw_Text("BLACKPILL", 10, 130, CYAN, 3, BLACK);
+
+    // 4. 하단 안내 (안전한 Y좌표 180)
+    // ILI9341_Draw_Horizontal_Line : 수평선(가로선)을 그리는 함수
+    ILI9341_Draw_Horizontal_Line(20, 180, 200, WHITE);
+    ILI9341_Draw_Text("Press Button", 60, 195, LIGHTGREY, 1, BLACK);
+}
+
+static void draw_system_info(void) {
+    ILI9341_Fill_Screen(BLACK);
+    ILI9341_Draw_Filled_Rectangle_Coord(0, 0, 240, 30, BLUE);
+    ILI9341_Draw_Text("SYSTEM INFO", 60, 10, WHITE, 2, BLUE);
+
+    ILI9341_Draw_Text("CPU: STM32F429", 20, 60, WHITE, 2, BLACK);
+    ILI9341_Draw_Text("RTOS: FreeRTOS", 20, 90, WHITE, 2, BLACK);
+    ILI9341_Draw_Text("LCD: ILI9341", 20, 120, WHITE, 2, BLACK);
+
+    ILI9341_Draw_Text("Status: Running", 20, 160, GREEN, 2, BLACK);
+}
+
+void draw_moving_sine(uint8_t *data, uint32_t offset) {
+	// 화면 가로 240픽셀을 순회
+    for(int x = 0; x < 239; x++) {
+        // 세로 선으로 한 번에 지우기
+    	// ILI9341_Draw_Vertical_Line : 세로선을 그리는 함수
+        ILI9341_Draw_Vertical_Line(x, 50, 160, BLACK);
+
+        // 가이드라인(중앙선)
+        if(x % 4 == 0) {
+            ILI9341_Draw_Pixel(x, 120, DARKGREY);
+        }
+
+        // 새로운 샘플값 읽기
+        uint32_t index = (offset + x) % 1024;
+        uint8_t y_val = data[index];
+
+        // Y값 안전 범위 제한 (50~210)
+        // LCD 컨트롤러 오작동 방지
+        if(y_val < 50)  y_val = 50;
+        if(y_val > 210) y_val = 210;
+
+        // 노란색 점 찍기 (샘플 표현)
+        ILI9341_Draw_Pixel(x, y_val, YELLOW);
+
+        // 주기적으로 다른 Task에게 양보
+        // 20픽셀마다 1ms 대기 → 시스템 안정성 확보
+        if(x % 20 == 0) {
+            osDelay(1);
+        }
+    }
+}
+static void LCD_Task(void *argument) {
+    uint32_t received;
+    uint32_t offset = 0;
+    uint8_t *current_data_ptr = NULL;
+    uint8_t screen_mode = 0;
+    uint8_t last_screen_mode = 255;
+
+    for(;;) {
+        if(xQueueReceive(lcdQueueHandle, &received, 0) == pdTRUE) {
+            if(received >= 0x20000000) {
+                current_data_ptr = (uint8_t*)received;
+                screen_mode = 2;
+            } else {
+                screen_mode = (uint8_t)received;
+                current_data_ptr = NULL;
+            }
+
+            ILI9341_Fill_Screen(BLACK);
+            memset(prev_y, 120, sizeof(prev_y));
+        }
+
+        if(screen_mode == 2 && current_data_ptr != NULL) {
+            draw_moving_sine(current_data_ptr, offset);
+            offset = (offset + 6) % 1024;
+            vTaskDelay(pdMS_TO_TICKS(30));
+        }
+        else if(screen_mode != last_screen_mode) {
+            if(screen_mode == 0) draw_main_dashboard();
+            else if(screen_mode == 1) draw_system_info();
+            last_screen_mode = screen_mode;
+        }
+
+        vTaskDelay(pdMS_TO_TICKS(10));
+    }
+}
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_PIN)
+{
+    static uint32_t last_tick = 0;
+
+    if(GPIO_PIN == USER_Btn_Pin)
+    {
+        if(HAL_GetTick() - last_tick < 250) return;
+        last_tick = HAL_GetTick();
+
+        if(currentLcdState == LCD_STATE_MAIN_DASH)
+            currentLcdState = LCD_STATE_SUB_INFO;
+        else if(currentLcdState == LCD_STATE_SUB_INFO)
+            currentLcdState = LCD_STATE_GRAPH_VIEW;
+        else
+            currentLcdState = LCD_STATE_MAIN_DASH;
+
+        BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+
+        if(currentLcdState == LCD_STATE_GRAPH_VIEW) {
+            uint32_t sin_addr = (uint32_t)sin_samples;
+            xQueueSendFromISR(lcdQueueHandle, &sin_addr, &xHigherPriorityTaskWoken);
+        } else {
+            uint32_t state = (uint32_t)currentLcdState;
+            xQueueSendFromISR(lcdQueueHandle, &state, &xHigherPriorityTaskWoken);
+        }
+
+        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+    }
+}
