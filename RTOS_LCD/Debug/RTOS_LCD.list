@@ -39,15 +39,15 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  17 .debug_macro  000265b1  00000000  00000000  0002e75b  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_line   00019593  00000000  00000000  00054d0c  2**0
+ 18 .debug_line   00019595  00000000  00000000  00054d0c  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_str    000e7559  00000000  00000000  0006e29f  2**0
+ 19 .debug_str    000e7559  00000000  00000000  0006e2a1  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .comment      00000043  00000000  00000000  001557f8  2**0
+ 20 .comment      00000043  00000000  00000000  001557fa  2**0
                   CONTENTS, READONLY
- 21 .debug_frame  00006928  00000000  00000000  0015583c  2**2
+ 21 .debug_frame  00006928  00000000  00000000  00155840  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 22 .debug_line_str 00000062  00000000  00000000  0015c164  2**0
+ 22 .debug_line_str 00000062  00000000  00000000  0015c168  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -5100,7 +5100,7 @@ static void draw_adsr_graph(void) {
  80026f0:	b580      	push	{r7, lr}
  80026f2:	b086      	sub	sp, #24
  80026f4:	af02      	add	r7, sp, #8
-    // ✅ 그래프 영역만 지우기
+    // 그래프 영역만 지우기
     ILI9341_Draw_Filled_Rectangle_Coord(0, ADSR_Y0, 240, ADSR_Y1, BLACK);
  80026f6:	2300      	movs	r3, #0
  80026f8:	9300      	str	r3, [sp, #0]
@@ -5189,7 +5189,7 @@ static void draw_adsr_labels(void) {
  8002794:	b580      	push	{r7, lr}
  8002796:	b084      	sub	sp, #16
  8002798:	af02      	add	r7, sp, #8
-    // ✅ 라벨 영역만 지우기
+    // 라벨 영역만 지우기
     ILI9341_Draw_Filled_Rectangle_Coord(0, ADSR_LABEL_Y, 240, ADSR_LABEL_Y + 20, BLACK);
  800279a:	2300      	movs	r3, #0
  800279c:	9300      	str	r3, [sp, #0]
@@ -5311,7 +5311,7 @@ static void draw_wave_title(void) {
  8002886:	f64f 031f 	movw	r3, #63519	@ 0xf81f
  800288a:	80fb      	strh	r3, [r7, #6]
 
-    // ✅ 타이틀 바 영역만 지우고 다시 그리기
+    // 타이틀 바 영역만 지우고 다시 그리기
     ILI9341_Draw_Filled_Rectangle_Coord(0, WAVE_TITLE_Y0, 240, WAVE_TITLE_Y1, bar_color);
  800288c:	88fb      	ldrh	r3, [r7, #6]
  800288e:	9300      	str	r3, [sp, #0]
@@ -5378,6 +5378,7 @@ static void draw_note_display(void) {
  8002902:	f64f 031f 	movw	r3, #63519	@ 0xf81f
  8002906:	85fb      	strh	r3, [r7, #46]	@ 0x2e
 
+    // 음계 표시
     sprintf(note_buf, "NOTE:%s%d", notes_list[current_note.note_idx], current_note.octave);
  8002908:	4b10      	ldr	r3, [pc, #64]	@ (800294c <draw_note_display+0x74>)
  800290a:	781b      	ldrb	r3, [r3, #0]
@@ -5418,7 +5419,7 @@ static void draw_wave_graph(void) {
  8002954:	b580      	push	{r7, lr}
  8002956:	b086      	sub	sp, #24
  8002958:	af02      	add	r7, sp, #8
-    // ✅ 파형 그래프 영역만 지우기
+    // 파형 그래프 영역만 지우기
     ILI9341_Draw_Filled_Rectangle_Coord(0, WAVE_GRAPH_Y0, 240, WAVE_GRAPH_Y1, BLACK);
  800295a:	2300      	movs	r3, #0
  800295c:	9300      	str	r3, [sp, #0]
@@ -5509,7 +5510,7 @@ static void draw_filter_labels(void) {
  8002a04:	b580      	push	{r7, lr}
  8002a06:	b084      	sub	sp, #16
  8002a08:	af02      	add	r7, sp, #8
-    // ✅ 필터 라벨 영역만 지우기
+    // 필터 라벨 영역만 지우기
     ILI9341_Draw_Filled_Rectangle_Coord(0, FILTER_Y, 240, FILTER_Y + 20, BLACK);
  8002a0a:	2300      	movs	r3, #0
  8002a0c:	9300      	str	r3, [sp, #0]
@@ -5576,7 +5577,7 @@ static void draw_volume_bar(void) {
  8002a84:	b580      	push	{r7, lr}
  8002a86:	b086      	sub	sp, #24
  8002a88:	af02      	add	r7, sp, #8
-    // ✅ 볼륨 영역만 지우기
+    // 볼륨 영역만 지우기
     ILI9341_Draw_Filled_Rectangle_Coord(0, VOL_Y, 240, VOL_Y + 15, BLACK);
  8002a8a:	2300      	movs	r3, #0
  8002a8c:	9300      	str	r3, [sp, #0]
@@ -5738,7 +5739,7 @@ static void LCD_Task(void *argument) {
  8002ba0:	7bbb      	ldrb	r3, [r7, #14]
  8002ba2:	2b02      	cmp	r3, #2
  8002ba4:	d178      	bne.n	8002c98 <LCD_Task+0x130>
-                // ✅ 메인에서 그래프로 전환 시 전체 다시 그리기
+                // 메인에서 그래프로 전환 시 전체 다시 그리기
                 if (lastState == LCD_STATE_MAIN_DASH) {
  8002ba6:	7bfb      	ldrb	r3, [r7, #15]
  8002ba8:	2b01      	cmp	r3, #1
@@ -5749,7 +5750,7 @@ static void LCD_Task(void *argument) {
  8002bb0:	701a      	strb	r2, [r3, #0]
                 }
 
-                // ✅ 전체 다시 그리기
+                // 전체 그리기로 모든 요소를 이미 그렸으므로, 남아있을 수 있는 개별 플래그들을 전부 0으로 초기화
                 if (g_ui_dirty.full_redraw) {
  8002bb2:	4b3d      	ldr	r3, [pc, #244]	@ (8002ca8 <LCD_Task+0x140>)
  8002bb4:	781b      	ldrb	r3, [r3, #0]
@@ -5811,7 +5812,7 @@ static void LCD_Task(void *argument) {
  8002c0c:	71da      	strb	r2, [r3, #7]
  8002c0e:	e043      	b.n	8002c98 <LCD_Task+0x130>
                 }
-                // ✅ 부분 업데이트
+                // 부분 업데이트
                 else {
                     if (g_ui_dirty.adsr_graph) {
  8002c10:	4b25      	ldr	r3, [pc, #148]	@ (8002ca8 <LCD_Task+0x140>)
@@ -5937,6 +5938,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_PIN) {
  8002cba:	f000 f983 	bl	8002fc4 <HAL_GetTick>
  8002cbe:	6178      	str	r0, [r7, #20]
 
+    // 디바운싱
     if(GPIO_PIN == USER_Btn_Pin) {
  8002cc0:	88fb      	ldrh	r3, [r7, #6]
  8002cc2:	f5b3 5f00 	cmp.w	r3, #8192	@ 0x2000
@@ -5957,6 +5959,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_PIN) {
  8002ce4:	697b      	ldr	r3, [r7, #20]
  8002ce6:	6013      	str	r3, [r2, #0]
 
+        // 메인 화면에서 그래프 화면으로 전환할 때
         if (currentLcdState == LCD_STATE_MAIN_DASH) {
  8002ce8:	4b66      	ldr	r3, [pc, #408]	@ (8002e84 <HAL_GPIO_EXTI_Callback+0x1d4>)
  8002cea:	781b      	ldrb	r3, [r3, #0]
@@ -5966,16 +5969,17 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_PIN) {
  8002cf0:	4b64      	ldr	r3, [pc, #400]	@ (8002e84 <HAL_GPIO_EXTI_Callback+0x1d4>)
  8002cf2:	2202      	movs	r2, #2
  8002cf4:	701a      	strb	r2, [r3, #0]
-            selected_adsr_idx = 0;
+            selected_adsr_idx = 0;	// A 부터 시작
  8002cf6:	4b64      	ldr	r3, [pc, #400]	@ (8002e88 <HAL_GPIO_EXTI_Callback+0x1d8>)
  8002cf8:	2200      	movs	r2, #0
  8002cfa:	701a      	strb	r2, [r3, #0]
-            g_ui_dirty.full_redraw = 1; // ✅ 전체 다시 그리기
+            g_ui_dirty.full_redraw = 1; // 전체 다시 그리기
  8002cfc:	4b63      	ldr	r3, [pc, #396]	@ (8002e8c <HAL_GPIO_EXTI_Callback+0x1dc>)
  8002cfe:	2201      	movs	r2, #1
  8002d00:	701a      	strb	r2, [r3, #0]
  8002d02:	e09d      	b.n	8002e40 <HAL_GPIO_EXTI_Callback+0x190>
         }
+        // 그래프 화면에서 스위치를 눌렀을 경우
         else if (currentLcdState == LCD_STATE_ADSR_VIEW) {
  8002d04:	4b5f      	ldr	r3, [pc, #380]	@ (8002e84 <HAL_GPIO_EXTI_Callback+0x1d4>)
  8002d06:	781b      	ldrb	r3, [r3, #0]
@@ -6000,7 +6004,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_PIN) {
  8002d26:	b2da      	uxtb	r2, r3
  8002d28:	4b59      	ldr	r3, [pc, #356]	@ (8002e90 <HAL_GPIO_EXTI_Callback+0x1e0>)
  8002d2a:	701a      	strb	r2, [r3, #0]
-                if (selected_wave_type > 2) {
+                if (selected_wave_type > 2) {	// Triangle이면 다시 Sine으로
  8002d2c:	4b58      	ldr	r3, [pc, #352]	@ (8002e90 <HAL_GPIO_EXTI_Callback+0x1e0>)
  8002d2e:	781b      	ldrb	r3, [r3, #0]
  8002d30:	b2db      	uxtb	r3, r3
@@ -6010,20 +6014,20 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_PIN) {
  8002d36:	4b56      	ldr	r3, [pc, #344]	@ (8002e90 <HAL_GPIO_EXTI_Callback+0x1e0>)
  8002d38:	2200      	movs	r2, #0
  8002d3a:	701a      	strb	r2, [r3, #0]
-                    selected_adsr_idx = 5;
+                    selected_adsr_idx = 5; // Reso부터 시작
  8002d3c:	4b52      	ldr	r3, [pc, #328]	@ (8002e88 <HAL_GPIO_EXTI_Callback+0x1d8>)
  8002d3e:	2205      	movs	r2, #5
  8002d40:	701a      	strb	r2, [r3, #0]
-                    g_ui_dirty.filter_labels = 1; // ✅ 필터 라벨만
+                    g_ui_dirty.filter_labels = 1; // 필터 라벨만
  8002d42:	4b52      	ldr	r3, [pc, #328]	@ (8002e8c <HAL_GPIO_EXTI_Callback+0x1dc>)
  8002d44:	2201      	movs	r2, #1
  8002d46:	715a      	strb	r2, [r3, #5]
                 }
-                g_ui_dirty.wave_title = 1;  // ✅ 파형 타이틀만
+                g_ui_dirty.wave_title = 1;  // 파형 타이틀만
  8002d48:	4b50      	ldr	r3, [pc, #320]	@ (8002e8c <HAL_GPIO_EXTI_Callback+0x1dc>)
  8002d4a:	2201      	movs	r2, #1
  8002d4c:	70da      	strb	r2, [r3, #3]
-                g_ui_dirty.wave_graph = 1;  // ✅ 파형 그래프만
+                g_ui_dirty.wave_graph = 1;  // 파형 그래프만
  8002d4e:	4b4f      	ldr	r3, [pc, #316]	@ (8002e8c <HAL_GPIO_EXTI_Callback+0x1dc>)
  8002d50:	2201      	movs	r2, #1
  8002d52:	711a      	strb	r2, [r3, #4]
@@ -6037,7 +6041,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_PIN) {
  8002d5c:	b2da      	uxtb	r2, r3
  8002d5e:	4b4d      	ldr	r3, [pc, #308]	@ (8002e94 <HAL_GPIO_EXTI_Callback+0x1e4>)
  8002d60:	701a      	strb	r2, [r3, #0]
-                if (current_note.note_idx > 6) {
+                if (current_note.note_idx > 6) { // 음계 B 넘어가면 다시 처음으로
  8002d62:	4b4c      	ldr	r3, [pc, #304]	@ (8002e94 <HAL_GPIO_EXTI_Callback+0x1e4>)
  8002d64:	781b      	ldrb	r3, [r3, #0]
  8002d66:	b2db      	uxtb	r3, r3
@@ -6047,7 +6051,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_PIN) {
  8002d6c:	4b49      	ldr	r3, [pc, #292]	@ (8002e94 <HAL_GPIO_EXTI_Callback+0x1e4>)
  8002d6e:	2200      	movs	r2, #0
  8002d70:	701a      	strb	r2, [r3, #0]
-                    current_note.octave = (current_note.octave == 2) ? 3 : 2;
+                    current_note.octave = (current_note.octave == 2) ? 3 : 2; // 옥타브 변경
  8002d72:	4b48      	ldr	r3, [pc, #288]	@ (8002e94 <HAL_GPIO_EXTI_Callback+0x1e4>)
  8002d74:	785b      	ldrb	r3, [r3, #1]
  8002d76:	b2db      	uxtb	r3, r3
@@ -6059,7 +6063,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_PIN) {
  8002d82:	4b44      	ldr	r3, [pc, #272]	@ (8002e94 <HAL_GPIO_EXTI_Callback+0x1e4>)
  8002d84:	705a      	strb	r2, [r3, #1]
                 }
-                g_ui_dirty.note_display = 1; // ✅ 음계 표시만
+                g_ui_dirty.note_display = 1; // 음계 표시만
  8002d86:	4b41      	ldr	r3, [pc, #260]	@ (8002e8c <HAL_GPIO_EXTI_Callback+0x1dc>)
  8002d88:	2201      	movs	r2, #1
  8002d8a:	71da      	strb	r2, [r3, #7]
@@ -6085,20 +6089,20 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_PIN) {
  8002daa:	b2db      	uxtb	r3, r3
  8002dac:	2b64      	cmp	r3, #100	@ 0x64
  8002dae:	d908      	bls.n	8002dc2 <HAL_GPIO_EXTI_Callback+0x112>
-                    volume_val = 10;
+                    volume_val = 0;
  8002db0:	4b39      	ldr	r3, [pc, #228]	@ (8002e98 <HAL_GPIO_EXTI_Callback+0x1e8>)
- 8002db2:	220a      	movs	r2, #10
+ 8002db2:	2200      	movs	r2, #0
  8002db4:	701a      	strb	r2, [r3, #0]
                     selected_adsr_idx = 0;
  8002db6:	4b34      	ldr	r3, [pc, #208]	@ (8002e88 <HAL_GPIO_EXTI_Callback+0x1d8>)
  8002db8:	2200      	movs	r2, #0
  8002dba:	701a      	strb	r2, [r3, #0]
-                    g_ui_dirty.adsr_labels = 1; // ✅ ADSR 라벨만
+                    g_ui_dirty.adsr_labels = 1; // ADSR 라벨만
  8002dbc:	4b33      	ldr	r3, [pc, #204]	@ (8002e8c <HAL_GPIO_EXTI_Callback+0x1dc>)
  8002dbe:	2201      	movs	r2, #1
  8002dc0:	709a      	strb	r2, [r3, #2]
                 }
-                g_ui_dirty.volume_bar = 1; // ✅ 볼륨 바만
+                g_ui_dirty.volume_bar = 1; // 볼륨 바만
  8002dc2:	4b32      	ldr	r3, [pc, #200]	@ (8002e8c <HAL_GPIO_EXTI_Callback+0x1dc>)
  8002dc4:	2201      	movs	r2, #1
  8002dc6:	719a      	strb	r2, [r3, #6]
@@ -6115,6 +6119,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_PIN) {
  8002dd6:	701a      	strb	r2, [r3, #0]
 
                 // 어느 영역이 바뀌었는지 확인
+                // 해당 영역 플래그 활성화
                 if (prev_idx <= 3 || selected_adsr_idx <= 3) {
  8002dd8:	7cfb      	ldrb	r3, [r7, #19]
  8002dda:	2b03      	cmp	r3, #3

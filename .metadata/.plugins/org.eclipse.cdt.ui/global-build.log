@@ -337,3 +337,143 @@ Finished building: default.size.stdout
  
 Finished building: RTOS_LCD.list
  
+14:23:36 **** Incremental Build of configuration Debug for project RTOS_LCD ****
+make -j24 all 
+arm-none-eabi-gcc "../Core/Src/ui.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F429xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/ui.d" -MT"Core/Src/ui.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/ui.o"
+arm-none-eabi-gcc -o "RTOS_LCD.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\User\Desktop\SYNTH_RTOS_BLACKPILL\RTOS_LCD\STM32F429ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="RTOS_LCD.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: RTOS_LCD.elf
+ 
+arm-none-eabi-size  RTOS_LCD.elf 
+arm-none-eabi-objdump -h -S RTOS_LCD.elf  > "RTOS_LCD.list"
+   text	   data	    bss	    dec	    hex	filename
+  41396	    116	  24716	  66228	  102b4	RTOS_LCD.elf
+Finished building: default.size.stdout
+ 
+Finished building: RTOS_LCD.list
+ 
+14:32:53 **** Incremental Build of configuration Debug for project RTOS_LCD ****
+make -j24 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F429xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/ui.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F429xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/ui.d" -MT"Core/Src/ui.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/ui.o"
+../Core/Src/ui.c:12:10: fatal error: user_rtos.h: No such file or directory
+   12 | #include "user_rtos.h"
+      |          ^~~~~~~~~~~~~
+compilation terminated.
+make: *** [Core/Src/subdir.mk:46: Core/Src/ui.o] Error 1
+make: *** Waiting for unfinished jobs....
+"make -j24 all" terminated with exit code 2. Build might be incomplete.
+14:33:35 **** Incremental Build of configuration Debug for project RTOS_LCD ****
+make -j24 all 
+arm-none-eabi-gcc "../Core/Src/ui.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F429xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/ui.d" -MT"Core/Src/ui.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/ui.o"
+../Core/Src/ui.c: In function 'draw_adsr_graph':
+../Core/Src/ui.c:174:49: warning: unused variable 'h' [-Wunused-variable]
+  174 |     int x0 = ADSR_X0, y0 = ADSR_Y0, w = ADSR_W, h = ADSR_H;
+      |                                                 ^
+../Core/Src/ui.c:174:23: warning: unused variable 'y0' [-Wunused-variable]
+  174 |     int x0 = ADSR_X0, y0 = ADSR_Y0, w = ADSR_W, h = ADSR_H;
+      |                       ^~
+../Core/Src/ui.c: In function 'draw_note_center':
+../Core/Src/ui.c:340:5: warning: implicit declaration of function 'snprintf' [-Wimplicit-function-declaration]
+  340 |     snprintf(buf, sizeof(buf), "%s%u", NAMES[n], (unsigned)o);
+      |     ^~~~~~~~
+../Core/Src/ui.c:13:1: note: include '<stdio.h>' or provide a declaration of 'snprintf'
+   12 | #include "user_rtos.h"
+  +++ |+#include <stdio.h>
+   13 | 
+../Core/Src/ui.c:340:5: warning: incompatible implicit declaration of built-in function 'snprintf' [-Wbuiltin-declaration-mismatch]
+  340 |     snprintf(buf, sizeof(buf), "%s%u", NAMES[n], (unsigned)o);
+      |     ^~~~~~~~
+../Core/Src/ui.c:340:5: note: include '<stdio.h>' or provide a declaration of 'snprintf'
+../Core/Src/ui.c: In function 'HAL_GPIO_EXTI_Callback':
+../Core/Src/ui.c:548:21: error: 'Rotary1_KEY_Pin' undeclared (first use in this function)
+  548 |     if (GPIO_PIN == Rotary1_KEY_Pin) {
+      |                     ^~~~~~~~~~~~~~~
+../Core/Src/ui.c:548:21: note: each undeclared identifier is reported only once for each function it appears in
+../Core/Src/ui.c: At top level:
+../Core/Src/ui.c:412:13: warning: 'UI_SelectVolumeMode' defined but not used [-Wunused-function]
+  412 | static void UI_SelectVolumeMode(void) {
+      |             ^~~~~~~~~~~~~~~~~~~
+../Core/Src/ui.c:406:13: warning: 'UI_ToggleFilterSelect' defined but not used [-Wunused-function]
+  406 | static void UI_ToggleFilterSelect(void) {
+      |             ^~~~~~~~~~~~~~~~~~~~~
+make: *** [Core/Src/subdir.mk:46: Core/Src/ui.o] Error 1
+"make -j24 all" terminated with exit code 2. Build might be incomplete.
+14:33:40 **** Incremental Build of configuration Debug for project RTOS_LCD ****
+make -j24 all 
+arm-none-eabi-gcc "../Core/Src/ui.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F429xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/ui.d" -MT"Core/Src/ui.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/ui.o"
+In file included from ../Core/Src/ui.c:12:
+../Core/Inc/user_rtos.h:64:8: error: unknown type name 'TIM_HandleTypeDef'
+   64 | extern TIM_HandleTypeDef htim4;
+      |        ^~~~~~~~~~~~~~~~~
+../Core/Inc/user_rtos.h:65:8: error: unknown type name 'TIM_HandleTypeDef'
+   65 | extern TIM_HandleTypeDef htim5;
+      |        ^~~~~~~~~~~~~~~~~
+../Core/Src/ui.c: In function 'draw_adsr_graph':
+../Core/Src/ui.c:174:49: warning: unused variable 'h' [-Wunused-variable]
+  174 |     int x0 = ADSR_X0, y0 = ADSR_Y0, w = ADSR_W, h = ADSR_H;
+      |                                                 ^
+../Core/Src/ui.c:174:23: warning: unused variable 'y0' [-Wunused-variable]
+  174 |     int x0 = ADSR_X0, y0 = ADSR_Y0, w = ADSR_W, h = ADSR_H;
+      |                       ^~
+../Core/Src/ui.c: In function 'draw_note_center':
+../Core/Src/ui.c:340:5: warning: implicit declaration of function 'snprintf' [-Wimplicit-function-declaration]
+  340 |     snprintf(buf, sizeof(buf), "%s%u", NAMES[n], (unsigned)o);
+      |     ^~~~~~~~
+../Core/Src/ui.c:13:1: note: include '<stdio.h>' or provide a declaration of 'snprintf'
+   12 | #include "user_rtos.h"
+  +++ |+#include <stdio.h>
+   13 | 
+../Core/Src/ui.c:340:5: warning: incompatible implicit declaration of built-in function 'snprintf' [-Wbuiltin-declaration-mismatch]
+  340 |     snprintf(buf, sizeof(buf), "%s%u", NAMES[n], (unsigned)o);
+      |     ^~~~~~~~
+../Core/Src/ui.c:340:5: note: include '<stdio.h>' or provide a declaration of 'snprintf'
+../Core/Src/ui.c: In function 'HAL_GPIO_EXTI_Callback':
+../Core/Src/ui.c:548:21: error: 'Rotary1_KEY_Pin' undeclared (first use in this function)
+  548 |     if (GPIO_PIN == Rotary1_KEY_Pin) {
+      |                     ^~~~~~~~~~~~~~~
+../Core/Src/ui.c:548:21: note: each undeclared identifier is reported only once for each function it appears in
+../Core/Src/ui.c: At top level:
+../Core/Src/ui.c:412:13: warning: 'UI_SelectVolumeMode' defined but not used [-Wunused-function]
+  412 | static void UI_SelectVolumeMode(void) {
+      |             ^~~~~~~~~~~~~~~~~~~
+../Core/Src/ui.c:406:13: warning: 'UI_ToggleFilterSelect' defined but not used [-Wunused-function]
+  406 | static void UI_ToggleFilterSelect(void) {
+      |             ^~~~~~~~~~~~~~~~~~~~~
+make: *** [Core/Src/subdir.mk:46: Core/Src/ui.o] Error 1
+"make -j24 all" terminated with exit code 2. Build might be incomplete.
+14:34:10 **** Incremental Build of configuration Debug for project RTOS_LCD ****
+make -j24 all 
+arm-none-eabi-gcc "../Core/Src/ui.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F429xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/ui.d" -MT"Core/Src/ui.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/ui.o"
+../Core/Src/ui.c: In function 'draw_adsr_graph':
+../Core/Src/ui.c:173:49: warning: unused variable 'h' [-Wunused-variable]
+  173 |     int x0 = ADSR_X0, y0 = ADSR_Y0, w = ADSR_W, h = ADSR_H;
+      |                                                 ^
+../Core/Src/ui.c:173:23: warning: unused variable 'y0' [-Wunused-variable]
+  173 |     int x0 = ADSR_X0, y0 = ADSR_Y0, w = ADSR_W, h = ADSR_H;
+      |                       ^~
+../Core/Src/ui.c: In function 'draw_note_center':
+../Core/Src/ui.c:339:5: warning: implicit declaration of function 'snprintf' [-Wimplicit-function-declaration]
+  339 |     snprintf(buf, sizeof(buf), "%s%u", NAMES[n], (unsigned)o);
+      |     ^~~~~~~~
+../Core/Src/ui.c:11:1: note: include '<stdio.h>' or provide a declaration of 'snprintf'
+   10 | #include <math.h>
+  +++ |+#include <stdio.h>
+   11 | #include "task.h"
+../Core/Src/ui.c:339:5: warning: incompatible implicit declaration of built-in function 'snprintf' [-Wbuiltin-declaration-mismatch]
+  339 |     snprintf(buf, sizeof(buf), "%s%u", NAMES[n], (unsigned)o);
+      |     ^~~~~~~~
+../Core/Src/ui.c:339:5: note: include '<stdio.h>' or provide a declaration of 'snprintf'
+../Core/Src/ui.c: In function 'HAL_GPIO_EXTI_Callback':
+../Core/Src/ui.c:547:21: error: 'Rotary1_KEY_Pin' undeclared (first use in this function)
+  547 |     if (GPIO_PIN == Rotary1_KEY_Pin) {
+      |                     ^~~~~~~~~~~~~~~
+../Core/Src/ui.c:547:21: note: each undeclared identifier is reported only once for each function it appears in
+../Core/Src/ui.c: At top level:
+../Core/Src/ui.c:411:13: warning: 'UI_SelectVolumeMode' defined but not used [-Wunused-function]
+  411 | static void UI_SelectVolumeMode(void) {
+      |             ^~~~~~~~~~~~~~~~~~~
+../Core/Src/ui.c:405:13: warning: 'UI_ToggleFilterSelect' defined but not used [-Wunused-function]
+  405 | static void UI_ToggleFilterSelect(void) {
+      |             ^~~~~~~~~~~~~~~~~~~~~
+make: *** [Core/Src/subdir.mk:46: Core/Src/ui.o] Error 1
+"make -j24 all" terminated with exit code 2. Build might be incomplete.

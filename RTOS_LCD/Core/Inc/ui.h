@@ -1,57 +1,92 @@
 /*
  * ui.h
- *
- *  Created on: Jan 14, 2026
- *      Author: 환중
  */
 
 #ifndef INC_UI_H_
 #define INC_UI_H_
 
-#include <stdint.h>
+#include "stm32f4xx_hal.h"
 #include "FreeRTOS.h"
-#include "task.h"
 #include "queue.h"
+#include "task.h"
 
+// ===== Dirty Flags 구조체 =====
 typedef struct {
     uint8_t full_redraw;       // 전체 화면 다시 그리기
     uint8_t adsr_graph;        // ADSR 그래프만
-    uint8_t adsr_labels;       // ADSR 라벨 강조만
-    uint8_t wave_title;        // 파형 타이틀 바
-    uint8_t wave_graph;        // 파형 그래프
-    uint8_t filter_labels;     // 필터 라벨
-    uint8_t volume_bar;        // 볼륨 게이지
-    uint8_t note_display;      // 음계 표시
+    uint8_t adsr_sel;          // ADSR 선택 강조만
+    uint8_t wave_graph;        // 파형 그래프만
+    uint8_t filter_sel;        // 필터 선택 강조만
+    uint8_t note_display;      // 음계 표시만
+    uint8_t volume_bar;        // 볼륨 바만
 } UI_DirtyFlags_t;
 
-/* ===== 화면 상태 정의 ===== */
+// LCD 상태
 typedef enum {
     LCD_STATE_INIT = 0,
-	LCD_STATE_MAIN_DASH,
-	LCD_STATE_ADSR_VIEW
+    LCD_STATE_MAIN_DASH,
+    LCD_STATE_GRAPH_VIEW
 } LcdState_t;
 
+// ADSR 파라미터
 typedef struct {
-    uint8_t note_idx;   // 0~6 (C,D,E,F,G,A,B)
-    uint8_t octave;     // 2 or 3
-} NoteInfo_t;
+    uint32_t attack_steps;
+    uint32_t decay_steps;
+    uint32_t sustain_level;
+    uint32_t release_steps;
+} UI_ADSR_t;
 
-/* ===== 전역 변수 (외부 접근용) ===== */
+// 파형 타입
+typedef enum {
+    UI_WAVE_SINE = 0,
+    UI_WAVE_SQUARE,
+    UI_WAVE_SAW
+} UI_Wave_t;
+
+// 편집 모드
+typedef enum {
+    UI_EDIT_ADSR = 0,
+    UI_EDIT_FILTER,
+    UI_EDIT_VOLUME
+} UI_EditMode_t;
+
+// ADSR 선택
+typedef enum {
+    ADSR_SEL_A = 0,
+    ADSR_SEL_D,
+    ADSR_SEL_S,
+    ADSR_SEL_R
+} UI_ADSR_Select_t;
+
+// 필터 선택
+typedef enum {
+    FILTER_SEL_CUTOFF = 0,
+    FILTER_SEL_RESO
+} UI_Filter_Select_t;
+
+// 전역 변수
 extern TaskHandle_t lcdTaskHandle;
 extern QueueHandle_t lcdQueueHandle;
 extern LcdState_t currentLcdState;
 
 extern volatile UI_DirtyFlags_t g_ui_dirty;
-extern volatile uint8_t selected_adsr_idx;
-extern volatile uint8_t volume_val;
-extern volatile uint8_t selected_wave_type;
-extern volatile NoteInfo_t current_note;
+extern volatile UI_ADSR_t g_ui_adsr;
+extern volatile UI_Wave_t g_ui_wave;
+extern volatile UI_EditMode_t g_ui_edit_mode;
+extern volatile UI_ADSR_Select_t g_adsr_sel;
+extern volatile UI_Filter_Select_t g_filter_sel;
 
-extern const char* wave_names[];
-extern uint8_t adsr_samples[1024];
+extern volatile uint8_t g_ui_note;
+extern volatile uint8_t g_ui_oct;
+extern volatile uint8_t g_ui_vol;
+extern volatile uint8_t g_ui_cutoff;
+extern volatile uint8_t g_ui_reso;
+
 extern uint8_t sin_samples[1024];
 
-/* ===== 초기화 함수 ===== */
+// 함수 선언
+void display_init(void);
 void UI_Init(void);
+void UI_OnEncoderDelta(int delta);
 
 #endif /* INC_UI_H_ */
