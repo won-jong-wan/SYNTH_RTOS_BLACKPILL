@@ -1,34 +1,62 @@
-14:12:56 **** Incremental Build of configuration Debug for project SYNTH_RTOS_STM32F411CEU6 ****
+15:26:53 **** Incremental Build of configuration Debug for project SYNTH_RTOS_STM32F411CEU6 ****
 make -j24 all 
-arm-none-eabi-gcc "../Core/Src/rotary.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -DARM_MATH_CM4 -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -I../Middlewares/ST/ARM/DSP/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/rotary.d" -MT"Core/Src/rotary.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/rotary.o"
+arm-none-eabi-gcc "../Core/Src/ui.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -DARM_MATH_CM4 -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -I../Middlewares/ST/ARM/DSP/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/ui.d" -MT"Core/Src/ui.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/ui.o"
+../Core/Src/ui.c: In function 'draw_adsr_graph':
+../Core/Src/ui.c:159:53: warning: unused variable 'h' [-Wunused-variable]
+  159 |         int x0 = ADSR_X0, y0 = ADSR_Y0, w = ADSR_W, h = ADSR_H;
+      |                                                     ^
+../Core/Src/ui.c:159:27: warning: unused variable 'y0' [-Wunused-variable]
+  159 |         int x0 = ADSR_X0, y0 = ADSR_Y0, w = ADSR_W, h = ADSR_H;
+      |                           ^~
+../Core/Src/ui.c: At top level:
+../Core/Src/ui.c:437:13: warning: 'UI_SelectVolumeMode' defined but not used [-Wunused-function]
+  437 | static void UI_SelectVolumeMode(void) {
+      |             ^~~~~~~~~~~~~~~~~~~
+../Core/Src/ui.c:429:13: warning: 'UI_ToggleFilterSelect' defined but not used [-Wunused-function]
+  429 | static void UI_ToggleFilterSelect(void) {
+      |             ^~~~~~~~~~~~~~~~~~~~~
 arm-none-eabi-gcc -o "SYNTH_RTOS_STM32F411CEU6.elf" @"objects.list"  -l:libarm_cortexM4lf_math.a -mcpu=cortex-m4 -T"C:\Users\kccistc\Desktop\SYNTH_RTOS_BLACKPILL\SYNTH_RTOS_STM32F411CEU6\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="SYNTH_RTOS_STM32F411CEU6.map" -Wl,--gc-sections -static -L../Middlewares/ST/ARM/DSP/Lib -u _printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 Finished building target: SYNTH_RTOS_STM32F411CEU6.elf
  
 arm-none-eabi-size  SYNTH_RTOS_STM32F411CEU6.elf 
 arm-none-eabi-objdump -h -S SYNTH_RTOS_STM32F411CEU6.elf  > "SYNTH_RTOS_STM32F411CEU6.list"
    text	   data	    bss	    dec	    hex	filename
-  68328	    676	  37116	 106120	  19e88	SYNTH_RTOS_STM32F411CEU6.elf
+  63988	    676	  36572	 101236	  18b74	SYNTH_RTOS_STM32F411CEU6.elf
 Finished building: default.size.stdout
  
 Finished building: SYNTH_RTOS_STM32F411CEU6.list
  
-14:13:07 **** Incremental Build of configuration Debug for project SYNTH_RTOS_STM32F411CEU6 ****
+15:26:58 **** Incremental Build of configuration Debug for project SYNTH_RTOS_STM32F411CEU6 ****
 make -j24 all 
 arm-none-eabi-size  SYNTH_RTOS_STM32F411CEU6.elf 
    text	   data	    bss	    dec	    hex	filename
-  68328	    676	  37116	 106120	  19e88	SYNTH_RTOS_STM32F411CEU6.elf
+  63988	    676	  36572	 101236	  18b74	SYNTH_RTOS_STM32F411CEU6.elf
 Finished building: default.size.stdout
  
-14:19:33 **** Incremental Build of configuration Debug for project SYNTH_RTOS_STM32F411CEU6 ****
+15:29:35 **** Incremental Build of configuration Debug for project SYNTH_RTOS_STM32F411CEU6 ****
 make -j24 all 
-arm-none-eabi-gcc "../Core/Src/sound_engine.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -DARM_MATH_CM4 -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -I../Middlewares/ST/ARM/DSP/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/sound_engine.d" -MT"Core/Src/sound_engine.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/sound_engine.o"
+arm-none-eabi-gcc "../Core/Src/ui.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -DARM_MATH_CM4 -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -I../Middlewares/ST/ARM/DSP/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/ui.d" -MT"Core/Src/ui.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/ui.o"
+../Core/Src/ui.c: In function 'draw_adsr_graph':
+../Core/Src/ui.c:159:53: warning: unused variable 'h' [-Wunused-variable]
+  159 |         int x0 = ADSR_X0, y0 = ADSR_Y0, w = ADSR_W, h = ADSR_H;
+      |                                                     ^
+../Core/Src/ui.c:159:27: warning: unused variable 'y0' [-Wunused-variable]
+  159 |         int x0 = ADSR_X0, y0 = ADSR_Y0, w = ADSR_W, h = ADSR_H;
+      |                           ^~
+../Core/Src/ui.c: At top level:
+../Core/Src/ui.c:443:13: warning: 'UI_SelectVolumeMode' defined but not used [-Wunused-function]
+  443 | static void UI_SelectVolumeMode(void) {
+      |             ^~~~~~~~~~~~~~~~~~~
+../Core/Src/ui.c:435:13: warning: 'UI_ToggleFilterSelect' defined but not used [-Wunused-function]
+  435 | static void UI_ToggleFilterSelect(void) {
+      |             ^~~~~~~~~~~~~~~~~~~~~
 arm-none-eabi-gcc -o "SYNTH_RTOS_STM32F411CEU6.elf" @"objects.list"  -l:libarm_cortexM4lf_math.a -mcpu=cortex-m4 -T"C:\Users\kccistc\Desktop\SYNTH_RTOS_BLACKPILL\SYNTH_RTOS_STM32F411CEU6\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="SYNTH_RTOS_STM32F411CEU6.map" -Wl,--gc-sections -static -L../Middlewares/ST/ARM/DSP/Lib -u _printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 Finished building target: SYNTH_RTOS_STM32F411CEU6.elf
  
 arm-none-eabi-size  SYNTH_RTOS_STM32F411CEU6.elf 
 arm-none-eabi-objdump -h -S SYNTH_RTOS_STM32F411CEU6.elf  > "SYNTH_RTOS_STM32F411CEU6.list"
    text	   data	    bss	    dec	    hex	filename
-  68536	    676	  37116	 106328	  19f58	SYNTH_RTOS_STM32F411CEU6.elf
+  64004	    676	  36572	 101252	  18b84	SYNTH_RTOS_STM32F411CEU6.elf
 Finished building: default.size.stdout
  
 Finished building: SYNTH_RTOS_STM32F411CEU6.list

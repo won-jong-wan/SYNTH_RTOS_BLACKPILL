@@ -41,7 +41,8 @@ Core/Src/btn.o: ../Core/Src/btn.c \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h \
- ../Core/Inc/user_rtos.h ../Core/Inc/main.h
+ ../Core/Inc/user_rtos.h ../Core/Inc/main.h ../Core/Inc/ui.h \
+ ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h
 ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
 ../Core/Inc/FreeRTOSConfig.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h:
@@ -87,3 +88,5 @@ Core/Src/btn.o: ../Core/Src/btn.c \
 ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h:
 ../Core/Inc/user_rtos.h:
 ../Core/Inc/main.h:
+../Core/Inc/ui.h:
+../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:

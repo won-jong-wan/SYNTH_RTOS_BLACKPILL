@@ -14,6 +14,7 @@
 #include <stdio.h>
 
 #include "user_rtos.h"
+#include "ui.h"
 
 #define C1_GPIO_Port  GPIOB
 #define C1_Pin        GPIO_PIN_13
@@ -140,12 +141,16 @@ static void print_event(const InputEvent *e) {
 		xSemaphoreTake(printfMutex, portMAX_DELAY);
 
 	KEY = e->key;
-	if (e->key == 7) {
-		current_lut = saw_lut;
+	if (e->type == EV_KEY_DOWN &&e->key == 7) {
+		UI_OnChangeOctave(1);
 	} else if (e->key == 8) {
-		current_lut = square_lut;
-	} else if (e->key == 9) {
 		current_lut = sine_lut;
+	} else if (e->key == 9) {
+		current_lut = square_lut;
+	} else if (e->key == 10) {
+		current_lut = saw_lut;
+	}else if (e->type == EV_KEY_DOWN &&e->key == 11) {
+		UI_OnChangeOctave(-1);
 	}
 
 	if (e->type == EV_KEY_DOWN && e->key < 7) {

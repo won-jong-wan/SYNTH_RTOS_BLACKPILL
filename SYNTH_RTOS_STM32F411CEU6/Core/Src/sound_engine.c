@@ -23,6 +23,8 @@ extern I2S_HandleTypeDef hi2s1;
 double freq_list[] = { FREQ_C4, FREQ_D4, FREQ_E4, FREQ_F4, FREQ_G4, FREQ_A4,
 FREQ_B4 };
 
+volatile int16_t g_vis_buffer[VIS_BUF_SIZE] = { 0 };
+
 uint8_t count_arr[7] = { 0 };
 
 // --- 변수 ---
@@ -114,6 +116,22 @@ void NoteOn(void) {
 	}
 //    printf("New voice idx %d\n", new_voice_idx);
 
+	// [수정] 옥타브 계산 로직 추가
+	float base_freq = target_freq; // target_freq는 보통 4옥타브 기준 (예: C4 = 261.63Hz)
+	float final_freq = base_freq;
+
+	int shift = (int) g_ui_oct - 4; // 4옥타브가 기준(0)
+
+	if (shift > 0) {
+		// 옥타브 올림 (주파수 2배씩)
+		for (int k = 0; k < shift; k++)
+			final_freq *= 2.0f;
+	} else if (shift < 0) {
+		// 옥타브 내림 (주파수 절반씩)
+		for (int k = 0; k < -shift; k++)
+			final_freq *= 0.5f;
+	}
+
 	// 1. Attack (UI값 1당 약 5ms 정도로 가정)
 	adsrs[new_voice_idx].attack_steps = g_ui_adsr.attack_steps
 			* (5 * SAMPLES_PER_MS);
@@ -130,7 +148,7 @@ void NoteOn(void) {
 	adsrs[new_voice_idx].release_steps = g_ui_adsr.release_steps
 			* (5 * SAMPLES_PER_MS);
 
-	adsrs[new_voice_idx].freq = target_freq;
+	adsrs[new_voice_idx].freq = final_freq;
 	adsrs[new_voice_idx].count = ++count;
 	adsrs[new_voice_idx].state = ADSR_ATTACK;
 	// [중요] Step Value 재계산 (Attack 시간에 맞춰서)
@@ -141,7 +159,7 @@ void NoteOn(void) {
 		adsrs[new_voice_idx].step_val = 1.0f; // 즉시 최대 볼륨
 	}
 
-	adsrs[new_voice_idx].tuning_word = (uint32_t) ((double) target_freq
+	adsrs[new_voice_idx].tuning_word = (uint32_t) ((double) final_freq
 			* 4294967296.0 / (double) SAMPLE_RATE);
 
 	// 어택 시작은 0부터
@@ -315,6 +333,24 @@ void Calc_Wave_LUT(int16_t *buffer, int length) {
 		buffer[i + 1] += out;
 
 	}
+	int capture_len = (length / 2); // 스테레오니까 샘플 쌍의 개수
+	if (capture_len > VIS_BUF_SIZE)
+		capture_len = VIS_BUF_SIZE;
+
+	for (int k = 0; k < capture_len; k++) {
+		// buffer[2*k]는 Left 채널, buffer[2*k+1]은 Right 채널
+		// 그냥 Left만 가져옵니다.
+		g_vis_buffer[k] = buffer[2 * k];
+	}
+
+	static uint8_t frame_skip = 0;
+
+	// 약 4번에 1번만 UI 업데이트 요청 (약 30~40 FPS 조절용)
+	frame_skip++;
+	if (frame_skip > 3) {
+	    frame_skip = 0;
+	    g_ui_dirty.wave_graph = 1; // "UI야, 그림 그려라!"
+	}
 }
 void StartAudioTask(void *argument) {
 
@@ -337,7 +373,7 @@ void StartAudioTask(void *argument) {
 	for (;;) {
 		xTaskNotifyWait(0, 0xFFFFFFFF, &ulNotificationValue, portMAX_DELAY);
 
-		enc_val = SOUND_MAX / 100 * g_enc_pos[1];
+		enc_val = (SOUND_MAX / 100.0f) * (float) g_ui_vol;
 
 		if ((ulNotificationValue & 0x01) != 0) {
 			Calc_Wave_LUT(&i2s_buffer[0], BUFFER_SIZE / 2); // 이름 변경됨

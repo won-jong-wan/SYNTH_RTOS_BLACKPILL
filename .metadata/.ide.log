@@ -2378,3 +2378,6 @@ java.lang.NullPointerException: Cannot invoke "javax.swing.JTextField.getText()"
 2026-01-15 11:54:58,030 [INFO] ProjectBuilder:5496 - Time for Generating toolchain IDE Files: 404mS.
 2026-01-15 11:54:58,032 [INFO] ProjectBuilder:3463 - Time for Copy CMSIS : 2mS.
 2026-01-15 11:54:58,038 [INFO] ProjectBuilder:3463 - Time for Copy CMSIS : 0mS.
+2026-01-15 14:48:51,196 [ERROR] AdobePublisher:162 - Exception while opening the connection: java.net.SocketTimeoutException: Read timed out
+2026-01-15 14:49:09,941 [ERROR] AdobePublisher:162 - Exception while opening the connection: java.net.SocketTimeoutException: Read timed out
+2026-01-15 15:07:58,243 [ERROR] ConfigurationRetriever:142 - IOException on connection: Connect timed out

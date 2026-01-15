@@ -67,7 +67,7 @@ static void Apply_Rotary1_Change(int8_t dir) {
 static void Apply_Rotary2_Change(int8_t dir) {
     // 1. 위치값 단순 기록
 	g_enc_pos[1] = volfilter(g_enc_pos[1] + dir);
-
+	UI_OnChangeVolume((int)dir);
     // 2. 실제 기능 (Cutoff Frequency 조절)
 //    float fc = g_lpf_FC + (float)dir * FC_STEP;
 //    g_lpf_FC = clampf(fc, FC_MIN, FC_MAX);
