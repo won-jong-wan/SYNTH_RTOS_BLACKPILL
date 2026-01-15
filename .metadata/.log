@@ -2851,3 +2851,647 @@ Command-line arguments:  -os win32 -ws win32 -arch x86_64
 
 !ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-01-15 15:29:43.181
 !MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 100000000; div: 50
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-01-15 15:47:24.931
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 100000000; div: 50
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-01-15 15:49:05.623
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 100000000; div: 50
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-01-15 16:00:27.991
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 100000000; div: 50
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-01-15 16:08:23.429
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 100000000; div: 50
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-01-15 16:14:36.386
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 100000000; div: 50
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-01-15 16:17:07.972
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 100000000; div: 50
+
+!ENTRY org.eclipse.cdt.dsf.gdb 4 5012 2026-01-15 16:17:08.247
+!MESSAGE Error in final launch sequence:
+
+Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+!STACK 1
+org.eclipse.core.runtime.CoreException: Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+	at org.eclipse.cdt.dsf.concurrent.Query.get(Query.java:112)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launchDebugSession(GdbLaunchDelegate.java:252)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launchDebugger(GdbLaunchDelegate.java:109)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launch(GdbLaunchDelegate.java:97)
+	at com.st.stm32cube.ide.mcu.debug.launch.DSFDelegate.launch(DSFDelegate.java:334)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:805)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:716)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin.buildAndLaunch(DebugUIPlugin.java:1054)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin$1.run(DebugUIPlugin.java:1257)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+Contains: Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+java.lang.Exception: Error finishing flash operation
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+!SUBENTRY 1 org.eclipse.cdt.dsf 4 10004 2026-01-15 16:17:08.248
+!MESSAGE Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+!SUBENTRY 2 org.eclipse.cdt.dsf.gdb 4 10004 2026-01-15 16:17:08.248
+!MESSAGE Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+!STACK 0
+java.lang.Exception: Error finishing flash operation
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-01-15 16:17:53.017
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 100000000; div: 50
+
+!ENTRY org.eclipse.cdt.dsf.gdb 4 5012 2026-01-15 16:17:53.279
+!MESSAGE Error in final launch sequence:
+
+Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+!STACK 1
+org.eclipse.core.runtime.CoreException: Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+	at org.eclipse.cdt.dsf.concurrent.Query.get(Query.java:112)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launchDebugSession(GdbLaunchDelegate.java:252)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launchDebugger(GdbLaunchDelegate.java:109)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launch(GdbLaunchDelegate.java:97)
+	at com.st.stm32cube.ide.mcu.debug.launch.DSFDelegate.launch(DSFDelegate.java:334)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:805)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:716)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin.buildAndLaunch(DebugUIPlugin.java:1054)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin$1.run(DebugUIPlugin.java:1257)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+Contains: Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+java.lang.Exception: Error finishing flash operation
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+!SUBENTRY 1 org.eclipse.cdt.dsf 4 10004 2026-01-15 16:17:53.279
+!MESSAGE Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+!SUBENTRY 2 org.eclipse.cdt.dsf.gdb 4 10004 2026-01-15 16:17:53.279
+!MESSAGE Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+!STACK 0
+java.lang.Exception: Error finishing flash operation
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-01-15 16:18:10.844
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 100000000; div: 50
+
+!ENTRY org.eclipse.cdt.dsf.gdb 4 5012 2026-01-15 16:18:11.089
+!MESSAGE Error in final launch sequence:
+
+Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+!STACK 1
+org.eclipse.core.runtime.CoreException: Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+	at org.eclipse.cdt.dsf.concurrent.Query.get(Query.java:112)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launchDebugSession(GdbLaunchDelegate.java:252)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launchDebugger(GdbLaunchDelegate.java:109)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launch(GdbLaunchDelegate.java:97)
+	at com.st.stm32cube.ide.mcu.debug.launch.DSFDelegate.launch(DSFDelegate.java:334)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:805)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:716)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin.buildAndLaunch(DebugUIPlugin.java:1054)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin$1.run(DebugUIPlugin.java:1257)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+Contains: Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+java.lang.Exception: Error finishing flash operation
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+!SUBENTRY 1 org.eclipse.cdt.dsf 4 10004 2026-01-15 16:18:11.089
+!MESSAGE Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+!SUBENTRY 2 org.eclipse.cdt.dsf.gdb 4 10004 2026-01-15 16:18:11.089
+!MESSAGE Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+!STACK 0
+java.lang.Exception: Error finishing flash operation
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-01-15 16:18:37.495
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 100000000; div: 50
+
+!ENTRY org.eclipse.cdt.dsf.gdb 4 5012 2026-01-15 16:18:37.627
+!MESSAGE Error in final launch sequence:
+
+Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+!STACK 1
+org.eclipse.core.runtime.CoreException: Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+	at org.eclipse.cdt.dsf.concurrent.Query.get(Query.java:112)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launchDebugSession(GdbLaunchDelegate.java:252)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launchDebugger(GdbLaunchDelegate.java:109)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launch(GdbLaunchDelegate.java:97)
+	at com.st.stm32cube.ide.mcu.debug.launch.DSFDelegate.launch(DSFDelegate.java:334)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:805)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:716)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin.buildAndLaunch(DebugUIPlugin.java:1054)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin$1.run(DebugUIPlugin.java:1257)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+Contains: Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+java.lang.Exception: Error finishing flash operation
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+!SUBENTRY 1 org.eclipse.cdt.dsf 4 10004 2026-01-15 16:18:37.627
+!MESSAGE Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+!SUBENTRY 2 org.eclipse.cdt.dsf.gdb 4 10004 2026-01-15 16:18:37.627
+!MESSAGE Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+!STACK 0
+java.lang.Exception: Error finishing flash operation
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-01-15 16:19:15.405
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 100000000; div: 50
+
+!ENTRY org.eclipse.cdt.dsf.gdb 4 5012 2026-01-15 16:19:15.685
+!MESSAGE Error in final launch sequence:
+
+Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+!STACK 1
+org.eclipse.core.runtime.CoreException: Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+	at org.eclipse.cdt.dsf.concurrent.Query.get(Query.java:112)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launchDebugSession(GdbLaunchDelegate.java:252)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launchDebugger(GdbLaunchDelegate.java:109)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launch(GdbLaunchDelegate.java:97)
+	at com.st.stm32cube.ide.mcu.debug.launch.DSFDelegate.launch(DSFDelegate.java:334)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:805)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:716)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin.buildAndLaunch(DebugUIPlugin.java:1054)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin$1.run(DebugUIPlugin.java:1257)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+Contains: Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+java.lang.Exception: Error finishing flash operation
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+!SUBENTRY 1 org.eclipse.cdt.dsf 4 10004 2026-01-15 16:19:15.685
+!MESSAGE Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+!SUBENTRY 2 org.eclipse.cdt.dsf.gdb 4 10004 2026-01-15 16:19:15.685
+!MESSAGE Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+!STACK 0
+java.lang.Exception: Error finishing flash operation
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-01-15 16:20:04.986
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 100000000; div: 50
+
+!ENTRY org.eclipse.cdt.dsf.gdb 4 5012 2026-01-15 16:20:05.263
+!MESSAGE Error in final launch sequence:
+
+Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+!STACK 1
+org.eclipse.core.runtime.CoreException: Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+	at org.eclipse.cdt.dsf.concurrent.Query.get(Query.java:112)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launchDebugSession(GdbLaunchDelegate.java:252)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launchDebugger(GdbLaunchDelegate.java:109)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launch(GdbLaunchDelegate.java:97)
+	at com.st.stm32cube.ide.mcu.debug.launch.DSFDelegate.launch(DSFDelegate.java:336)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:805)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:716)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin.buildAndLaunch(DebugUIPlugin.java:1054)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin$1.run(DebugUIPlugin.java:1257)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+Contains: Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+java.lang.Exception: Error finishing flash operation
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+!SUBENTRY 1 org.eclipse.cdt.dsf 4 10004 2026-01-15 16:20:05.263
+!MESSAGE Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+!SUBENTRY 2 org.eclipse.cdt.dsf.gdb 4 10004 2026-01-15 16:20:05.263
+!MESSAGE Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+!STACK 0
+java.lang.Exception: Error finishing flash operation
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-01-15 16:20:45.736
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 100000000; div: 50
+
+!ENTRY com.st.stm32cube.ide.mcu.debug 4 0 2026-01-15 16:20:48.160
+!MESSAGE Error - No active DSF-Session. tmpSessionId = 71 (contextManager row 121)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug 4 0 2026-01-15 16:20:48.160
+!MESSAGE Existing sessions are:
+
+!ENTRY com.st.stm32cube.ide.mcu.debug 4 0 2026-01-15 16:20:48.161
+!MESSAGE Error - No active DSF-Session. tmpSessionId = 71 (contextManager row 121)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug 4 0 2026-01-15 16:20:48.161
+!MESSAGE Existing sessions are:
+
+!ENTRY com.st.stm32cube.ide.mcu.debug 4 0 2026-01-15 16:20:48.162
+!MESSAGE Error - No active DSF-Session. tmpSessionId = 71 (contextManager row 121)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug 4 0 2026-01-15 16:20:48.162
+!MESSAGE Existing sessions are:
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-01-15 16:21:40.101
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 100000000; div: 50
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-01-15 16:33:28.910
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 100000000; div: 50
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-01-15 16:33:55.357
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 100000000; div: 50
+
+!ENTRY org.eclipse.cdt.dsf.gdb 4 5012 2026-01-15 16:33:55.600
+!MESSAGE Error in final launch sequence:
+
+Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+!STACK 1
+org.eclipse.core.runtime.CoreException: Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+	at org.eclipse.cdt.dsf.concurrent.Query.get(Query.java:112)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launchDebugSession(GdbLaunchDelegate.java:252)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launchDebugger(GdbLaunchDelegate.java:109)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launch(GdbLaunchDelegate.java:97)
+	at com.st.stm32cube.ide.mcu.debug.launch.DSFDelegate.launch(DSFDelegate.java:334)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:805)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:716)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin.buildAndLaunch(DebugUIPlugin.java:1054)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin$1.run(DebugUIPlugin.java:1257)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+Contains: Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+java.lang.Exception: Error finishing flash operation
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+!SUBENTRY 1 org.eclipse.cdt.dsf 4 10004 2026-01-15 16:33:55.600
+!MESSAGE Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+!SUBENTRY 2 org.eclipse.cdt.dsf.gdb 4 10004 2026-01-15 16:33:55.600
+!MESSAGE Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+!STACK 0
+java.lang.Exception: Error finishing flash operation
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-01-15 16:34:11.498
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 100000000; div: 50
+
+!ENTRY org.eclipse.cdt.dsf.gdb 4 5012 2026-01-15 16:34:12.834
+!MESSAGE Error in final launch sequence:
+
+Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+!STACK 1
+org.eclipse.core.runtime.CoreException: Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+	at org.eclipse.cdt.dsf.concurrent.Query.get(Query.java:112)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launchDebugSession(GdbLaunchDelegate.java:252)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launchDebugger(GdbLaunchDelegate.java:109)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launch(GdbLaunchDelegate.java:97)
+	at com.st.stm32cube.ide.mcu.debug.launch.DSFDelegate.launch(DSFDelegate.java:334)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:805)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:716)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin.buildAndLaunch(DebugUIPlugin.java:1054)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin$1.run(DebugUIPlugin.java:1257)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+Contains: Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+java.lang.Exception: Error finishing flash operation
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+!SUBENTRY 1 org.eclipse.cdt.dsf 4 10004 2026-01-15 16:34:12.834
+!MESSAGE Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+!SUBENTRY 2 org.eclipse.cdt.dsf.gdb 4 10004 2026-01-15 16:34:12.834
+!MESSAGE Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+!STACK 0
+java.lang.Exception: Error finishing flash operation
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-01-15 16:34:37.330
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 100000000; div: 50
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-01-15 16:36:32.554
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 100000000; div: 50
+
+!ENTRY org.eclipse.cdt.dsf.gdb 4 5012 2026-01-15 16:36:32.815
+!MESSAGE Error in final launch sequence:
+
+Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+!STACK 1
+org.eclipse.core.runtime.CoreException: Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+	at org.eclipse.cdt.dsf.concurrent.Query.get(Query.java:112)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launchDebugSession(GdbLaunchDelegate.java:252)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launchDebugger(GdbLaunchDelegate.java:109)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launch(GdbLaunchDelegate.java:97)
+	at com.st.stm32cube.ide.mcu.debug.launch.DSFDelegate.launch(DSFDelegate.java:334)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:805)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:716)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin.buildAndLaunch(DebugUIPlugin.java:1054)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin$1.run(DebugUIPlugin.java:1257)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+Contains: Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+java.lang.Exception: Error finishing flash operation
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+!SUBENTRY 1 org.eclipse.cdt.dsf 4 10004 2026-01-15 16:36:32.815
+!MESSAGE Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+!SUBENTRY 2 org.eclipse.cdt.dsf.gdb 4 10004 2026-01-15 16:36:32.815
+!MESSAGE Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+!STACK 0
+java.lang.Exception: Error finishing flash operation
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-01-15 16:36:47.992
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 100000000; div: 50
+
+!ENTRY org.eclipse.cdt.dsf.gdb 4 5012 2026-01-15 16:36:48.198
+!MESSAGE Error in final launch sequence:
+
+Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+!STACK 1
+org.eclipse.core.runtime.CoreException: Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+	at org.eclipse.cdt.dsf.concurrent.Query.get(Query.java:112)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launchDebugSession(GdbLaunchDelegate.java:252)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launchDebugger(GdbLaunchDelegate.java:109)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launch(GdbLaunchDelegate.java:97)
+	at com.st.stm32cube.ide.mcu.debug.launch.DSFDelegate.launch(DSFDelegate.java:334)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:805)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:716)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin.buildAndLaunch(DebugUIPlugin.java:1054)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin$1.run(DebugUIPlugin.java:1257)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+Contains: Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+java.lang.Exception: Error finishing flash operation
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+!SUBENTRY 1 org.eclipse.cdt.dsf 4 10004 2026-01-15 16:36:48.198
+!MESSAGE Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+!SUBENTRY 2 org.eclipse.cdt.dsf.gdb 4 10004 2026-01-15 16:36:48.198
+!MESSAGE Failed to execute MI command:
+load C:\\Users\\kccistc\\Desktop\\SYNTH_RTOS_BLACKPILL\\SYNTH_RTOS_STM32F411CEU6\\Debug\\SYNTH_RTOS_STM32F411CEU6.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+!STACK 0
+java.lang.Exception: Error finishing flash operation
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:1024)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:853)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-01-15 16:37:06.986
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 100000000; div: 50
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-01-15 16:37:54.523
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 100000000; div: 50
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-01-15 16:38:20.234
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 100000000; div: 50
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-01-15 16:38:52.589
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 100000000; div: 50
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-01-15 16:40:21.302
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 100000000; div: 50
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-01-15 16:40:50.601
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 100000000; div: 50
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-01-15 16:41:11.145
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 100000000; div: 50
+
+!ENTRY org.eclipse.cdt.dsf.gdb 4 4 2026-01-15 16:41:44.136
+!MESSAGE NullPointerException while trying to calculated source lookup path. This can be ignored if it occurs while terminating a debug session. See Bug 500988.
+!STACK 0
+java.lang.NullPointerException: Cannot read the array length because "containers" is null
+	at org.eclipse.cdt.dsf.gdb.launching.GdbSourceLookupDirector.collectSubstitutionsPaths(GdbSourceLookupDirector.java:102)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbSourceLookupDirector.collectSubstitutionsPaths(GdbSourceLookupDirector.java:146)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbSourceLookupDirector.getSubstitutionsPaths(GdbSourceLookupDirector.java:72)
+	at org.eclipse.cdt.dsf.gdb.service.GDBSourceLookup.getSubstitutionsPaths(GDBSourceLookup.java:124)
+	at org.eclipse.cdt.dsf.gdb.service.GDBSourceLookup.sourceContainersChanged(GDBSourceLookup.java:139)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbSourceLookupParticipant.sourceContainersChangedOnDispatchThread(GdbSourceLookupParticipant.java:120)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbSourceLookupParticipant$1.run(GdbSourceLookupParticipant.java:85)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:572)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-01-15 17:01:42.869
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 100000000; div: 50
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-01-15 17:02:55.238
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 100000000; div: 50
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-01-15 17:08:12.148
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 100000000; div: 50
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-01-15 17:10:05.308
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 100000000; div: 50
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-01-15 17:11:37.591
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 100000000; div: 50
+
+!ENTRY org.eclipse.cdt.dsf.gdb 4 5012 2026-01-15 17:11:39.994
+!MESSAGE Error in final launch sequence:
+
+Setup exceptions
+!STACK 1
+org.eclipse.core.runtime.CoreException: Setup exceptions
+	at org.eclipse.cdt.dsf.concurrent.Query.get(Query.java:112)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launchDebugSession(GdbLaunchDelegate.java:252)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launchDebugger(GdbLaunchDelegate.java:109)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launch(GdbLaunchDelegate.java:97)
+	at com.st.stm32cube.ide.mcu.debug.launch.DSFDelegate.launch(DSFDelegate.java:336)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:805)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:716)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin.buildAndLaunch(DebugUIPlugin.java:1054)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin$1.run(DebugUIPlugin.java:1257)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 com.st.stm32cube.ide.mcu.debug.launch 4 0 2026-01-15 17:11:39.994
+!MESSAGE Setup exceptions
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-01-15 17:11:51.143
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 100000000; div: 50
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-01-15 17:14:10.209
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 100000000; div: 50

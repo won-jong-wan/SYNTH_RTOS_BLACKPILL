@@ -13,17 +13,6 @@
 #include "user_rtos.h"
 #include "ui.h"
 
-// --- 설정값 정의 ---
-// Rotary 1 (Q Factor)
-#define Q_MIN 0.50f
-#define Q_MAX 8.00f
-#define Q_STEP 0.10f
-
-// Rotary 2 (Cutoff Frequency)
-#define FC_MIN   50.0f
-#define FC_MAX   8000.0f
-#define FC_STEP  50.0f
-
 // 엔코더 감도 설정 (2: 민감함, 4: 둔감함/안정적)
 #define ENC_STEPS_PER_NOTCH 2
 

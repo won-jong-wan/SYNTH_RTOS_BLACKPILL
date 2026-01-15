@@ -1,5 +1,5 @@
-../Core/Src/rotary.c:40:19:volfilter	16	static
-../Core/Src/rotary.c:52:13:Apply_Rotary1_Change	16	static
-../Core/Src/rotary.c:67:13:Apply_Rotary2_Change	16	static
-../Core/Src/rotary.c:80:6:InputTask	48	static
-../Core/Src/rotary.c:140:6:RotaryTasks_Init	24	static,ignoring_inline_asm
+../Core/Src/rotary.c:29:19:volfilter	16	static
+../Core/Src/rotary.c:41:13:Apply_Rotary1_Change	16	static
+../Core/Src/rotary.c:56:13:Apply_Rotary2_Change	16	static
+../Core/Src/rotary.c:69:6:InputTask	48	static
+../Core/Src/rotary.c:129:6:RotaryTasks_Init	24	static,ignoring_inline_asm

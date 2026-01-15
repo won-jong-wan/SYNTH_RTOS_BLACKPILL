@@ -230,18 +230,16 @@ static void draw_adsr_labels_static(void) {
 static void draw_adsr_selection(void) {
 	int x_pos[4] = { 40, 90, 140, 190 };
 
-	// 라벨 영역만 지우기
-	ILI9341_Draw_Filled_Rectangle_Coord(ADSR_X0, ADSR_LY0, ADSR_X1, ADSR_LY1,
-	BLACK);
-
-	// 라벨 다시 출력
+	// 1. 배경을 지우고 글씨(A D S R)를 다시 그립니다.
+	ILI9341_Draw_Filled_Rectangle_Coord(ADSR_X0, ADSR_LY0, ADSR_X1, ADSR_LY1, BLACK);
 	draw_adsr_labels_static();
 
-	int x = x_pos[g_adsr_sel];
-
-	// 선택 박스
-	ILI9341_Draw_Hollow_Rectangle_Coord(x - 6, ADSR_LY0, x + 18, ADSR_LY1,
-	YELLOW);
+	// 2. [수정됨] "현재 모드가 ADSR일 때만" 노란 박스를 그립니다.
+	// 필터 모드일 때는 이 부분이 실행되지 않아 박스가 사라진 상태가 유지됩니다.
+	if (g_ui_edit_mode == UI_EDIT_ADSR) {
+		int x = x_pos[g_adsr_sel];
+		ILI9341_Draw_Hollow_Rectangle_Coord(x - 6, ADSR_LY0, x + 18, ADSR_LY1, YELLOW);
+	}
 }
 
 // ===== 파형 그래프 =====
@@ -325,23 +323,35 @@ static void draw_filter_labels_static(void) {
 }
 
 static void draw_filter_selection(void) {
-	int y = FILTER_LY0 + 2;
+    int y_text = FILTER_LY0 + 2;
 
-	// 라벨 영역 클리어
-	ILI9341_Draw_Filled_Rectangle_Coord(0, FILTER_LY0, LCD_W - 1, FILTER_LY1,
-	BLACK);
+    // 1. 해당 영역 배경 지우기
+    ILI9341_Draw_Filled_Rectangle_Coord(0, FILTER_LY0, LCD_W - 1, FILTER_LY1, BLACK);
 
-	// 기본 라벨
-	draw_filter_labels_static();
+    // 2. 글씨 색상 결정 (선택된 항목만 흰색, 나머진 회색)
+    uint16_t color_cutoff = LIGHTGREY;
+    uint16_t color_reso = LIGHTGREY;
 
-	// 선택 강조
-	if (g_filter_sel == FILTER_SEL_CUTOFF) {
-		ILI9341_Draw_Text("CUTOFF", 32, y, WHITE, 2, BLACK);
-		ILI9341_Draw_Horizontal_Line(30, y + 20, 80, YELLOW);
-	} else {
-		ILI9341_Draw_Text("RESONANCE", 130, y, WHITE, 2, BLACK);
-		ILI9341_Draw_Horizontal_Line(128, y + 20, 110, YELLOW);
-	}
+    if (g_ui_edit_mode == UI_EDIT_FILTER) {
+        if (g_filter_sel == FILTER_SEL_CUTOFF) color_cutoff = WHITE;
+        else color_reso = WHITE;
+    }
+
+    // 3. 글씨 출력
+    // CUTOFF (X=32), RESONANCE (X=130)
+    ILI9341_Draw_Text("CUTOFF", 32, y_text, color_cutoff, 2, BLACK);
+    ILI9341_Draw_Text("RESONANCE", 130, y_text, color_reso, 2, BLACK);
+
+    // 4. [수정됨] 필터 모드일 때 "노란 박스" 그리기
+    if (g_ui_edit_mode == UI_EDIT_FILTER) {
+        if (g_filter_sel == FILTER_SEL_CUTOFF) {
+            // CUTOFF 텍스트 주변 박스 (X: 28 ~ 110)
+            ILI9341_Draw_Hollow_Rectangle_Coord(28, FILTER_LY0, 110, FILTER_LY1, YELLOW);
+        } else {
+            // RESONANCE 텍스트 주변 박스 (X: 126 ~ 238)
+            ILI9341_Draw_Hollow_Rectangle_Coord(126, FILTER_LY0, 238, FILTER_LY1, YELLOW);
+        }
+    }
 }
 
 // ===== 음계 표시 =====
@@ -427,9 +437,40 @@ static int clampi(int v, int lo, int hi) {
 }
 
 static void UI_MoveAdsrSelect(void) {
-	g_ui_edit_mode = UI_EDIT_ADSR;
-	g_adsr_sel = (UI_ADSR_Select_t) ((g_adsr_sel + 1) % 4);
-	g_ui_dirty.adsr_sel = 1;  // ✅ 구조체 사용
+	// 1. 현재 ADSR 모드인 경우
+	if (g_ui_edit_mode == UI_EDIT_ADSR) {
+		// R(마지막)이 아니면 다음 칸(D, S, R)으로 이동
+		if (g_adsr_sel < ADSR_SEL_R) {
+			g_adsr_sel = (UI_ADSR_Select_t)(g_adsr_sel + 1);
+		}
+		// R에서 한 번 더 누르면 -> 필터 모드(Cutoff)로 진입!
+		else {
+			g_ui_edit_mode = UI_EDIT_FILTER;
+			g_filter_sel = FILTER_SEL_CUTOFF;
+		}
+	}
+	// 2. 현재 필터 모드인 경우
+	else if (g_ui_edit_mode == UI_EDIT_FILTER) {
+		// Cutoff이면 -> Resonance로 이동
+		if (g_filter_sel == FILTER_SEL_CUTOFF) {
+			g_filter_sel = FILTER_SEL_RESO;
+		}
+		// Resonance(마지막)이면 -> 다시 ADSR 모드(A)로 복귀!
+		else {
+			g_ui_edit_mode = UI_EDIT_ADSR;
+			g_adsr_sel = ADSR_SEL_A;
+		}
+	}
+	// (예외 처리: 혹시 다른 모드라면 ADSR 초기화)
+	else {
+		g_ui_edit_mode = UI_EDIT_ADSR;
+		g_adsr_sel = ADSR_SEL_A;
+	}
+
+	// [중요] 두 영역 모두 dirty 처리해야
+	// 기존 박스는 지워지고, 새로운 강조가 나타납니다.
+	g_ui_dirty.adsr_sel = 1;
+	g_ui_dirty.filter_sel = 1;
 }
 
 static void UI_ToggleFilterSelect(void) {
@@ -448,42 +489,49 @@ static void UI_SelectVolumeMode(void) {
 }
 
 void UI_OnEncoderDelta(int delta) {
-	if (delta == 0)
-		return;
+    if (delta == 0)
+        return;
 
-	if (g_ui_edit_mode == UI_EDIT_ADSR) {
-		switch (g_adsr_sel) {
-		case ADSR_SEL_A:
-			g_ui_adsr.attack_steps = (uint32_t) clampi(
-					(int) g_ui_adsr.attack_steps + delta, 1, 200);
-			break;
-		case ADSR_SEL_D:
-			g_ui_adsr.decay_steps = (uint32_t) clampi(
-					(int) g_ui_adsr.decay_steps + delta, 1, 200);
-			break;
-		case ADSR_SEL_S:
-			g_ui_adsr.sustain_level = (uint32_t) clampi(
-					(int) g_ui_adsr.sustain_level + delta, 0, 100);
-			break;
-		case ADSR_SEL_R:
-			g_ui_adsr.release_steps = (uint32_t) clampi(
-					(int) g_ui_adsr.release_steps + delta, 1, 200);
-			break;
-		}
-		g_ui_dirty.adsr_graph = 1;  // ✅ 구조체 사용
-	} else if (g_ui_edit_mode == UI_EDIT_FILTER) {
-		if (g_filter_sel == FILTER_SEL_CUTOFF) {
-			g_ui_cutoff = (uint8_t) clampi((int) g_ui_cutoff + delta, 0, 100);
-		} else {
-			g_ui_reso = (uint8_t) clampi((int) g_ui_reso + delta, 0, 100);
-		}
-		g_ui_dirty.wave_graph = 1;  // ✅ 구조체 사용
-	} else {
-		int v = (int) g_ui_vol + delta;
-		v = clampi(v, 0, 100);
-		g_ui_vol = (uint8_t) v;
-		g_ui_dirty.volume_bar = 1;  // ✅ 구조체 사용
-	}
+    // 1. ADSR 모드일 때
+    if (g_ui_edit_mode == UI_EDIT_ADSR) {
+        switch (g_adsr_sel) {
+        case ADSR_SEL_A:
+            g_ui_adsr.attack_steps = (uint32_t) clampi((int) g_ui_adsr.attack_steps + delta, 1, 200);
+            break;
+        case ADSR_SEL_D:
+            g_ui_adsr.decay_steps = (uint32_t) clampi((int) g_ui_adsr.decay_steps + delta, 1, 200);
+            break;
+        case ADSR_SEL_S:
+            g_ui_adsr.sustain_level = (uint32_t) clampi((int) g_ui_adsr.sustain_level + delta, 0, 100);
+            break;
+        case ADSR_SEL_R:
+            g_ui_adsr.release_steps = (uint32_t) clampi((int) g_ui_adsr.release_steps + delta, 1, 200);
+            break;
+        }
+        g_ui_dirty.adsr_graph = 1; // 그래프 갱신
+    }
+    // 2. [추가됨] 필터 모드일 때 (여기가 핵심!)
+    else if (g_ui_edit_mode == UI_EDIT_FILTER) {
+        if (g_filter_sel == FILTER_SEL_CUTOFF) {
+            // Cutoff 값 변경 (0 ~ 100)
+            int val = (int)g_ui_cutoff + delta;
+            g_ui_cutoff = (uint8_t)clampi(val, 0, 100);
+        } else {
+            // Resonance 값 변경 (0 ~ 100)
+            int val = (int)g_ui_reso + delta;
+            g_ui_reso = (uint8_t)clampi(val, 0, 100);
+        }
+
+        // (선택 사항) 만약 화면에 숫자를 표시하고 있다면 여기서 UI 갱신 플래그를 켜야 함
+        // 현재는 텍스트만 있으므로 변수값만 바꾸면 Sound Engine이 알아서 읽어감
+         g_ui_dirty.filter_sel = 1;
+    }
+    // 3. 그 외 (볼륨 모드 등)
+    else {
+        int v = (int) g_ui_vol + delta;
+        g_ui_vol = (uint8_t) clampi(v, 0, 100);
+        g_ui_dirty.volume_bar = 1;
+    }
 }
 
 // 1. 볼륨 변경 함수 (Rotary 2에서 호출)

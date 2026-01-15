@@ -2381,3 +2381,11 @@ java.lang.NullPointerException: Cannot invoke "javax.swing.JTextField.getText()"
 2026-01-15 14:48:51,196 [ERROR] AdobePublisher:162 - Exception while opening the connection: java.net.SocketTimeoutException: Read timed out
 2026-01-15 14:49:09,941 [ERROR] AdobePublisher:162 - Exception while opening the connection: java.net.SocketTimeoutException: Read timed out
 2026-01-15 15:07:58,243 [ERROR] ConfigurationRetriever:142 - IOException on connection: Connect timed out
+2026-01-15 16:41:41,021 [INFO] LogOutputStream:77 - [STDOUT_REDIRECT] StartTraceHandler.execute(), success : Collect=false
+2026-01-15 16:41:44,169 [INFO] LogOutputStream:77 - [STDOUT_REDIRECT] StartTraceHandler.execute(), success : Collect=true
+2026-01-15 17:10:00,577 [ERROR] ConfigurationRetriever:142 - IOException on connection: Connect timed out
+2026-01-15 17:10:02,579 [ERROR] ConfigurationRetriever:142 - IOException on connection: Connect timed out
+2026-01-15 17:10:04,582 [ERROR] ConfigurationRetriever:142 - IOException on connection: Connect timed out
+2026-01-15 17:10:06,602 [ERROR] ConfigurationRetriever:142 - IOException on connection: Connect timed out
+2026-01-15 17:10:08,605 [ERROR] ConfigurationRetriever:142 - IOException on connection: Connect timed out
+2026-01-15 17:10:10,608 [ERROR] ConfigurationRetriever:142 - IOException on connection: Connect timed out

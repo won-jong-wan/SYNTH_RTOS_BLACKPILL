@@ -14,6 +14,17 @@
 #include <stdio.h>
 #include "ui.h"
 
+// --- 설정값 정의 ---
+// Rotary 1 (Q Factor)
+#define Q_MIN 0.50f
+#define Q_MAX 8.00f
+#define Q_STEP 0.10f
+
+// Rotary 2 (Cutoff Frequency)
+#define FC_MIN   50.0f
+#define FC_MAX   8000.0f
+#define FC_STEP  50.0f
+
 #define OCTAVE_SHIFT  1
 #define SOUND_MAX 32767.0f
 #define SAMPLES_PER_MS  44  // 44.1kHz 기준 약 1ms
@@ -232,12 +243,45 @@ void Init_All_LUTs(void) {
 	}
 }
 
+float map_and_snap(float input_0_100, float min_val, float max_val,
+		float step_val) {
+	// 1. 입력값 범위 제한 (Clamping): 0~100을 벗어나는 경우 방지
+	if (input_0_100 < 0.0f)
+		input_0_100 = 0.0f;
+	if (input_0_100 > 100.0f)
+		input_0_100 = 100.0f;
+
+	// 2. 선형 보간 (Linear Interpolation)
+	// 비율(0.0 ~ 1.0) 계산 후 범위에 적용
+	float raw_val = min_val + (input_0_100 / 100.0f) * (max_val - min_val);
+
+	// 3. 스텝 단위로 반올림 (Quantization)
+	// (현재값 - 최소값)을 스텝으로 나누어 반올림 한 뒤, 다시 스텝을 곱해 복원
+	float snapped_val = min_val
+			+ roundf((raw_val - min_val) / step_val) * step_val;
+
+	// 4. 부동소수점 오차로 인해 max를 살짝 넘거나 min보다 작아지는 경우 방지
+	if (snapped_val > max_val)
+		snapped_val = max_val;
+	if (snapped_val < min_val)
+		snapped_val = min_val;
+
+	return snapped_val;
+}
+
 void Calc_Wave_LUT(int16_t *buffer, int length) {
 	//tuning_word = (uint32_t)((double)target_freq * 4294967296.0 / (double)SAMPLE_RATE);
 
 	// ✅ 필터는 “한 번만” 초기화 (상태 유지)
 	static Biquad lpf;
 	static int inited = 0;
+
+	g_lpf_FC = map_and_snap((float)g_ui_cutoff, FC_MIN, FC_MAX, FC_STEP);
+	g_lpf_Q = map_and_snap((float)g_ui_reso, Q_MIN, Q_MAX, Q_STEP);
+
+	g_lpf_dirty = 1;
+
+	printf("%f %f\n", g_lpf_FC, g_lpf_Q);
 
 	if (!inited) {
 		biquad_reset(&lpf);
@@ -348,8 +392,8 @@ void Calc_Wave_LUT(int16_t *buffer, int length) {
 	// 약 4번에 1번만 UI 업데이트 요청 (약 30~40 FPS 조절용)
 	frame_skip++;
 	if (frame_skip > 3) {
-	    frame_skip = 0;
-	    g_ui_dirty.wave_graph = 1; // "UI야, 그림 그려라!"
+		frame_skip = 0;
+		g_ui_dirty.wave_graph = 1; // "UI야, 그림 그려라!"
 	}
 }
 void StartAudioTask(void *argument) {
