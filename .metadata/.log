@@ -1,0 +1,19 @@
+!SESSION 2026-01-15 09:33:41.792 -----------------------------------------------
+eclipse.buildId=Version 1.19.0
+java.version=21.0.3
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=ko_KR
+Framework arguments:  C:\Users\User\Desktop\SYNTH_RTOS_BLACKPILL\RTOS_LCD\.project
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 C:\Users\User\Desktop\SYNTH_RTOS_BLACKPILL\RTOS_LCD\.project
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2026-01-15 09:33:59.155
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2026-01-15 09:33:59.157
+!MESSAGE Log4j2 initialized with config file C:\Users\User\Desktop\SYNTH_RTOS_BLACKPILL\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2026-01-15 09:34:02.563
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.cdt.core 1 0 2026-01-15 09:34:10.552
+!MESSAGE Indexed 'RTOS_LCD' (39 sources, 157 headers) in 5.48 sec: 17,889 declarations; 74,098 references; 5 unresolved inclusions; 1,325 syntax errors; 1,916 unresolved names (2%)

@@ -1,0 +1,372 @@
+/*
+ * ui.c - 수정본 (유령 출력 및 잔상 제거)
+ */
+
+#include "ui.h"
+#include "main.h"
+#include "ILI9341_STM32_Driver.h"
+#include "ILI9341_GFX.h"
+#include <string.h>
+#include <stdio.h>
+#include <math.h>
+
+TaskHandle_t lcdTaskHandle = NULL;
+QueueHandle_t lcdQueueHandle = NULL;
+
+LcdState_t currentLcdState = LCD_STATE_INIT; // 화면 초기 상태
+
+volatile UI_DirtyFlags_t g_ui_dirty = {0};
+
+// 버튼 누를 때마다 증가: 0(A) → 1(D) → 2(S) → 3(R) → 4(파형) → 5(RESO) → 6(CUTOFF) → 7(Vol)
+volatile uint8_t selected_adsr_idx = 0;
+
+volatile uint8_t volume_val = 0;	// 볼륨 초기 값
+volatile uint8_t selected_wave_type = 0; // 0:SINE, 1:SQUARE, 2:TRIANGLE -> 파형의 종류
+const char* wave_names[] = {"SINE", "SQUARE", "TRIANGLE"};
+
+typedef struct {
+    uint8_t note_idx;   // 0~6 (C,D,E,F,G,A,B)
+    uint8_t octave;     // 2 or 3
+} NoteInfo_t;
+
+volatile NoteInfo_t current_note = {0, 2};
+
+// 샘플 배열 선언
+uint8_t adsr_samples[1024];	// ADSR 그래프 배열
+uint8_t sin_samples[1024];	// SIN 파형 배열
+
+#define TITLE_Y0    0
+#define TITLE_Y1    30
+
+#define ADSR_Y0     50
+#define ADSR_Y1     110
+
+#define ADSR_LABEL_Y    135
+
+#define WAVE_TITLE_Y0   160
+#define WAVE_TITLE_Y1   185
+
+#define FILTER_Y        195
+
+#define VOL_Y           220
+
+#define WAVE_GRAPH_Y0   240
+#define WAVE_GRAPH_Y1   295
+
+static void LCD_Task(void *argument);
+static void Generate_ADSR_Samples(void);
+static void Generate_Sine_Samples(void);
+static void draw_main_dashboard(void);
+static void draw_title_bar(void);
+static void draw_adsr_graph(void);
+static void draw_adsr_labels(void);
+static void draw_wave_title(void);
+static void draw_wave_graph(void);
+static void draw_filter_labels(void);
+static void draw_volume_bar(void);
+static void draw_note_display(void);
+
+void UI_Init(void) {
+    // 1. 데이터 생성
+    Generate_ADSR_Samples();
+    Generate_Sine_Samples();
+
+    // 2. 하드웨어 리셋 및 초기화
+    HAL_GPIO_WritePin(GPIOD, RESET_Pin, GPIO_PIN_RESET);
+    HAL_Delay(100);
+    HAL_GPIO_WritePin(GPIOD, RESET_Pin, GPIO_PIN_SET);
+    HAL_Delay(100);
+
+    ILI9341_Init();
+    ILI9341_Fill_Screen(BLACK);
+
+    // 3. 큐 생성 및 초기화
+    lcdQueueHandle = xQueueCreate(5, sizeof(uint32_t));
+    if(lcdQueueHandle == NULL) {
+        Error_Handler();
+    }
+
+    xQueueReset(lcdQueueHandle); // 부팅 시 쌓인 노이즈 제거
+
+    // 4. 초기 상태 설정
+    // 이 값이 MAIN_DASH여야 EXTI 콜백의 첫 번째 if문이 동작합니다.
+    currentLcdState = LCD_STATE_MAIN_DASH;
+    selected_adsr_idx = 0;
+
+    // 5. Task 생성
+    BaseType_t result = xTaskCreate(
+        LCD_Task,
+        "LCDTask",
+        2048,
+        NULL,
+        tskIDLE_PRIORITY + 2,
+        &lcdTaskHandle
+    );
+
+    if(result != pdPASS) {
+        Error_Handler();
+    }
+}
+
+// SIN 파형 생성 부분
+// 1024개의 값을 만들어서 점 생성
+// 5번 물결치는 SIN 파형 생성
+static void Generate_Sine_Samples(void) {
+    for (int i = 0; i < 1024; i++) {
+        sin_samples[i] = (uint8_t)(127 + 100 * sin(2.0 * M_PI * i / 1024.0 * 5.0));
+    }
+}
+
+// ADSR 그래프 생성 부분
+static void Generate_ADSR_Samples(void) {
+	// 값 직접 임의로 설정해서 출력
+	uint16_t attack_len  = 100; // 작을수록 급격히 상승 (0~1024)
+	uint16_t decay_len   = 200; // 피크에서 유지 레벨까지 내려오는 시간
+	uint16_t sustain_len = 400; // 유지되는 시간
+	uint16_t release_len = 324; // 건반을 뗐을 때 사라지는 시간 (총합 1024 권장)
+
+	uint8_t peak_level    = 240; // Attack의 정점 높이 (0~255)
+	uint8_t sustain_level = 120; // Sustain 구간의 높이 (0~peak_level)
+	uint8_t base_level    = 30;  // 바닥 높이
+    uint16_t idx = 0;
+
+    // ADSR 값 계산
+    for (int i = 0; i < attack_len && idx < 1024; i++, idx++) adsr_samples[idx] = base_level + (peak_level - base_level) * i / attack_len;
+    for (int i = 0; i < decay_len && idx < 1024; i++, idx++) adsr_samples[idx] = peak_level - (peak_level - sustain_level) * i / decay_len;
+    for (int i = 0; i < sustain_len && idx < 1024; i++, idx++) adsr_samples[idx] = sustain_level;
+    for (int i = 0; i < release_len && idx < 1024; i++, idx++) adsr_samples[idx] = sustain_level - (sustain_level - base_level) * i / release_len;
+    while(idx < 1024) adsr_samples[idx++] = base_level;
+}
+
+
+// 첫 화면 문구
+static void draw_main_dashboard(void) {
+    ILI9341_Fill_Screen(BLACK);
+    vTaskDelay(pdMS_TO_TICKS(10));
+
+    ILI9341_Draw_Filled_Rectangle_Coord(0, 0, 240, 30, GREEN);
+    ILI9341_Draw_Text("SYSTEM READY", 48, 10, BLACK, 2, GREEN);
+
+    ILI9341_Draw_Text("Welcome to", 60, 60, WHITE, 2, BLACK);
+
+    ILI9341_Draw_Text("SYNTH RTOS", 30, 90, YELLOW, 3, BLACK);
+    ILI9341_Draw_Text("BLACKPILL", 39, 130, CYAN, 3, BLACK);
+
+    ILI9341_Draw_Horizontal_Line(20, 180, 200, WHITE);
+    ILI9341_Draw_Text("Press Button", 84, 195, LIGHTGREY, 1, BLACK);
+}
+
+static void draw_title_bar(void) {
+    ILI9341_Draw_Filled_Rectangle_Coord(0, TITLE_Y0, 240, TITLE_Y1, CYAN);
+    ILI9341_Draw_Text("ADSR ENVELOPE", 42, 8, BLACK, 2, CYAN);
+    ILI9341_Draw_Horizontal_Line(0, TITLE_Y1, 240, WHITE);
+}
+
+static void draw_adsr_graph(void) {
+    // ✅ 그래프 영역만 지우기
+    ILI9341_Draw_Filled_Rectangle_Coord(0, ADSR_Y0, 240, ADSR_Y1, BLACK);
+
+    // ADSR 그래프 그리기
+    for(int x = 0; x < 240; x++) {
+        uint32_t index = (x * 1024) / 240;
+        int16_t y_raw = ADSR_Y1 - ((adsr_samples[index] * (ADSR_Y1 - ADSR_Y0)) / 255);
+        if (y_raw < ADSR_Y0) y_raw = ADSR_Y0;
+        if (y_raw > ADSR_Y1) y_raw = ADSR_Y1;
+        ILI9341_Draw_Pixel(x, (uint16_t)y_raw, YELLOW);
+    }
+}
+
+
+static void draw_dual_graph(uint8_t force_clear) {
+    // [1] 이전 상태 저장용 static 변수 (플래그 역할)
+    static int last_adsr_idx = -1;
+    static uint8_t last_wave_type = 255;
+    static uint8_t last_volume_val = 255;
+
+    // 음계 관리용 변수
+    static int current_note_idx = 0;
+    static int current_octave = 2;
+    static int last_note_idx = -1;
+
+    // [2] 스위치 변경에 따른 음계 계산
+    if (selected_adsr_idx != last_adsr_idx && last_adsr_idx != -1) {
+        current_note_idx++;
+        if (current_note_idx > 6) {
+            current_note_idx = 0;
+            current_octave = (current_octave == 2) ? 3 : 2;
+        }
+    }
+
+    // [3] 전체 화면 강제 갱신 (화면 진입 시 1회)
+    if (force_clear) {
+        ILI9341_Fill_Screen(BLACK);
+        vTaskDelay(pdMS_TO_TICKS(5));
+
+        // 고정 레이아웃: 타이틀 및 구분선
+        ILI9341_Draw_Filled_Rectangle_Coord(0, 0, 240, 30, CYAN);
+        ILI9341_Draw_Text("ADSR ENVELOPE", 42, 8, BLACK, 2, CYAN);
+        ILI9341_Draw_Horizontal_Line(0, 30, 240, WHITE);
+
+        // 고정 레이아웃: ADSR 그래프 (노란색)
+        for(int x = 0; x < 240; x++) {
+            uint32_t index = (x * 1024) / 240;
+            int16_t y_raw = 110 - ((adsr_samples[index] * 60) / 255);
+            ILI9341_Draw_Pixel(x, (uint16_t)y_raw, YELLOW);
+        }
+
+        // 고정 레이아웃: 하단 녹색 파형 그래프
+        for(int x = 0; x < 240; x++) {
+            uint32_t index = (x * 1024) / 240;
+            uint8_t sample_val = sin_samples[index];
+            int16_t y_raw = 295 - ((sample_val * 50) / 255);
+            if(y_raw > 318) y_raw = 318;
+            ILI9341_Draw_Pixel(x, (uint16_t)y_raw, GREEN);
+        }
+
+        // force_clear 시 모든 비교 변수 초기화
+        last_adsr_idx = -1; last_wave_type = 255; last_volume_val = 255; last_note_idx = -1;
+    }
+
+    // [4] 부분 업데이트 (Dirty Flag 기반)
+
+    // 4-1. ADSR 라벨 영역 (A, D, S, R)
+    if (selected_adsr_idx != last_adsr_idx) {
+        uint16_t adrs_y = 135;
+        // 텍스트의 배경색을 BLACK으로 설정하여 '지우기' 과정 없이 바로 덮어씀 (깜빡임 제거 핵심)
+        ILI9341_Draw_Text("A", 30, adrs_y, (selected_adsr_idx == 0 ? RED : WHITE), 2, BLACK);
+        ILI9341_Draw_Text("D", 85, adrs_y, (selected_adsr_idx == 1 ? RED : WHITE), 2, BLACK);
+        ILI9341_Draw_Text("S", 140, adrs_y, (selected_adsr_idx == 2 ? RED : WHITE), 2, BLACK);
+        ILI9341_Draw_Text("R", 195, adrs_y, (selected_adsr_idx == 3 ? RED : WHITE), 2, BLACK);
+    }
+
+    // 4-2. 파형 타이틀 바 + 음계 표시
+    if (selected_adsr_idx != last_adsr_idx || selected_wave_type != last_wave_type || current_note_idx != last_note_idx) {
+        uint16_t wave_bar_color = (selected_adsr_idx == 4 ? RED : MAGENTA);
+        // 바 색상이 변하므로 이 영역은 사각형으로 지우고 다시 그림
+        ILI9341_Draw_Filled_Rectangle_Coord(0, 160, 240, 185, wave_bar_color);
+        ILI9341_Draw_Text(wave_names[selected_wave_type], 5, 165, WHITE, 2, wave_bar_color);
+
+        const char *notes_list[] = {"C", "D", "E", "F", "G", "A", "B"};
+        char note_buf[12];
+        sprintf(note_buf, "NOTE:%s%d", notes_list[current_note_idx], current_octave);
+        ILI9341_Draw_Text(note_buf, 145, 165, YELLOW, 2, wave_bar_color);
+    }
+
+    // 4-3. 필터 라벨 (RESO, CUTOFF)
+    if (selected_adsr_idx != last_adsr_idx) {
+        uint16_t filter_y = 195;
+        ILI9341_Draw_Text("RESO", 45, filter_y, (selected_adsr_idx == 5 ? RED : WHITE), 2, BLACK);
+        ILI9341_Draw_Text("CUTOFF", 125, filter_y, (selected_adsr_idx == 6 ? RED : WHITE), 2, BLACK);
+    }
+
+    // 4-4. 볼륨 게이지
+    if (selected_adsr_idx != last_adsr_idx || volume_val != last_volume_val) {
+        uint16_t vol_y = 220;
+        uint16_t vol_color = (selected_adsr_idx == 7 ? RED : WHITE);
+
+        // 텍스트 갱신
+        ILI9341_Draw_Text("Vol", 15, vol_y, vol_color, 1, BLACK);
+
+        // 막대 게이지 부분만 BLACK으로 밀기
+        ILI9341_Draw_Filled_Rectangle_Coord(45, vol_y, 214, vol_y + 8, BLACK);
+        for(int i = 0; i < 10; i++) {
+            uint16_t bar_x = 45 + (i * 17);
+            if (i < (volume_val / 10)) {
+                ILI9341_Draw_Filled_Rectangle_Coord(bar_x, vol_y, bar_x + 13, vol_y + 8, vol_color);
+            } else {
+                ILI9341_Draw_Rectangle(bar_x, vol_y, 13, 8, DARKGREY);
+            }
+        }
+
+        char vol_buf[6];
+        sprintf(vol_buf, "%d  ", volume_val); // 뒤에 공백을 주어 100->10 시 잔상 방지
+        ILI9341_Draw_Text(vol_buf, 215, vol_y, vol_color, 1, BLACK);
+    }
+
+    // [5] 상태 업데이트 (다음 호출 시 비교를 위해 현재 상태 저장)
+    last_adsr_idx = selected_adsr_idx;
+    last_wave_type = selected_wave_type;
+    last_volume_val = volume_val;
+    last_note_idx = current_note_idx;
+}
+
+static void LCD_Task(void *argument) {
+    uint32_t received;
+
+    // 시작 시 메인 화면 그리기
+    draw_main_dashboard();
+    LcdState_t lastState = LCD_STATE_MAIN_DASH;
+
+    for(;;) {
+        if(xQueueReceive(lcdQueueHandle, &received, portMAX_DELAY) == pdTRUE) {
+            LcdState_t nextState = (LcdState_t)received;
+
+            if(nextState == LCD_STATE_MAIN_DASH) {
+                draw_main_dashboard();
+            }
+            else if(nextState == LCD_STATE_ADSR_VIEW) {
+                // 이전 상태가 메인이었다면
+            	// 화면을 깨끗이 해준 뒤 그래프 화면 출력
+                uint8_t force_clear = (lastState == LCD_STATE_MAIN_DASH);
+                draw_dual_graph(force_clear);
+            }
+
+            // 인터럽트 콜백 함수와 상태를 동기화
+            currentLcdState = nextState;
+            lastState = nextState;
+        }
+    }
+}
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_PIN) {
+	// 디바운싱
+    static uint32_t last_tick = 0;
+    uint32_t now = HAL_GetTick();
+
+    if(GPIO_PIN == USER_Btn_Pin) {
+    	// 1초동안 버튼 무시
+    	// 떨림으로 버튼이 눌리는 것을 방지
+        if (now < 1000) return;
+
+        // 여러번 눌리는 것을 방지
+        if(now - last_tick < 250) return;
+        last_tick = now;
+
+        // 메인 화면에서 누르면 그래프 출력 화면으로 전환
+        if (currentLcdState == LCD_STATE_MAIN_DASH) {
+            currentLcdState = LCD_STATE_ADSR_VIEW;
+            selected_adsr_idx = 0;
+        }
+
+        // 그래프 화면에서 버튼을 눌렀을 때
+        // 버튼을 눌렀을 때 다음 항목으로 넘어가지 않는 파형, 볼륨 if
+        // 한 번 누를 때마다 다음 항목으로 넘어가는 것들은 else
+        else if (currentLcdState == LCD_STATE_ADSR_VIEW) {
+            if (selected_adsr_idx == 4) { // 1. 파형 선택 바
+                selected_wave_type++;
+                if (selected_wave_type > 2) {
+                    selected_wave_type = 0;
+                    selected_adsr_idx = 5; // 다음: RESO로 이동
+                }
+            }
+            else if (selected_adsr_idx == 7) { // 2. 볼륨 조절 모드 (마지막 단계)
+                volume_val += 10;
+                if (volume_val > 100) {
+                    volume_val = 10;       // 100 넘으면 10으로 초기화
+                    selected_adsr_idx = 0; // 다시 처음: Attack(A)으로 복귀
+                }
+            }
+            else {
+                // 0~3(ADSR), 5(RESO), 6(CUTOFF)는 단순히 다음 인덱스로 이동
+                selected_adsr_idx++;
+            }
+        }
+
+        // 인터럽트 처리
+        // 일해라!!
+        uint32_t msg = (uint32_t)currentLcdState;
+        BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+        xQueueSendFromISR(lcdQueueHandle, &msg, &xHigherPriorityTaskWoken);
+        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+    }
+}
