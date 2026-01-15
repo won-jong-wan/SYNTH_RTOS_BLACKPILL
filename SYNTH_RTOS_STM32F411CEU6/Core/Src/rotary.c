@@ -36,6 +36,14 @@ static inline float clampf(float x, float lo, float hi) {
     return x;
 }
 
+static inline int volfilter(int pos){
+	if(pos > 100){
+		return 100;
+	}else if(pos < 0){
+		return 0;
+	}
+}
+
 // --- [Logic Layer] 비즈니스 로직 분리 ---
 // 로터리 1이 움직였을 때 호출됨
 static void Apply_Rotary1_Change(int8_t dir) {
@@ -43,24 +51,24 @@ static void Apply_Rotary1_Change(int8_t dir) {
     g_enc_pos[0] += dir;
 
     // 2. 실제 기능 (Q Factor 조절)
-    float q = g_lpf_Q + (float)dir * Q_STEP;
-    g_lpf_Q = clampf(q, Q_MIN, Q_MAX);
-    g_lpf_dirty = 1; // 오디오 태스크에 변경 알림
-
-    printf("[R1] Q-Factor: %.2f (Pos: %ld)\r\n", g_lpf_Q, g_enc_pos[0]);
+//    float q = g_lpf_Q + (float)dir * Q_STEP;
+//    g_lpf_Q = clampf(q, Q_MIN, Q_MAX);
+//    g_lpf_dirty = 1; // 오디오 태스크에 변경 알림
+//
+//    printf("[R1] Q-Factor: %.2f (Pos: %ld)\r\n", g_lpf_Q, g_enc_pos[0]);
 }
 
 // 로터리 2가 움직였을 때 호출됨
 static void Apply_Rotary2_Change(int8_t dir) {
     // 1. 위치값 단순 기록
-    g_enc_pos[1] += dir;
+	g_enc_pos[1] = volfilter(g_enc_pos[1] + dir);
 
     // 2. 실제 기능 (Cutoff Frequency 조절)
-    float fc = g_lpf_FC + (float)dir * FC_STEP;
-    g_lpf_FC = clampf(fc, FC_MIN, FC_MAX);
-    g_lpf_dirty = 1;
-
-    printf("[R2] Freq: %.0f Hz (Pos: %ld)\r\n", g_lpf_FC, g_enc_pos[1]);
+//    float fc = g_lpf_FC + (float)dir * FC_STEP;
+//    g_lpf_FC = clampf(fc, FC_MIN, FC_MAX);
+//    g_lpf_dirty = 1;
+//
+    printf("[R2] Pos: %ld \r\n", g_enc_pos[1]);
 }
 
 // --- [Driver Layer] 하드웨어 폴링 태스크 ---
@@ -73,6 +81,8 @@ void InputTask(void *arg) {
     // 스텝 누적 변수 (나머지 처리용)
     int16_t acc1 = 0;
     int16_t acc2 = 0;
+
+    g_enc_pos[1] = 50;
 
     for (;;) {
         // 1. 현재 카운터 값 읽기

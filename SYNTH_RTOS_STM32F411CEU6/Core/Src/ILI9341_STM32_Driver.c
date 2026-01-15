@@ -358,13 +358,13 @@ void ILI9341_Draw_Colour_Burst(uint16_t Colour, uint32_t Size) {
 	if (Sending_in_Block != 0) {
 		for (uint32_t j = 0; j < (Sending_in_Block); j++) {
 			HAL_SPI_Transmit(HSPI_INSTANCE, (unsigned char*) burst_buffer,
-					Buffer_Size, 10);
+					Buffer_Size, HAL_MAX_DELAY);
 		}
 	}
 
 //REMAINDER!
 	HAL_SPI_Transmit(HSPI_INSTANCE, (unsigned char*) burst_buffer,
-			Remainder_from_block, 10);
+			Remainder_from_block, HAL_MAX_DELAY);
 
 	HAL_GPIO_WritePin(LCD_CS_PORT, LCD_CS_PIN, GPIO_PIN_SET);
 }
@@ -396,7 +396,7 @@ void ILI9341_Draw_Pixel(uint16_t X, uint16_t Y, uint16_t Colour) {
 //XDATA
 	HAL_GPIO_WritePin(LCD_CS_PORT, LCD_CS_PIN, GPIO_PIN_RESET);
 	unsigned char Temp_Buffer[4] = { X >> 8, X, (X + 1) >> 8, (X + 1) };
-	HAL_SPI_Transmit(HSPI_INSTANCE, Temp_Buffer, 4, 1);
+	HAL_SPI_Transmit(HSPI_INSTANCE, Temp_Buffer, 4, HAL_MAX_DELAY);
 	HAL_GPIO_WritePin(LCD_CS_PORT, LCD_CS_PIN, GPIO_PIN_SET);
 
 //ADDRESS
@@ -409,7 +409,7 @@ void ILI9341_Draw_Pixel(uint16_t X, uint16_t Y, uint16_t Colour) {
 //YDATA
 	HAL_GPIO_WritePin(LCD_CS_PORT, LCD_CS_PIN, GPIO_PIN_RESET);
 	unsigned char Temp_Buffer1[4] = { Y >> 8, Y, (Y + 1) >> 8, (Y + 1) };
-	HAL_SPI_Transmit(HSPI_INSTANCE, Temp_Buffer1, 4, 1);
+	HAL_SPI_Transmit(HSPI_INSTANCE, Temp_Buffer1, 4, HAL_MAX_DELAY);
 	HAL_GPIO_WritePin(LCD_CS_PORT, LCD_CS_PIN, GPIO_PIN_SET);
 
 //ADDRESS	
@@ -422,7 +422,7 @@ void ILI9341_Draw_Pixel(uint16_t X, uint16_t Y, uint16_t Colour) {
 //COLOUR	
 	HAL_GPIO_WritePin(LCD_CS_PORT, LCD_CS_PIN, GPIO_PIN_RESET);
 	unsigned char Temp_Buffer2[2] = { Colour >> 8, Colour };
-	HAL_SPI_Transmit(HSPI_INSTANCE, Temp_Buffer2, 2, 1);
+	HAL_SPI_Transmit(HSPI_INSTANCE, Temp_Buffer2, 2, HAL_MAX_DELAY);
 	HAL_GPIO_WritePin(LCD_CS_PORT, LCD_CS_PIN, GPIO_PIN_SET);
 
 }

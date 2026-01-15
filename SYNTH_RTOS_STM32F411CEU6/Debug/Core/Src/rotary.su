@@ -1,5 +1,5 @@
-../Core/Src/rotary.c:33:21:clampf	24	static
-../Core/Src/rotary.c:41:13:Apply_Rotary1_Change	32	static
-../Core/Src/rotary.c:54:13:Apply_Rotary2_Change	32	static
-../Core/Src/rotary.c:67:6:InputTask	48	static
-../Core/Src/rotary.c:125:6:RotaryTasks_Init	24	static,ignoring_inline_asm
+../Core/Src/rotary.c:39:19:volfilter	16	static
+../Core/Src/rotary.c:49:13:Apply_Rotary1_Change	16	static
+../Core/Src/rotary.c:62:13:Apply_Rotary2_Change	16	static
+../Core/Src/rotary.c:75:6:InputTask	48	static
+../Core/Src/rotary.c:135:6:RotaryTasks_Init	24	static,ignoring_inline_asm
