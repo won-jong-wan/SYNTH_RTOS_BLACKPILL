@@ -137,7 +137,7 @@ STM32 BlackPill(STM32F411)에서 **44.1kHz 실시간 오디오**를 생성하고
 
 <video src="assets/videos/demo_adsr_increase.mp4" controls muted width="800"></video>
 
-- 링크: [demo_adsr_increase.mp4](assets/videos/demo_adsr_increase.mp4)
+- 링크: [demo_adsr_increase.mp4](assets/videos/ADSR_증가.mp4)
 
 </details>
 
