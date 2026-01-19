@@ -134,79 +134,21 @@ STM32 BlackPill(STM32F411)에서 **44.1kHz 실시간 오디오**를 생성하고
 
 ## 🎥 8. 데모 영상 (Demo Videos)
 
-> ✅ 데모 영상은 사용자가 직접 업로드한 뒤, 아래 링크만 교체해서 사용하면 됩니다.  
-> 권장 폴더 구조: `assets/videos/`
 
-### 8.1 영상 목록 (표)
+### ✅ 1) 4개 데모 (가로 4개)
 
-| 기능 | 파일(예시) | 링크(교체) | 비고 |
+| ADSR 증가 | ADSR 감소 | Resonance(Q) | Octave 변경 |
 |---|---|---|---|
-| ADSR 증가(Attack/Decay/Sustain/Release) | `demo_adsr_increase.mp4` | [영상 보기](assets/videos/ADSR_증가.mp4) | 엔벨로프 변화 확인 |
-| ADSR 감소 | `demo_adsr_decrease.mp4` | [영상 보기](assets/videos/demo_adsr_decrease.mp4) | Release/감쇠 확인 |
-| Resonance 변화(Q 조절) | `demo_resonance.mp4` | [영상 보기](assets/videos/demo_resonance.mp4) | 공진 강조 확인 |
-| Cutoff 감소(Fc Down) | `demo_cutoff_down.mp4` | [영상 보기](assets/videos/demo_cutoff_down.mp4) | 고역 감쇠 확인 |
-| Octave 변경(Up/Down) | `demo_octave.mp4` | [영상 보기](assets/videos/demo_octave.mp4) | Pitch 스케일 확인 |
-| 파형 차이(Sine/Square/Saw) | `demo_waveform_diff.mp4` | [영상 보기](assets/videos/demo_waveform_diff.mp4) | 파형/음색 비교 |
+| [▶️ Watch](https://github.com/user-attachments/assets/20490c06-4561-4c52-9833-793dc6b0e555) | [▶️ Watch](https://github.com/user-attachments/assets/7daee3bf-dd8c-44fe-a728-9777f0d2aacb) | [▶️ Watch](https://github.com/user-attachments/assets/dcbed712-60cd-4608-ac7b-2feb3794245e) | [▶️ Watch](https://github.com/user-attachments/assets/e0f30bff-a481-4cd4-b910-f7195fdd4b93) |
 
-### 8.2 (선택) Video 태그로 넣기
+### ✅ 2) 2개 데모 (가로 2개)
 
-> GitHub 환경에 따라 `<video>`가 안 보일 수 있어 링크도 같이 유지하는 것을 권장합니다.
-
-<details>
-<summary>ADSR 증가 데모 (펼치기)</summary>
-
-<video src="assets/videos/demo_adsr_increase.mp4" controls muted width="800"></video>
-
-- 링크: [demo_adsr_increase.mp4](assets/videos/ADSR_증가.mp4)
-
-</details>
-
-<details>
-<summary>ADSR 감소 데모 (펼치기)</summary>
-
-<video src="assets/videos/demo_adsr_decrease.mp4" controls muted width="800"></video>
-
-- 링크: [demo_adsr_decrease.mp4](assets/videos/demo_adsr_decrease.mp4)
-
-</details>
-
-<details>
-<summary>Resonance(Q) 변화 데모 (펼치기)</summary>
-
-<video src="assets/videos/demo_resonance.mp4" controls muted width="800"></video>
-
-- 링크: [demo_resonance.mp4](assets/videos/demo_resonance.mp4)
-
-</details>
-
-<details>
-<summary>Cutoff(Fc) 감소 데모 (펼치기)</summary>
-
-<video src="assets/videos/demo_cutoff_down.mp4" controls muted width="800"></video>
-
-- 링크: [demo_cutoff_down.mp4](assets/videos/demo_cutoff_down.mp4)
-
-</details>
-
-<details>
-<summary>Octave 변경 데모 (펼치기)</summary>
-
-<video src="assets/videos/demo_octave.mp4" controls muted width="800"></video>
-
-- 링크: [demo_octave.mp4](assets/videos/demo_octave.mp4)
-
-</details>
-
-<details>
-<summary>파형 차이(Sine/Square/Saw) 데모 (펼치기)</summary>
-
-<video src="assets/videos/demo_waveform_diff.mp4" controls muted width="800"></video>
-
-- 링크: [demo_waveform_diff.mp4](assets/videos/demo_waveform_diff.mp4)
-
-</details>
+| Cutoff 감소 | 파형 차이 (Sine/Square/Saw) |
+|---|---|
+| [▶️ Watch](https://github.com/user-attachments/assets/9f5a5483-4b9e-445a-a331-8de48a920aaf) | [▶️ Watch](https://github.com/user-attachments/assets/84fd0f4a-1169-4cac-be41-eebe17c3d590) |
 
 ---
+
 
 ## 🧯 9. 트러블슈팅 (Troubleshooting)
 
