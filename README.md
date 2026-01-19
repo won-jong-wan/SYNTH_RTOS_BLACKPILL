@@ -2,7 +2,7 @@
 <!--  RTOS Synth README (KOR)  -->
 <!-- ========================= -->
 
-# 🎹 RTOS 기반 임베디드 디지털 신디사이저 (STM32 BlackPill)
+# 🎹 RTOS 기반 임베디드 디지털 신디사이저 
 
 <table>
   <tr>
