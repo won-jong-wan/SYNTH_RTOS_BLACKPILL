@@ -16,14 +16,6 @@
 
 ---
 
-### 📌 영상 링크 목록(텍스트)
-
-- ADSR 증가: https://github.com/user-attachments/assets/20490c06-4561-4c52-9833-793dc6b0e555  
-- ADSR 감소: https://github.com/user-attachments/assets/7daee3bf-dd8c-44fe-a728-9777f0d2aacb  
-- Resonance(Q): https://github.com/user-attachments/assets/dcbed712-60cd-4608-ac7b-2feb3794245e  
-- Octave 변경: https://github.com/user-attachments/assets/e0f30bff-a481-4cd4-b910-f7195fdd4b93  
-- Cutoff 감소: https://github.com/user-attachments/assets/9f5a5483-4b9e-445a-a331-8de48a920aaf  
-- 파형 차이: https://github.com/user-attachments/assets/84fd0f4a-1169-4cac-be41-eebe17c3d590  
 
 
 
