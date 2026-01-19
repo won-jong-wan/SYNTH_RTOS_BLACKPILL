@@ -2,7 +2,7 @@
 <!--  RTOS Synth README (KOR)  -->
 <!-- ========================= -->
 
-# 🎹 RTOS 기반 임베디드 디지털 신디사이저 
+# 🎹 RTOS 기반 디지털 신디사이저 
 
 <table>
   <tr>
@@ -10,7 +10,7 @@
       <img src="https://github.com/user-attachments/assets/4f4dce32-1f35-45e3-bfb7-9151e01d296c" width="100%" alt="Project Photo">
     </td>
     <td width="55%" valign="top">
-      <h3>RTOS 기반 임베디드 디지털 신디사이저</h3>
+      <h3>RTOS 기반 디지털 신디사이저</h3>
       <p>
         STM32 BlackPill(STM32F411)에서 <b>44.1kHz 실시간 오디오</b>를 생성하고,<br/>
         <b>키패드/로터리 입력</b>으로 <b>Pitch(옥타브)</b>, <b>파형</b>, <b>ADSR</b>, <b>LPF(Cutoff/Resonance)</b>, <b>Volume</b>을 제어하는
