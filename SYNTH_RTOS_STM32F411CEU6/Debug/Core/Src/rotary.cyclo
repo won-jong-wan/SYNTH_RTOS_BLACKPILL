@@ -1,0 +1,5 @@
+../Core/Src/rotary.c:29:19:volfilter	3
+../Core/Src/rotary.c:41:13:Apply_Rotary1_Change	1
+../Core/Src/rotary.c:56:13:Apply_Rotary2_Change	1
+../Core/Src/rotary.c:69:6:InputTask	7
+../Core/Src/rotary.c:129:6:RotaryTasks_Init	2

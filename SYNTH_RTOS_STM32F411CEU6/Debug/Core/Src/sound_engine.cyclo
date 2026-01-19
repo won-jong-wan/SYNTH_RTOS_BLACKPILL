@@ -1,0 +1,10 @@
+../Core/Src/sound_engine.c:104:6:NoteOn	16
+../Core/Src/sound_engine.c:211:6:NoteOff	3
+../Core/Src/sound_engine.c:224:6:Init_All_LUTs	3
+../Core/Src/sound_engine.c:246:7:map_and_snap	5
+../Core/Src/sound_engine.c:272:6:Calc_Wave_LUT	18
+../Core/Src/sound_engine.c:399:6:StartAudioTask	4
+../Core/Src/sound_engine.c:432:6:HAL_I2S_TxHalfCpltCallback	3
+../Core/Src/sound_engine.c:442:6:HAL_I2S_TxCpltCallback	3
+../Core/Src/sound_engine.c:452:6:InitTasks	1
+../Core/Src/sound_engine.c:456:6:Test	1

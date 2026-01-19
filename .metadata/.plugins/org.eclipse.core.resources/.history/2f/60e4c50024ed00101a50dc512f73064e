@@ -1,0 +1,38 @@
+/*
+ * user_rtos.h
+ *
+ *  Created on: Jan 9, 2026
+ *      Author: kccistc
+ */
+
+#ifndef INC_USER_RTOS_H_
+#define INC_USER_RTOS_H_
+
+
+// --- 설정 ---
+#define SAMPLE_RATE   44100
+#define BUFFER_SIZE   4096 // 사실 상 2048
+#define LUT_SIZE      1024
+#define LUT_SHIFT     (32 - 10)
+
+// 주파수 설정
+#define FREQ_C4       261.63f
+#define FREQ_D4       293.66f
+#define FREQ_E4       329.63f
+#define FREQ_F4       349.23f
+#define FREQ_G4       392.00f
+#define FREQ_A4       440.00f
+#define FREQ_B4       493.88f
+
+extern double freq_list[];
+
+extern volatile float target_freq;
+extern
+
+extern void InitTasks(void);
+extern void Test(void);
+extern void KeypadTasks_Init(void);
+extern void NoteOn(void);
+extern void NoteOff(void);
+
+#endif /* INC_USER_RTOS_H_ */
