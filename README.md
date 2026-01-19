@@ -121,7 +121,7 @@ STM32 BlackPill(STM32F411)에서 **44.1kHz 실시간 오디오**를 생성하고
 
 | 기능 | 파일(예시) | 링크(교체) | 비고 |
 |---|---|---|---|
-| ADSR 증가(Attack/Decay/Sustain/Release) | `demo_adsr_increase.mp4` | [영상 보기](assets/videos/demo_adsr_increase.mp4) | 엔벨로프 변화 확인 |
+| ADSR 증가(Attack/Decay/Sustain/Release) | `demo_adsr_increase.mp4` | [영상 보기](assets/videos/ADSR_증가.mp4) | 엔벨로프 변화 확인 |
 | ADSR 감소 | `demo_adsr_decrease.mp4` | [영상 보기](assets/videos/demo_adsr_decrease.mp4) | Release/감쇠 확인 |
 | Resonance 변화(Q 조절) | `demo_resonance.mp4` | [영상 보기](assets/videos/demo_resonance.mp4) | 공진 강조 확인 |
 | Cutoff 감소(Fc Down) | `demo_cutoff_down.mp4` | [영상 보기](assets/videos/demo_cutoff_down.mp4) | 고역 감쇠 확인 |
