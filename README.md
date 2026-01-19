@@ -4,30 +4,51 @@
 
 # 🎹 RTOS 기반 임베디드 디지털 신디사이저 (STM32 BlackPill)
 
-STM32 BlackPill(STM32F411)에서 **44.1kHz 실시간 오디오**를 생성하고,  
-**키패드/로터리 입력**으로 **Pitch(옥타브), 파형, ADSR, LPF(Cutoff/Resonance), Volume**을 제어하는  
-**RTOS 기반 디지털 신디사이저** 프로젝트입니다.
+<table>
+  <tr>
+    <td width="45%" valign="top">
+      <img src="https://github.com/user-attachments/assets/4f4dce32-1f35-45e3-bfb7-9151e01d296c" width="100%" alt="Project Photo">
+    </td>
+    <td width="55%" valign="top">
+      <h3>RTOS 기반 임베디드 디지털 신디사이저</h3>
+      <p>
+        STM32 BlackPill(STM32F411)에서 <b>44.1kHz 실시간 오디오</b>를 생성하고,<br/>
+        <b>키패드/로터리 입력</b>으로 <b>Pitch(옥타브)</b>, <b>파형</b>, <b>ADSR</b>, <b>LPF(Cutoff/Resonance)</b>, <b>Volume</b>을 제어하는
+        RTOS 기반 디지털 신디사이저</b> 프로젝트입니다.
+      </p>
+      <ul>
+        <li><b>Audio</b>: I2S + DMA(Circular), DDS + ADSR + IIR LPF</li>
+        <li><b>UI</b>: ILI9341 TFT LCD (SPI)</li>
+        <li><b>Input</b>: 4×4 Keypad + Rotary Encoder ×2</li>
+      </ul>
+    </td>
+  </tr>
+</table>
 
 ---
 
-## ✅ 1. 프로젝트 개요
+## ✨ 1. 주요 기능 (Features)
 
-- **MCU**: STM32 BlackPill (STM32F411)
-- **Audio Output**: I2S DAC (ex. UDA1334A)
-- **UI Display**: TFT-LCD (ILI9341, SPI)
-- **Input**
-  - 4×4 Matrix Keypad: 노트/파형/옥타브
-  - Rotary Encoder 2개: 파라미터 조절(ADSR/Filter/Volume)
-- **SW**
-  - FreeRTOS 기반 태스크 분리
-  - I2S + DMA(Circular)로 오디오 지속 출력
-  - DDS(NCO) + ADSR + IIR(2nd LPF) + Polyphony
+### 🎼 (1) Keypad 기능
+- 노트 입력 (C4~B4)
+- 파형 선택 (Sine / Square / Saw)
+- 옥타브 Up / Down
+
+### 🎚️ (2) Rotary 기능
+- **Rotary #1**: ADSR/Filter 파라미터 “선택된 항목” 값 변경
+- **Rotary #1 버튼**: ADSR 항목 이동(A/D/S/R) 또는 Filter 항목 이동(Cutoff/Q)
+- **Rotary #2**: Volume 조절
+
+### 🎧 (3) DSP 기능
+- **ADSR Envelope** (A/D/S/R 상태 머신)
+- **2차 IIR LPF (Biquad)**: Cutoff / Resonance(Q)
+- **Polyphony (멀티 보이스) + Voice Stealing**
+- **TFT UI 시각화**: ADSR/파형 그래프, 파라미터 표시
 
 ---
 
 ## 🧩 2. 구성도 (Hardware / System)
 
-> PPT 이미지 캡처본을 `assets/` 폴더에 넣고 아래 경로만 맞춰주세요.
 <img width="1080" height="522" alt="image" src="https://github.com/user-attachments/assets/3e9757d5-a652-40d4-9eae-89c765891a52" />
 
 
@@ -40,9 +61,22 @@ STM32 BlackPill(STM32F411)에서 **44.1kHz 실시간 오디오**를 생성하고
 
 ---
 
-## 🔊 3. 오디오 신호 처리 흐름
 
-### 3.1 신호 처리 개념 (ADSR / IIR LPF)
+## 🎛️ 3. 파형생성 (DDS/NCO 방식)
+<img width="947" height="226" alt="image" src="https://github.com/user-attachments/assets/815fcfed-07cf-402f-8126-cc65ab282f54" />
+
+<img width="1034" height="388" alt="image" src="https://github.com/user-attachments/assets/300af78c-eeaa-4d9a-9251-0a03d904c974" />
+
+- `tuning_word = f_target * 2^32 / F_sample`
+- `phase_acc += tuning_word`
+- `index = phase_acc >> SHIFT` 로 LUT 접근
+- 샘플레이트: **F_sample = 44.1kHz**
+
+---
+
+## 🔊 4. 오디오 신호 처리 흐름
+
+### 4.1 신호 처리 개념 (ADSR / IIR LPF)
 
 <table>
   <tr>
@@ -69,7 +103,7 @@ STM32 BlackPill(STM32F411)에서 **44.1kHz 실시간 오디오**를 생성하고
   - Cutoff(Fc): 음색 밝기/고조파 조절  
   - Resonance(Q): 컷오프 근처 강조(필터 “쏘는” 느낌)
 
-### 3.2 오디오 파이프라인 (Polyphony)
+### 4.2 오디오 파이프라인 (Polyphony)
 <img width="1054" height="220" alt="image" src="https://github.com/user-attachments/assets/3f2feef0-8bda-4a0f-a028-e198c93cb1a8" />
 
 
@@ -79,7 +113,32 @@ STM32 BlackPill(STM32F411)에서 **44.1kHz 실시간 오디오**를 생성하고
 
 ---
 
-## ⏱️ 4. RTOS 기반 실시간 설계 (DMA + TaskNotify)
+
+## 5. I2S DMA Circular Buffer (Half/Full Ping-Pong)
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/a3f5b8b1-4708-43e4-85bc-8e87ec9a8479" width="700" alt="image">
+
+</p>
+
+### 개념
+- I2S는 **DMA Circular mode**로 오디오 버퍼를 반복 전송합니다.
+- DMA는 버퍼를 **읽어서(READ)** DAC로 보내고, CPU(AudioTask)는 비는 구간을 **채워서(WRITE)** 끊김 없이 재생합니다.
+
+### 동작 흐름
+- **Half Complete ISR**: 버퍼 **앞쪽(1/2)** 전송 완료 → CPU가 **앞쪽을 채움**
+- **Full Complete ISR**: 버퍼 **뒤쪽(1/2)** 전송 완료 → CPU가 **뒤쪽을 채움**
+- ISR에서는 연산 최소화(Notify만) → 실제 오디오 생성은 **AudioTask**에서 수행
+
+### 장점
+- 샘플레이트(예: **44.1kHz**)를 일정하게 유지 → **실시간성 확보**
+- CPU는 “반쪽 버퍼 deadline”만 맞추면 됨 → 안정적 오디오 출력
+- 입력/UI 작업이 있어도 오디오 스트림이 끊기지 않도록 RTOS로 역할 분리 가능
+
+
+---
+
+## ⏱️ 6. RTOS 기반 실시간 설계 (DMA + TaskNotify)
 
 <img width="1012" height="247" alt="image" src="https://github.com/user-attachments/assets/23aa3238-bf88-47d1-8525-193ec3a1b064" />
 
@@ -97,51 +156,23 @@ STM32 BlackPill(STM32F411)에서 **44.1kHz 실시간 오디오**를 생성하고
   - IIR LPF 적용
   - I2S 버퍼 채움
 
----
-
-## 🎛️ 5. Pitch Control (DDS/NCO 방식)
-
-<img width="1034" height="388" alt="image" src="https://github.com/user-attachments/assets/300af78c-eeaa-4d9a-9251-0a03d904c974" />
-
-- `tuning_word = f_target * 2^32 / F_sample`
-- `phase_acc += tuning_word`
-- `index = phase_acc >> SHIFT` 로 LUT 접근
-- 샘플레이트: **F_sample = 44.1kHz**
-
----
-
-## ✨ 6. 주요 기능 (Features)
-
-### 🎼 (1) Keypad 기능
-- 노트 입력 (C4~B4)
-- 파형 선택 (Sine / Square / Saw)
-- 옥타브 Up / Down
-
-### 🎚️ (2) Rotary 기능
-- **Rotary #1**: ADSR/Filter 파라미터 “선택된 항목” 값 변경
-- **Rotary #1 버튼**: ADSR 항목 이동(A/D/S/R) 또는 Filter 항목 이동(Cutoff/Q)
-- **Rotary #2**: Volume 조절
-
-### 🎧 (3) DSP 기능
-- **ADSR Envelope** (A/D/S/R 상태 머신)
-- **2차 IIR LPF (Biquad)**: Cutoff / Resonance(Q)
-- **Polyphony (멀티 보이스) + Voice Stealing**
-- **TFT UI 시각화**: ADSR/파형 그래프, 파라미터 표시
 
 ---
 
 
 
-## 🎥 8. 데모 영상 (Demo Videos)
 
 
-### ✅ 1) 4개 데모 (가로 4개)
+## 🎥 7. 데모 영상 (Demo Videos)
+
+
+### ✅ 1) 4개 데모 
 
 | ADSR 증가 | ADSR 감소 | Resonance(Q) | Octave 변경 |
 |---|---|---|---|
 | [▶️ Watch](https://github.com/user-attachments/assets/20490c06-4561-4c52-9833-793dc6b0e555) | [▶️ Watch](https://github.com/user-attachments/assets/7daee3bf-dd8c-44fe-a728-9777f0d2aacb) | [▶️ Watch](https://github.com/user-attachments/assets/dcbed712-60cd-4608-ac7b-2feb3794245e) | [▶️ Watch](https://github.com/user-attachments/assets/e0f30bff-a481-4cd4-b910-f7195fdd4b93) |
 
-### ✅ 2) 2개 데모 (가로 2개)
+### ✅ 2) 2개 데모 
 
 | Cutoff 감소 | 파형 차이 (Sine/Square/Saw) |
 |---|---|
@@ -150,22 +181,37 @@ STM32 BlackPill(STM32F411)에서 **44.1kHz 실시간 오디오**를 생성하고
 ---
 
 
-## 🧯 9. 트러블슈팅 (Troubleshooting)
+## 🧯 8. 트러블슈팅 (Troubleshooting)
 
-### 9.1 내부 Pull-up이 정상 동작하지 않는 문제
-- **증상**: 버튼/키 입력이 불안정하거나, 기대한 HIGH 상태가 유지되지 않음
-- **원인**: 특정 핀에서 내부 Pull-up 동작 불량(보드/핀 특성)
-- **해결**: 문제 핀을 다른 핀으로 변경하여 정상 동작 확인
+<table>
+  <tr>
+    <td width="33%" valign="top">
 
-### 9.2 (권장) 오디오 글리치(끊김) 이슈 체크 포인트
-- **원인 후보**
-  - AudioTask 처리 시간이 deadline(버퍼 갱신 시간) 초과
-  - 디버그 `printf()`를 오디오 루프에서 과도하게 호출
-  - LCD 전체 redraw를 너무 자주 수행
-- **개선 방법**
-  - ISR에서는 notify만, 연산은 Task로 분리 유지
-  - 오디오 생성 루프에서 printf 제거/조건부 출력
-  - UI는 dirty-flag로 “바뀐 부분만 갱신”
+### ⌨️ 스위치 입력 문제
+- **현상**: Pull-up 저항 동작 안함  
+- **원인**: MCU 내부 Pull-up 저항(해당 핀) 문제  
+- **해결**: **MCU 핀 위치 변경**으로 정상 동작 확인
+
+    </td>
+    <td width="33%" valign="top">
+
+### 🔁 버퍼 언더런 (Audio Glitch)
+- **현상**: 일정 주기로 짧게 소리가 끊김  
+- **원인**: 샘플 생성 루프 내 **과도한 연산**으로 인해 I2S DMA 버퍼를 제때 채우지 못함  
+- **해결**: 반복 수행되던 계산을 **루프 외부로 이동**하여 경로 최적화 → DMA 버퍼 안정적으로 갱신
+
+    </td>
+    <td width="33%" valign="top">
+
+### 🖥️ LCD SPI 통신 오류
+- **현상**: LCD 화면이 간헐적으로 꺼짐/깨짐  
+- **원인**: LCD 라이브러리에서 **SPI 타임아웃(1ms)** 설정 → 타임아웃 부족으로 전송 실패  
+- **해결**: 타임아웃을 **HAL_MAX_DELAY**로 변경(전송 완료까지 대기) → 화면 안정화
+
+    </td>
+  </tr>
+</table>
+
 
 ---
 
