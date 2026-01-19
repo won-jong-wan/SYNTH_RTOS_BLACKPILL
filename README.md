@@ -1,46 +1,37 @@
 ## 🎥 Demo Videos
 
-> 아래 썸네일을 클릭하면 데모 영상으로 이동합니다.  
-> (썸네일 이미지는 `assets/thumbs/`에 넣고 파일명만 맞춰주세요)
+> 각 항목을 클릭하면 데모 영상으로 이동합니다.
 
-### ✅ 1) 4개 데모 (가로 4개)
+### ✅ 빠른 보기 (Grid)
 
-<p align="center">
-  <a href="https://github.com/user-attachments/assets/20490c06-4561-4c52-9833-793dc6b0e555">
-    <img src="assets/thumbs/demo_01_adsr_increase.png" width="24%" alt="ADSR 증가 데모">
-  </a>
-  <a href="https://github.com/user-attachments/assets/7daee3bf-dd8c-44fe-a728-9777f0d2aacb">
-    <img src="assets/thumbs/demo_02_adsr_decrease.png" width="24%" alt="ADSR 감소 데모">
-  </a>
-  <a href="https://github.com/user-attachments/assets/dcbed712-60cd-4608-ac7b-2feb3794245e">
-    <img src="assets/thumbs/demo_03_resonance.png" width="24%" alt="Resonance(Q) 변화 데모">
-  </a>
-  <a href="https://github.com/user-attachments/assets/e0f30bff-a481-4cd4-b910-f7195fdd4b93">
-    <img src="assets/thumbs/demo_04_octave.png" width="24%" alt="Octave 변경 데모">
-  </a>
-</p>
+| 1) ADSR 증가 | 2) ADSR 감소 | 3) Resonance(Q) | 4) Octave 변경 |
+|---|---|---|---|
+| [▶️ Watch](v_adsr_up) | [▶️ Watch](v_adsr_down) | [▶️ Watch](v_resonance) | [▶️ Watch](v_octave) |
 
-### ✅ 2) 2개 데모 (가로 2개)
-
-<p align="center">
-  <a href="https://github.com/user-attachments/assets/9f5a5483-4b9e-445a-a331-8de48a920aaf">
-    <img src="assets/thumbs/demo_05_cutoff_down.png" width="49%" alt="Cutoff 감소 데모">
-  </a>
-  <a href="https://github.com/user-attachments/assets/84fd0f4a-1169-4cac-be41-eebe17c3d590">
-    <img src="assets/thumbs/demo_06_waveform_diff.png" width="49%" alt="파형 차이 데모 (Sine/Square/Saw)">
-  </a>
-</p>
+| 5) Cutoff 감소 | 6) 파형 차이 (Sine/Square/Saw) |
+|---|---|
+| [▶️ Watch](v_cutoff_down) | [▶️ Watch](v_wave_diff) |
 
 ---
 
-### 📌 영상 링크 목록(텍스트)
+### 📌 영상 링크 목록 (텍스트)
 
-- ADSR 증가: https://github.com/user-attachments/assets/20490c06-4561-4c52-9833-793dc6b0e555  
-- ADSR 감소: https://github.com/user-attachments/assets/7daee3bf-dd8c-44fe-a728-9777f0d2aacb  
-- Resonance(Q): https://github.com/user-attachments/assets/dcbed712-60cd-4608-ac7b-2feb3794245e  
-- Octave: https://github.com/user-attachments/assets/e0f30bff-a481-4cd4-b910-f7195fdd4b93  
-- Cutoff 감소: https://github.com/user-attachments/assets/9f5a5483-4b9e-445a-a331-8de48a920aaf  
-- 파형 차이: https://github.com/user-attachments/assets/84fd0f4a-1169-4cac-be41-eebe17c3d590  
+- ADSR 증가: [Open](v_adsr_up)  
+- ADSR 감소: [Open](v_adsr_down)  
+- Resonance(Q): [Open](v_resonance)  
+- Octave 변경: [Open](v_octave)  
+- Cutoff 감소: [Open](v_cutoff_down)  
+- 파형 차이(Sine/Square/Saw): [Open](v_wave_diff)
+
+---
+
+<!-- ✅ 링크 정의 (여기만 바꾸면 위 모든 링크가 자동으로 바뀜) -->
+[v_adsr_up]: https://github.com/user-attachments/assets/20490c06-4561-4c52-9833-793dc6b0e555
+[v_adsr_down]: https://github.com/user-attachments/assets/7daee3bf-dd8c-44fe-a728-9777f0d2aacb
+[v_resonance]: https://github.com/user-attachments/assets/dcbed712-60cd-4608-ac7b-2feb3794245e
+[v_octave]: https://github.com/user-attachments/assets/e0f30bff-a481-4cd4-b910-f7195fdd4b93
+[v_cutoff_down]: https://github.com/user-attachments/assets/9f5a5483-4b9e-445a-a331-8de48a920aaf
+[v_wave_diff]: https://github.com/user-attachments/assets/84fd0f4a-1169-4cac-be41-eebe17c3d590
 
 
 
