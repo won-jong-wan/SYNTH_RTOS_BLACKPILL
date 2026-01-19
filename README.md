@@ -142,25 +142,7 @@
 
 <img width="1012" height="247" alt="image" src="https://github.com/user-attachments/assets/23aa3238-bf88-47d1-8525-193ec3a1b064" />
 
-### 핵심 아이디어
-- **DMA Half/Full Complete ISR**에서는 **최소 작업(Notify)**만 수행
-- 오디오 합성/필터 처리는 **AudioTask**에서 수행 (deadline 내 완료)
-
-### 동작 구조(요약)
-- `HAL_I2S_TxHalfCpltCallback()` → AudioTask Notify (앞쪽 버퍼 갱신)
-- `HAL_I2S_TxCpltCallback()` → AudioTask Notify (뒤쪽 버퍼 갱신)
-- AudioTask:
-  - DDS 파형 생성
-  - ADSR 적용
-  - Polyphony 믹싱
-  - IIR LPF 적용
-  - I2S 버퍼 채움
-
-
 ---
-
-
-
 
 
 ## 🎥 7. 데모 영상 (Demo Videos)
